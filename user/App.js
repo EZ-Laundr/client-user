@@ -14,6 +14,7 @@ import OrderStatus from "./src/screens/OrderStatus";
 import CreateOrder from "./src/screens/CreateOrder";
 import { Provider } from "react-redux";
 import store from "./src/store";
+import Login from "./src/screens/Login";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -25,6 +26,8 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Orders" component={OrderList} />
         <Stack.Screen name="CreateOrder" component={CreateOrder} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="CartList" component={Cart} />
       </Stack.Navigator>
     );
   }

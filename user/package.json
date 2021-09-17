@@ -23,7 +23,8 @@
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
-    "tailwind-react-native-classnames": "^3.0.1"
+    "tailwind-react-native-classnames": "^3.0.1",
+    "@react-native-picker/picker": "1.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
