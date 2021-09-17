@@ -27,7 +27,8 @@ export default function App() {
         <Stack.Screen name="Orders" component={OrderList} />
         <Stack.Screen name="CreateOrder" component={CreateOrder} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="CartList" component={Cart} />
+        <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
       </Stack.Navigator>
     );
   }
@@ -36,9 +37,6 @@ export default function App() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="OrderDetail" component={OrderList} />
-        <Stack.Screen name="CreateOrder" component={CreateOrder} />
-        <Stack.Screen name="CartList" component={Cart} />
-        <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
         <Stack.Screen name="QrPage" component={QrCode} />
         <Stack.Screen name="StatusOrder" component={OrderStatus} />
       </Stack.Navigator>

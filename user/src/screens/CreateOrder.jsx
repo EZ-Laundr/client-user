@@ -7,7 +7,7 @@ export default function CreateOrder({ navigation }) {
   const [servicesSelected, setServicesSelected] = useState();
   const [parumeSelected, setParfumeSelected] = useState();
   const [treatmentSelected, setTreatmentSelected] = useState();
-  const [delivery, setDelivery] = useState("pickup");
+  const [delivery, setDelivery] = useState(false);
 
   return (
     <>
@@ -62,9 +62,9 @@ export default function CreateOrder({ navigation }) {
                 center
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                checkedColor="green"
-                // checked={delivery}
-                onPress={() => setDelivery("pickup")}
+                checkedColor="blue"
+                checked={!delivery}
+                onPress={() => setDelivery(false)}
               />
             </Card>
           </View>
@@ -76,9 +76,9 @@ export default function CreateOrder({ navigation }) {
                 center
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                checkedColor="green"
-                // checked={delivery}
-                onPress={() => setDelivery("take")}
+                checkedColor="blue"
+                checked={delivery}
+                onPress={() => setDelivery(true)}
               />
             </Card>
           </View>
@@ -86,7 +86,7 @@ export default function CreateOrder({ navigation }) {
         <View style={tw`mt-2`}>
           <Button
             title="Checkout"
-            onPress={() => navigation.navigate("CartList")}
+            onPress={() => navigation.navigate("Cart")}
           />
         </View>
       </View>
