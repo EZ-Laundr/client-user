@@ -4,10 +4,20 @@ import { Picker } from "@react-native-picker/picker";
 import { Card, CheckBox, Button } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 export default function CreateOrder({ navigation }) {
-  const [servicesSelected, setServicesSelected] = useState();
-  const [parumeSelected, setParfumeSelected] = useState();
-  const [treatmentSelected, setTreatmentSelected] = useState();
+  const [servicesSelected, setServicesSelected] = useState("");
+  const [parumeSelected, setParfumeSelected] = useState("");
+  const [treatmentSelected, setTreatmentSelected] = useState("");
   const [delivery, setDelivery] = useState(false);
+
+  //   function checkoutHandler() {
+  //     const payload = {
+  //       service: servicesSelected,
+  //       parfume: parumeSelected,
+  //       treatment: treatmentSelected,
+  //       delivery: delivery,
+  //     };
+  //     console.log(payload);
+  //   }
 
   return (
     <>
@@ -19,35 +29,35 @@ export default function CreateOrder({ navigation }) {
             onValueChange={(parfume, itemIndex) => setParfumeSelected(parfume)}
           >
             <Picker.Item enabled={false} label="Select Parfume" value="" />
-            <Picker.Item label="Random" value="random" />
-            <Picker.Item label="Easy" value="easy" />
-            <Picker.Item label="Medium" value="medium" />
-            <Picker.Item label="Hard" value="hard" />
+            <Picker.Item label="Parfume 1" value="Parfume 1" />
+            <Picker.Item label="Parfume 2" value="Parfume 2" />
+            <Picker.Item label="Parfume 3" value="Parfume 3" />
+            <Picker.Item label="Parfume 4" value="Parfume 4" />
           </Picker>
         </View>
       </View>
       <View style={styles.picker}>
         <Picker
           selectedValue={servicesSelected}
-          onValueChange={(value, itemIndex) => setServicesSelected(value)}
+          onValueChange={(service, itemIndex) => setServicesSelected(service)}
         >
           <Picker.Item enabled={false} label="Select Service" value="" />
-          <Picker.Item label="Service 1" value="java" />
-          <Picker.Item label="Service 2" value="java" />
-          <Picker.Item label="Service 3" value="java" />
-          <Picker.Item label="Service 4" value="java" />
+          <Picker.Item label="Service 1" value="Service 1" />
+          <Picker.Item label="Service 2" value="Service 2" />
+          <Picker.Item label="Service 3" value="Service 3" />
+          <Picker.Item label="Service 4" value="Service 4" />
         </Picker>
       </View>
       <View style={styles.picker}>
         <Picker
           selectedValue={treatmentSelected}
-          onValueChange={(value, itemIndex) => setTreatmentSelected(value)}
+          onValueChange={(treat, itemIndex) => setTreatmentSelected(treat)}
         >
           <Picker.Item enabled={false} label="Select Treatment" value="" />
-          <Picker.Item label="Service 1" value="java" />
-          <Picker.Item label="Service 2" value="java" />
-          <Picker.Item label="Service 3" value="java" />
-          <Picker.Item label="Service 4" value="java" />
+          <Picker.Item label="Treatment 1" value="Treatment 1" />
+          <Picker.Item label="Treatment 2" value="Treatment 2" />
+          <Picker.Item label="Treatment 3" value="Treatment 3" />
+          <Picker.Item label="Treatment 4" value="Treatment 4" />
         </Picker>
       </View>
       <View>
@@ -86,7 +96,14 @@ export default function CreateOrder({ navigation }) {
         <View style={tw`mt-2`}>
           <Button
             title="Checkout"
-            onPress={() => navigation.navigate("Cart")}
+            onPress={() =>
+              navigation.navigate("Cart", {
+                servicesSelected,
+                parumeSelected,
+                treatmentSelected,
+                delivery,
+              })
+            }
           />
         </View>
       </View>

@@ -1,10 +1,9 @@
-import { SET_SERVICES } from "./actionType";
+import { SET_SERVICES, SET_ACCESS_TOKEN } from "./actionType";
 
 const initialState = {
   services: [],
-  status: "unsolved",
+  access_token: "",
   loading: false,
-  leaderboard: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -15,6 +14,13 @@ export default function reducer(state = initialState, action) {
         services: action.payload,
       };
       return dataService;
+
+    case SET_ACCESS_TOKEN:
+      const dataToken = {
+        ...state,
+        access_token: action.payload,
+      };
+      return dataToken;
 
     default:
       return state;
