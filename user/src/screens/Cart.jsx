@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from "react-native";
-import tw from "tailwind-react-native-classnames";
+
 export default function Cart({ route, navigation }) {
   const { servicesSelected, parumeSelected, treatmentSelected, delivery } =
     route.params;

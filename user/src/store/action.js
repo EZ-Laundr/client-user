@@ -17,7 +17,7 @@ export function setServices(services) {
 export function setToken(token) {
   const dataToken = {
     type: SET_ACCESS_TOKEN,
-    payload: services,
+    payload: token,
   };
   return dataToken;
 }
@@ -132,12 +132,13 @@ export function loginUser(payload) {
       console.log(payload, "payload");
 
       if (payload) {
-        // dispatch(setToken(response.access_token));
+        dispatch(setToken("cobacoba"));
         return "success";
       } else {
         throw Error;
       }
     } catch (error) {
+      console.log(error, "disini?");
       return error;
     }
   };

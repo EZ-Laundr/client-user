@@ -15,7 +15,10 @@ import CreateOrder from "./src/screens/CreateOrder";
 import { Provider } from "react-redux";
 import store from "./src/store";
 import Login from "./src/screens/Login";
-
+import Splash from "./src/screens/Splash";
+// import Map from "./src/components/Map";
+import Wellcome from "./src/screens/Wellcome";
+import { Provider as PaperProvider } from "react-native-paper";
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -23,7 +26,28 @@ export default function App() {
   function StackNavigator() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
+        {/* <Stack.Screen name="Map" component={Map} /> */}
+        <Stack.Screen
+          name="Splash"
+          options={{
+            headerShown: false,
+          }}
+          component={Splash}
+        />
+        <Stack.Screen
+          name="Wellcome"
+          options={{
+            headerShown: false,
+          }}
+          component={Wellcome}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="Orders" component={OrderList} />
         <Stack.Screen name="CreateOrder" component={CreateOrder} />
         <Stack.Screen name="Login" component={Login} />
@@ -45,34 +69,36 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === "Home") {
-                iconName = focused ? "ios-home" : "ios-home";
-              } else if (route.name === "Orders") {
-                iconName = focused ? "ios-list" : "ios-list";
-              }
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "tomato",
-            tabBarInactiveTintColor: "gray",
-          })}
-        >
-          <Tab.Screen
-            name="Home"
-            component={StackNavigator}
-            options={{ headerShown: false }}
-          />
-          <Tab.Screen
-            name="Orders"
-            component={StackOrders}
-            options={{ headerShown: false }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <PaperProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === "Home") {
+                  iconName = focused ? "ios-home" : "ios-home";
+                } else if (route.name === "Orders") {
+                  iconName = focused ? "ios-list" : "ios-list";
+                }
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: "blue",
+              tabBarInactiveTintColor: "gray",
+            })}
+          >
+            <Tab.Screen
+              name="Home"
+              component={StackNavigator}
+              options={{ headerShown: false }}
+            />
+            <Tab.Screen
+              name="Orders"
+              component={StackOrders}
+              options={{ headerShown: false }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 }

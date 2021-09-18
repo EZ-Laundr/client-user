@@ -1,125 +1,570 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { Card, CheckBox, Button } from "react-native-elements";
-import tw from "tailwind-react-native-classnames";
-export default function CreateOrder({ navigation }) {
-  const [servicesSelected, setServicesSelected] = useState("");
-  const [parumeSelected, setParfumeSelected] = useState("");
-  const [treatmentSelected, setTreatmentSelected] = useState("");
-  const [delivery, setDelivery] = useState(false);
+import * as React from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Dimensions,
+  Alert,
+} from "react-native";
+import { Chip, Button, Card, Title } from "react-native-paper";
+import { DraxProvider, DraxView } from "react-native-drax";
+import { useDispatch, useSelector } from "react-redux";
+const windowWidth = Dimensions.get("window").width;
+const App = () => {
+  const [received, setReceived] = React.useState([]);
+  const [staged, setStaged] = React.useState([]);
+  const [serviceDragged, setServDrag] = React.useState(false);
+  const [parfumeDragged, setParfDrag] = React.useState(false);
+  const [delivery, setDelivery] = React.useState(false);
 
-  //   function checkoutHandler() {
-  //     const payload = {
-  //       service: servicesSelected,
-  //       parfume: parumeSelected,
-  //       treatment: treatmentSelected,
-  //       delivery: delivery,
-  //     };
-  //     console.log(payload);
-  //   }
+  const { services, access_token, loading } = useSelector(
+    (state) => state.reducer
+  );
+
+  function chechoutHander() {
+    let parfume = received.filter((el) => el.parfume);
+    let service = received.filter((el) => el.service);
+    let treat = received.filter((el) => el.parfume);
+    let payload;
+
+    // Alert.alert("test");
+
+    Alert.alert("Mau yang mana?", "Mau nganter apa di jemput nih?", [
+      {
+        text: "Anter Aja",
+        onPress: () => {
+          setDelivery(false),
+            Alert.alert("Di anter yaa?", "lanjut checkout kuy?", [
+              {
+                text: "GAS!",
+                onPress: () => {
+                  setDelivery(false), console.log(delivery);
+                },
+                style: "cancel",
+              },
+              {
+                text: "Ga jadi",
+                onPress: () => {
+                  setDelivery(true), console.log(delivery);
+                },
+              },
+            ]);
+        },
+        style: "cancel",
+      },
+      {
+        text: "Di Jemput Dong",
+        onPress: () => {
+          setDelivery(true),
+            Alert.alert("Okeey dijemput", "lanjut checkout kuy?", [
+              {
+                text: "GAS!",
+                onPress: () => {
+                  setDelivery(false), console.log(delivery);
+                },
+                style: "cancel",
+              },
+              {
+                text: "Ga jadi",
+                onPress: () => {
+                  setDelivery(true), console.log(delivery);
+                },
+              },
+            ]),
+            console.log(delivery);
+        },
+      },
+    ]);
+
+    console.log(payload, "payload");
+    // const payload = {
+    //   ServiceId: servicesSelected,
+    //   ParfumeId: parumeSelected,
+    //   treatments: treatmentSelected,
+    //   pickup: delivery,
+    // };
+  }
 
   return (
     <>
-      <View style={{ paddingTop: 3 }}>
-        <Text style={{ textAlign: "center" }}> Services :</Text>
-        <View style={styles.picker}>
-          <Picker
-            selectedValue={parumeSelected}
-            onValueChange={(parfume, itemIndex) => setParfumeSelected(parfume)}
+      <DraxProvider>
+        <View style={{ padding: 12 }}>
+          <Chip
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#3DB2FF",
+              borderRadius: 0,
+              justifyContent: "space-evenly",
+            }}
           >
-            <Picker.Item enabled={false} label="Select Parfume" value="" />
-            <Picker.Item label="Parfume 1" value="Parfume 1" />
-            <Picker.Item label="Parfume 2" value="Parfume 2" />
-            <Picker.Item label="Parfume 3" value="Parfume 3" />
-            <Picker.Item label="Parfume 4" value="Parfume 4" />
-          </Picker>
-        </View>
-      </View>
-      <View style={styles.picker}>
-        <Picker
-          selectedValue={servicesSelected}
-          onValueChange={(service, itemIndex) => setServicesSelected(service)}
-        >
-          <Picker.Item enabled={false} label="Select Service" value="" />
-          <Picker.Item label="Service 1" value="Service 1" />
-          <Picker.Item label="Service 2" value="Service 2" />
-          <Picker.Item label="Service 3" value="Service 3" />
-          <Picker.Item label="Service 4" value="Service 4" />
-        </Picker>
-      </View>
-      <View style={styles.picker}>
-        <Picker
-          selectedValue={treatmentSelected}
-          onValueChange={(treat, itemIndex) => setTreatmentSelected(treat)}
-        >
-          <Picker.Item enabled={false} label="Select Treatment" value="" />
-          <Picker.Item label="Treatment 1" value="Treatment 1" />
-          <Picker.Item label="Treatment 2" value="Treatment 2" />
-          <Picker.Item label="Treatment 3" value="Treatment 3" />
-          <Picker.Item label="Treatment 4" value="Treatment 4" />
-        </Picker>
-      </View>
-      <View>
-        <Text>Select Delivery</Text>
-        <View style={styles.delivery}>
-          <View style={tw`max-w-md`}>
-            <Card containerStyle={tw`w-40 h-32`}>
-              <Card.Title>PICK UP</Card.Title>
+            PESANANMU
+          </Chip>
 
-              <Text style={{ marginBottom: 10 }}>Ambil ke toko</Text>
-              <CheckBox
-                center
-                checkedIcon="dot-circle-o"
-                uncheckedIcon="circle-o"
-                checkedColor="blue"
-                checked={!delivery}
-                onPress={() => setDelivery(false)}
-              />
-            </Card>
-          </View>
-          <View>
-            <Card containerStyle={tw`w-40 h-32`}>
-              <Card.Title>TITLE</Card.Title>
-              <Text style={{ marginBottom: 10 }}>Tunggu dirumah</Text>
-              <CheckBox
-                center
-                checkedIcon="dot-circle-o"
-                uncheckedIcon="circle-o"
-                checkedColor="blue"
-                checked={delivery}
-                onPress={() => setDelivery(true)}
-              />
-            </Card>
-          </View>
+          <DraxView
+            onReceiveDragDrop={(event) => {
+              if (event.dragged.payload.type == "service") {
+                setReceived([
+                  ...received,
+                  { service: event.dragged.payload.service } || "?",
+                ]);
+                setServDrag(true);
+              } else if (event.dragged.payload.type == "parfume") {
+                setReceived([
+                  ...received,
+                  { parfume: event.dragged.payload.parfume } || "?",
+                ]);
+                // setParfDrag(true);
+              }
+            }}
+            style={[styles.receivingZone, styles.blue]}
+            receivingStyle={styles.receiving}
+          >
+            <ScrollView contentContainerStyle={styles.containerScroll}>
+              {received.map((item, index) => {
+                return (
+                  <View key={index + 1}>
+                    {item.service && (
+                      <View
+                        style={{
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Card
+                          style={{
+                            width: 160,
+                            height: 170,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginHorizontal: 10,
+                            borderRadius: 5,
+                            marginVertical: 2,
+                          }}
+                        >
+                          <Chip
+                            style={{
+                              width: 150,
+                              marginTop: 5,
+                              justifyContent: "center",
+                              backgroundColor: "#3DB2FF",
+                              borderTopRightRadius: 5,
+                              borderTopLeftRadius: 5,
+                              borderBottomRightRadius: 0,
+                              borderBottomLeftRadius: 0,
+                            }}
+                          >
+                            {item.service.title}
+                          </Chip>
+                          <Card.Cover
+                            style={{ width: 150, height: 120, marginTop: 5 }}
+                            source={{ uri: `${item.service.image}` }}
+                          />
+                        </Card>
+                      </View>
+                    )}
+                    {item.parfume && (
+                      <View
+                        style={{
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Card
+                          style={{
+                            width: 160,
+                            height: 170,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginHorizontal: 10,
+                            borderRadius: 5,
+                            marginVertical: 2,
+                          }}
+                        >
+                          <Chip
+                            style={{
+                              width: 150,
+                              marginTop: 5,
+                              justifyContent: "center",
+                              backgroundColor: "#3DB2FF",
+                              borderTopRightRadius: 5,
+                              borderTopLeftRadius: 5,
+                              borderBottomRightRadius: 0,
+                              borderBottomLeftRadius: 0,
+                            }}
+                          >
+                            {item.parfume.title}
+                          </Chip>
+                          <Card.Cover
+                            style={{ width: 150, height: 120, marginTop: 5 }}
+                            source={{ uri: `${item.parfume.image}` }}
+                          />
+                        </Card>
+                      </View>
+                    )}
+                    {item.treat && (
+                      <View
+                        style={{
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Card
+                          style={{
+                            width: 160,
+                            height: 170,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginHorizontal: 10,
+                            borderRadius: 5,
+                            marginVertical: 2,
+                          }}
+                        >
+                          <Chip
+                            style={{
+                              width: 150,
+                              marginTop: 5,
+                              justifyContent: "center",
+                              backgroundColor: "#3DB2FF",
+                              borderTopRightRadius: 5,
+                              borderTopLeftRadius: 5,
+                              borderBottomRightRadius: 0,
+                              borderBottomLeftRadius: 0,
+                            }}
+                          >
+                            {item.treat.title}
+                          </Chip>
+                          <Card.Cover
+                            style={{ width: 150, height: 120, marginTop: 5 }}
+                            source={{ uri: `${item.treat.image}` }}
+                          />
+                        </Card>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </DraxView>
         </View>
-        <View style={tw`mt-2`}>
-          <Button
-            title="Checkout"
-            onPress={() =>
-              navigation.navigate("Cart", {
-                servicesSelected,
-                parumeSelected,
-                treatmentSelected,
-                delivery,
-              })
-            }
-          />
-        </View>
+
+        <ScrollView>
+          {!serviceDragged && (
+            <View style={styles.container}>
+              <Chip
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#3DB2FF",
+                  borderRadius: 0,
+                  justifyContent: "space-evenly",
+                }}
+              >
+                PILIH SERVICE
+              </Chip>
+              <View style={styles.palette}>
+                <ScrollView horizontal={true}>
+                  {services.map((service, index) => {
+                    return (
+                      <DraxView
+                        key={index + 2}
+                        style={[styles.centeredContent, styles.draggableBox]}
+                        draggingStyle={styles.dragging}
+                        dragReleasedStyle={styles.dragging}
+                        hoverDraggingStyle={styles.hoverDragging}
+                        dragPayload={{ service, type: "service" }}
+                        longPressDelay={300}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                          }}
+                        >
+                          <Card
+                            style={{
+                              width: 160,
+                              height: 170,
+                              alignItems: "center",
+                              justifyContent: "center",
+                              marginHorizontal: 10,
+                              borderRadius: 5,
+                            }}
+                          >
+                            <Chip
+                              style={{
+                                width: 150,
+                                justifyContent: "center",
+                                backgroundColor: "#3DB2FF",
+                                marginTop: 5,
+                                borderTopRightRadius: 5,
+                                borderTopLeftRadius: 5,
+                                borderBottomRightRadius: 0,
+                                borderBottomLeftRadius: 0,
+                              }}
+                            >
+                              {service.title}
+                            </Chip>
+                            <Card.Cover
+                              style={{
+                                width: 150,
+                                height: 120,
+                                marginTop: 5,
+                              }}
+                              source={{ uri: `${service.image}` }}
+                            />
+                          </Card>
+                        </View>
+                      </DraxView>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            </View>
+          )}
+
+          {!parfumeDragged && (
+            <View style={styles.container}>
+              <Chip
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#3DB2FF",
+                  borderRadius: 0,
+                  justifyContent: "space-evenly",
+                }}
+              >
+                PILIH PARFUME
+              </Chip>
+              <View style={[styles.palette]}>
+                <ScrollView horizontal={true}>
+                  {services.map((parfume, index) => {
+                    return (
+                      <DraxView
+                        key={index + 3}
+                        style={[styles.centeredContent, styles.draggableBox]}
+                        draggingStyle={styles.dragging}
+                        dragReleasedStyle={styles.dragging}
+                        hoverDraggingStyle={styles.hoverDragging}
+                        dragPayload={{ parfume, type: "parfume" }}
+                        longPressDelay={300}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                          }}
+                        >
+                          <Card
+                            style={{
+                              width: 160,
+                              height: 170,
+                              alignItems: "center",
+                              justifyContent: "center",
+                              marginHorizontal: 10,
+                              borderRadius: 5,
+                            }}
+                          >
+                            <Chip
+                              style={{
+                                width: 150,
+                                justifyContent: "center",
+                                backgroundColor: "#3DB2FF",
+                                marginTop: 5,
+                                borderTopRightRadius: 5,
+                                borderTopLeftRadius: 5,
+                                borderBottomRightRadius: 0,
+                                borderBottomLeftRadius: 0,
+                              }}
+                            >
+                              {parfume.title}
+                            </Chip>
+                            <Card.Cover
+                              style={{
+                                width: 150,
+                                height: 120,
+                                marginTop: 5,
+                              }}
+                              source={{ uri: `${parfume.image}` }}
+                            />
+                          </Card>
+                        </View>
+                      </DraxView>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            </View>
+          )}
+
+          {!parfumeDragged && (
+            <View style={styles.container}>
+              <Chip
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#3DB2FF",
+                  borderRadius: 0,
+                  justifyContent: "space-evenly",
+                }}
+              >
+                EXTRA ORDER
+              </Chip>
+              <View style={[styles.palette]}>
+                <ScrollView horizontal={true}>
+                  {services.map((parfume, index) => {
+                    return (
+                      <DraxView
+                        key={index + 4}
+                        style={[styles.centeredContent, styles.draggableBox]}
+                        draggingStyle={styles.dragging}
+                        dragReleasedStyle={styles.dragging}
+                        hoverDraggingStyle={styles.hoverDragging}
+                        dragPayload={{ parfume, type: "parfume" }}
+                        longPressDelay={300}
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                          }}
+                        >
+                          <Card
+                            style={{
+                              width: 160,
+                              height: 170,
+                              alignItems: "center",
+                              justifyContent: "center",
+                              marginHorizontal: 10,
+                              borderRadius: 5,
+                            }}
+                          >
+                            <Chip
+                              style={{
+                                width: 150,
+                                justifyContent: "center",
+                                backgroundColor: "#3DB2FF",
+                                marginTop: 5,
+                                borderTopRightRadius: 5,
+                                borderTopLeftRadius: 5,
+                                borderBottomRightRadius: 0,
+                                borderBottomLeftRadius: 0,
+                              }}
+                            >
+                              {parfume.title}
+                            </Chip>
+                            <Card.Cover
+                              style={{
+                                width: 150,
+                                height: 120,
+                                marginTop: 5,
+                              }}
+                              source={{ uri: `${parfume.image}` }}
+                            />
+                          </Card>
+                        </View>
+                      </DraxView>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      </DraxProvider>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button
+          labelStyle={{ fontSize: 20, textAlign: "center" }}
+          style={{ width: 200, height: 40, borderRadius: 10 }}
+          mode="contained"
+          onPress={() => chechoutHander()}
+        >
+          Checkout
+        </Button>
       </View>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  picker: {
-    backgroundColor: "#A45D5D",
-    textAlign: "center",
-    height: 25,
-    width: 200,
-    borderRadius: 15,
+  container: {
+    flex: 1,
+    padding: 12,
   },
-  delivery: {
+  centeredContent: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  receivingZone: {
+    height: 180,
+    width: windowWidth * 0.94,
+    justifyContent: "flex-start",
+  },
+  receiving: {
+    borderColor: "green",
+    borderWidth: 2,
+  },
+  incomingPayload: {
+    marginTop: 10,
+    fontSize: 24,
+  },
+  received: {
+    marginTop: 10,
+    fontSize: 18,
+  },
+  palette: {
     flexDirection: "row",
   },
+  draggableBox: {
+    width: 150,
+    height: 170,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
+  green: {
+    backgroundColor: "#aaffaa",
+  },
+  blue: {
+    backgroundColor: "#aaaaff",
+  },
+  red: {
+    backgroundColor: "#ffaaaa",
+  },
+  yellow: {
+    backgroundColor: "#ffffaa",
+  },
+  cyan: {
+    backgroundColor: "#aaffff",
+  },
+  magenta: {
+    backgroundColor: "#ffaaff",
+  },
+  dragging: {
+    opacity: 0.2,
+  },
+  hoverDragging: {
+    borderColor: "magenta",
+    borderWidth: 2,
+  },
+  stagedCount: {
+    fontSize: 18,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    borderRadius: 20,
+  },
+  containerScroll: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
+
+export default App;

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import tw from "tailwind-react-native-classnames";
-import { Input } from "react-native-elements";
-import { Card, ListItem, Button } from "react-native-elements";
+import { TextInput, Button } from "react-native-paper";
+
 import { useDispatch } from "react-redux";
+import Header from "../components/Header";
 import { loginUser } from "../store/action";
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ export default function Login({ navigation }) {
         };
         const goLogin = await dispatch(loginUser(payload));
         if (goLogin === "success") {
-          console.log(goLogin);
+          console.log(goLogin, "turee");
           navigation.navigate("Home");
         } else {
           console.log(goLogin, "else");
@@ -47,24 +46,38 @@ export default function Login({ navigation }) {
 
   return (
     <>
-      <View style={tw`p-4 android:pt-72 bg-blue-500 flex-row`}>
-        <Text style={tw`font-medium tracking-wide`}>Hello World</Text>
-        <Text>{email}</Text>
-      </View>
-
-      <Input
-        placeholder="Your@mail.com"
-        leftIcon={{ type: "font-awesome", name: "envelope" }}
-        onChangeText={(value) => emailHandler(value)}
+      <Header />
+      <TextInput
+        mode="outlined"
+        label="Email"
+        left={<TextInput.Icon name="email" />}
+        onChangeText={(value) => setEmail(value)}
       />
-      <Input
-        placeholder="Password"
-        leftIcon={{ type: "font-awesome", name: "lock" }}
-        secureTextEntry={true}
+      <TextInput
+        theme="accent"
+        mode="outlined"
+        label="Password"
+        secureTextEntry
+        left={<TextInput.Icon name="lock" />}
+        right={<TextInput.Icon name="eye" />}
         onChangeText={(value) => passwordHandler(value)}
       />
-
-      <Button title="Login" onPress={() => loginHandler()} />
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
+        <Button
+          labelStyle={{ fontSize: 20, textAlign: "center" }}
+          style={{ width: 200, height: 50 }}
+          mode="contained"
+          onPress={() => loginHandler()}
+        >
+          Login
+        </Button>
+      </View>
     </>
   );
 }
