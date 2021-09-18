@@ -12,7 +12,7 @@ import { Chip, Button, Card, Title } from "react-native-paper";
 import { DraxProvider, DraxView } from "react-native-drax";
 import { useDispatch, useSelector } from "react-redux";
 const windowWidth = Dimensions.get("window").width;
-const App = () => {
+const CreateOrder = () => {
   const [received, setReceived] = React.useState([]);
   const [staged, setStaged] = React.useState([]);
   const [serviceDragged, setServDrag] = React.useState(false);
@@ -567,4 +567,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default CreateOrder;
