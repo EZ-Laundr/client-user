@@ -4,7 +4,7 @@ import CardService from "../components/CardService";
 import { SafeAreaView } from "react-native-safe-area-context";
 const height = Dimensions.get("window").height;
 import { useDispatch, useSelector } from "react-redux";
-import { FAB, Portal, Provider } from "react-native-paper";
+import { Button, FAB, Portal, Provider } from "react-native-paper";
 import Header from "../components/Header";
 import CarouselItem from "../components/CarouselItem";
 import { fetchServices } from "../store/action";
@@ -38,7 +38,19 @@ export default function Home({ navigation }) {
     return (
       <>
         <Provider>
+
+        
           <CarouselItem />
+          
+          <Button
+              labelStyle={{ fontSize: 20, textAlign: "center" }}
+              style={{ width: 200, height: 50 }}
+              mode="contained"
+              onPress={() => navigation.navigate("Register")}
+            >
+  Register
+            </Button>
+
           <View>
             <View style={{ marginTop: 20 }}>
               <Text>Selamat Datang</Text>

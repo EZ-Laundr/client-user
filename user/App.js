@@ -42,6 +42,8 @@ export default function App() {
 					}}
 					component={Wellcome}
 				/>
+				<Stack.Screen name="Register" component={Register} />
+				<Stack.Screen name="Login" component={Login} />
 				<Stack.Screen
 					name="Home"
 					component={Home}
@@ -51,8 +53,6 @@ export default function App() {
 				/>
 				<Stack.Screen name="Orders" component={OrderList} />
 				<Stack.Screen name="CreateOrder" component={CreateOrder} />
-				<Stack.Screen name="Login" component={Login} />
-				<Stack.Screen name="Register" component={Register} />
 				<Stack.Screen name="Cart" component={Cart} />
 				<Stack.Screen name="OrderCompleted" component={OrderCompleted} />
 			</Stack.Navigator>

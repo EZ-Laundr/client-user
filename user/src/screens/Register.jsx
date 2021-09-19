@@ -9,16 +9,11 @@ export default function Register({navigation}) {
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
 
     async function registerHandler() {
-        // if (!email) {
-        // Alert.alert("Email kosong", "Silahkan isi email & pasword");
-        // }
-        // if (!password) {
-        // Alert.alert("Password kosong", "Silahkan isi email & pasword");
-        // }
-
         const payload = {
+            phoneNumber,
             email,
             password,
           };
@@ -27,7 +22,7 @@ export default function Register({navigation}) {
           if (goRegister === "success") {
             navigation.navigate("Home");
           } else {
-            Alert.alert("Login Failed", `${goRegister.join('\n')}`);
+            Alert.alert("Rwgister Failed", `${goRegister.join('\n')}`);
           }
     }
 
@@ -43,11 +38,18 @@ export default function Register({navigation}) {
           <TextInput
             theme="accent"
             mode="outlined"
+            label="Phone Number"
+            left={<TextInput.Icon name="phone" />}
+            onChangeText={(value) => setPhoneNumber(value)}
+          />
+          <TextInput
+            theme="accent"
+            mode="outlined"
             label="Password"
             secureTextEntry
             left={<TextInput.Icon name="lock" />}
             right={<TextInput.Icon name="eye" />}
-            onChangeText={(value) => passwordHandler(value)}
+            onChangeText={(value) => setPassword(value)}
           />
           <View
             style={{

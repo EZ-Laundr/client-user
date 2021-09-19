@@ -66,10 +66,10 @@ export function setQrCode(code) {
 }
 
 export function fetchServices() {
-	console.log("masuk");
+	// console.log("masuk");
 	return async function (dispatch, getState) {
 		try {
-			console.log("try");
+			// console.log("try");
 			const response = await localhost({
 				method: "get",
 				url: `/services`,
@@ -105,7 +105,7 @@ export function fetchTreatment() {
 				url: `/special-treatments`,
 			});
 			const result = response.data;
-			console.log(result);
+			// console.log(result);
 			dispatch(setTreatment(result));
 		} catch (error) {
 			console.log(error);
@@ -117,7 +117,7 @@ export function createOrder(payload) {
 	return async function (dispatch, getState) {
 		try {
 			const state = getState();
-			console.log(state.reducer.access_token);
+			// console.log(state.reducer.access_token);
 			const response = await localhost({
 				method: "post",
 				url: `/orders`,
@@ -147,27 +147,26 @@ export function loginUser(payload) {
 				url: `/login`,
 				data: payload,
 			});
-			console.log(response, "responsee");
-			dispatch(setToken(response.access_token));
+			console.log(1, response.data.access_token);
+			dispatch(setToken(response.data.access_token));
 			return "success";
 		} catch (error) {
-			return error;
+			return error.response.data.msg;
 		}
 	};
 }
 
 export function registerUser(payload) {
 	return async function (dispatch, getState) {
-		console.log(12345);
+		// console.log(payload);
 		try {
 			const response = await localhost({
 				method: "post",
 				url: `/register`,
 				data: payload,
 			});
-
-			console.log(response.data, "responsee");
-			// dispatch(setToken(response.access_token));
+			console.log(2, response.data.access_token);
+			dispatch(setToken(response.data.access_token));
 			return "success";
 		} catch (error) {
 			return error.response.data.msg;
@@ -188,7 +187,7 @@ export function fetchOrders() {
 			});
 			const result = response.data;
 			dispatch(setOrders(result));
-			console.log(result);
+			// console.log(result);
 		} catch (error) {
 			console.log(error);
 		}
@@ -208,7 +207,7 @@ export function fetchOrderDetail(id) {
 			});
 			const result = response.data;
 			dispatch(setOrderDetail(result));
-			console.log(result);
+			// console.log(result);
 		} catch (error) {
 			console.log(error);
 		}
@@ -224,7 +223,7 @@ export function fetchQrCode(payload) {
 			});
 			const result = response.data;
 			dispatch(setQrCode(result));
-			console.log(result);
+			// console.log(result);
 		} catch (error) {
 			console.log(error);
 		}
