@@ -4,7 +4,7 @@ import {
   SET_TREATMENT,
   SET_ACCESS_TOKEN,
 } from "./actionType";
-
+import axios from "axios";
 const baseUrl = `http://localhost:3000`;
 
 export function setServices(services) {
@@ -39,16 +39,20 @@ export function setTreatment(treatment) {
 }
 
 export function fetchServices() {
+  console.log("masuk");
   return async function (dispatch, getState) {
     try {
-      const response = await fetch(`${baseUrl}/services`);
-      if (response.ok) {
-        const result = await response.json();
-        dispatch(setServices(result));
-      } else {
-        throw Error;
-      }
+      console.log("try");
+      const response = await axios.get(`http://192.168.43.227:4000/services`);
+      console.log(response, "response???");
+      // if (response.ok) {
+      //   const result = await response.json();
+      //   dispatch(setServices(result));
+      // } else {
+      //   throw Error;
+      // }
     } catch (error) {
+      console.log("catch");
       console.log(error);
     }
   };

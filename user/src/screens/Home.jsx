@@ -7,10 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Card } from "react-native-paper";
 import Header from "../components/Header";
 import CarouselItem from "../components/CarouselItem";
+import { fetchServices } from "../store/action";
 export default function Home({ navigation }) {
+  const dispatch = useDispatch();
   const { services, access_token, loading } = useSelector(
     (state) => state.reducer
   );
+
+  useEffect(() => {
+    dispatch(fetchServices());
+  }, []);
 
   return (
     <>
