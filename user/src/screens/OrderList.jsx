@@ -31,7 +31,7 @@ export default function OrderList({ navigation }) {
 
           {orders.map((order) => {
             return (
-              <DataTable.Row>
+              <DataTable.Row key={order.id}>
                 <DataTable.Cell>{order.id}</DataTable.Cell>
                 <DataTable.Cell>service</DataTable.Cell>
                 <DataTable.Cell>{order.status}</DataTable.Cell>
