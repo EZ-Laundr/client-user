@@ -60,8 +60,8 @@ export default function App() {
   function StackOrders() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="OrderDetail" component={OrderList} />
-        <Stack.Screen name="QrPage" component={QrCode} />
+        <Stack.Screen name="Order List" component={OrderList} />
+        <Stack.Screen name="Order Detail" component={QrCode} />
         <Stack.Screen name="StatusOrder" component={OrderStatus} />
       </Stack.Navigator>
     );

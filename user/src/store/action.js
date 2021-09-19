@@ -3,8 +3,12 @@ import {
   SET_PARFUME,
   SET_TREATMENT,
   SET_ACCESS_TOKEN,
+  SET_ORDERS,
+  SET_ORDER_DETAIL,
+  SET_QR_CODE,
 } from "./actionType";
 import localhost from "../APIS/axiosAPI";
+import happi from "../APIS/happiQR";
 
 export function setServices(services) {
   const dataServie = {
@@ -35,6 +39,30 @@ export function setTreatment(treatment) {
     payload: treatment,
   };
   return dataTreatment;
+}
+
+export function setOrders(orders) {
+  const dataOrders = {
+    type: SET_ORDERS,
+    payload: orders,
+  };
+  return dataOrders;
+}
+
+export function setOrderDetail(details) {
+  const dataDetailOrder = {
+    type: SET_ORDER_DETAIL,
+    payload: details,
+  };
+  return dataDetailOrder;
+}
+
+export function setQrCode(code) {
+  const dataQR = {
+    type: SET_QR_CODE,
+    payload: code,
+  };
+  return dataQR;
 }
 
 export function fetchServices() {
@@ -124,6 +152,62 @@ export function loginUser(payload) {
       return "success";
     } catch (error) {
       return error;
+    }
+  };
+}
+
+export function fetchOrders() {
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        headers: {
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
+        },
+        url: `/orders`,
+      });
+      const result = response.data;
+      dispatch(setOrders(result));
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function fetchOrderDetail(id) {
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        headers: {
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
+        },
+        url: `/orders/${id}`,
+      });
+      const result = response.data;
+      dispatch(setOrderDetail(result));
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function fetchQrCode(payload) {
+  return async function (dispatch, getState) {
+    try {
+      const response = await happi({
+        url: `/v1/qrcode?data=${payload}`,
+        method: "get",
+      });
+      const result = response.data;
+      dispatch(setQrCode(result));
+      console.log(result);
+    } catch (error) {
+      console.log(error);
     }
   };
 }

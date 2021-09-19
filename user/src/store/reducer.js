@@ -3,6 +3,9 @@ import {
   SET_ACCESS_TOKEN,
   SET_PARFUME,
   SET_TREATMENT,
+  SET_ORDERS,
+  SET_ORDER_DETAIL,
+  SET_QR_CODE,
 } from "./actionType";
 
 const initialState = {
@@ -12,6 +15,9 @@ const initialState = {
   perfumes: [],
   loading: false,
   treatments: [],
+  orders: [],
+  detailOrder: [],
+  qrCode: "",
 };
 
 export default function reducer(state = initialState, action) {
@@ -38,12 +44,33 @@ export default function reducer(state = initialState, action) {
       return dataTreat;
 
     case SET_ACCESS_TOKEN:
-      console.log("masuk");
       const dataToken = {
         ...state,
         access_token: action.payload,
       };
       return dataToken;
+
+    case SET_ORDERS:
+      const dataOrders = {
+        ...state,
+        orders: action.payload,
+      };
+      return dataOrders;
+
+    case SET_ORDER_DETAIL:
+      const dataOrderDetail = {
+        ...state,
+        detailOrder: action.payload,
+      };
+      return dataOrderDetail;
+
+    case SET_QR_CODE:
+      console.log("masuk");
+      const dataQr = {
+        ...state,
+        qrCode: action.payload,
+      };
+      return dataQr;
 
     default:
       return state;
