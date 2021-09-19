@@ -18,6 +18,7 @@ import {
   Colors,
   TextInput,
   Button,
+  Badge,
 } from "react-native-paper";
 import { DraxProvider, DraxView } from "react-native-drax";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,11 +58,12 @@ const CreateOrder = ({ navigation }) => {
   function submitExtraHandler() {
     let newTreat = {
       id: treatForAdd.id,
-      title: treatForAdd.name,
+      name: treatForAdd.name,
       qty: quantity,
       price: treatForAdd.price,
       imageUrl: treatForAdd.imageUrl,
     };
+    setReceived([...received, { treat: newTreat }]);
     setTreatForSend([...treatForSend, newTreat]);
     hideModal();
   }
@@ -334,6 +336,15 @@ const CreateOrder = ({ navigation }) => {
                             marginVertical: 2,
                           }}
                         >
+                          <Badge
+                            size={25}
+                            style={{
+                              position: "absolute",
+                              zIndex: 50,
+                            }}
+                          >
+                            {item.treat.qty}
+                          </Badge>
                           <Chip
                             style={{
                               width: 150,

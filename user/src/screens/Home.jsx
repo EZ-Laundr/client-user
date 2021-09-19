@@ -60,6 +60,8 @@ export default function Home({ navigation }) {
           </View>
           <Portal>
             <FAB.Group
+              fabStyle={{ backgroundColor: "#3DB2FF" }}
+              color="#FFFF"
               style={{ zIndex: 50 }}
               open={open}
               icon={open ? "basket-outline" : "plus"}

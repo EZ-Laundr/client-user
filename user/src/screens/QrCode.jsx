@@ -11,6 +11,7 @@ import {
   Modal,
   Portal,
 } from "react-native-paper";
+import convertToRupiah from "../helpers/toRupiah";
 const windowWidth = Dimensions.get("window").width;
 export default function QrCode({ route }) {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ export default function QrCode({ route }) {
 
             <Button
               labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
-              style={{ width: 80, height: 30, borderRadius: 10 }}
+              style={{ width: 80, height: 30, borderRadius: 10, marginTop: 20 }}
               mode="contained"
               onPress={() => hideModal()}
             >
@@ -78,6 +79,7 @@ export default function QrCode({ route }) {
             <View>
               <Text>INI STATUS</Text>
             </View>
+
             <Button
               labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
               style={{ width: 80, height: 30, borderRadius: 10 }}
@@ -89,55 +91,99 @@ export default function QrCode({ route }) {
           </Modal>
         </Portal>
         <Card>
-          <Card.Title title={detailOrder.Service.name} />
-          <Card.Cover source={{ uri: `${detailOrder.Service.imageUrl}` }} />
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: "#1DB9C3",
+            }}
+          >
+            <Title style={{ textAlign: "center" }}>
+              {detailOrder.Service.name}
+            </Title>
+          </View>
+
+          <Card.Cover
+            style={{ width: 150, height: 150, alignSelf: "center" }}
+            source={{ uri: `${detailOrder.Service.imageUrl}` }}
+          />
           <Card.Content>
-            <View>
-              <Title>With perfume</Title>
-              {/* <Paragraph>{detailOrder.perfume.name}</Paragraph> */}
-              <Paragraph>nama perfume</Paragraph>
-              <View>
-                <Image
-                  style={{ width: 80, height: 80, borderRadius: 20 }}
-                  source={{ uri: `${detailOrder.Service.imageUrl}` }}
-                />
-                {/* <Text>{convertToRupiah(+detailOrder.perfume.price)}</Text> */}
-                <Text>harga perfume</Text>
-              </View>
+            <View
+              style={{
+                marginTop: 10,
+                backgroundColor: "#1DB9C3",
+              }}
+            >
+              <Title style={{ textAlign: "center" }}>With perfume</Title>
             </View>
-            <View style={{ flexDirection: "row", marginTop: 10 }}>
+            <View style={{ alignItems: "center" }}>
+              <Paragraph>{detailOrder.Perfume.name}</Paragraph>
+              <Image
+                style={{ width: 80, height: 80, borderRadius: 20 }}
+                source={{ uri: `${detailOrder.Perfume.imageUrl}` }}
+              />
+              <Text>{convertToRupiah(+detailOrder.Perfume.price)}</Text>
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                backgroundColor: "#1DB9C3",
+              }}
+            >
+              <Title style={{ textAlign: "center" }}>Extra Order</Title>
+            </View>
+            <View style={{ flexDirection: "row" }}>
               {detailOrder.OrderSpecials.map((treat) => {
                 return (
-                  <View key={treat.id}>
+                  <View
+                    key={treat.id}
+                    style={{ marginHorizontal: 10, alignItems: "center" }}
+                  >
                     <Paragraph>{treat.SpecialTreatment.name}</Paragraph>
                     <View>
                       <Image
                         style={{ width: 80, height: 80, borderRadius: 20 }}
                         source={{ uri: `${treat.SpecialTreatment.imageUrl}` }}
                       />
-                      {/* <Text>{convertToRupiah(+cartData.perfume.price)}</Text> */}
+                      <Text>
+                        {convertToRupiah(+treat.price) + " x " + treat.quantity}
+                      </Text>
                     </View>
                   </View>
                 );
               })}
             </View>
           </Card.Content>
-          <Card.Actions></Card.Actions>
+          <Card.Actions style={{ alignItems: "center" }}>
+            <View
+              style={{
+                height: 30,
+                backgroundColor: "#1DB9C3",
+                width: windowWidth,
+              }}
+            >
+              <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+                Total pesanan : {convertToRupiah(detailOrder.totalPrice)}
+              </Text>
+            </View>
+          </Card.Actions>
         </Card>
         <View
           style={{
+            position: "absolute",
+            flexDirection: "row",
+            flex: 1,
+            bottom: 6,
             alignItems: "center",
             justifyContent: "center",
-            bottom: 3,
-            position: "absolute",
           }}
         >
           <Button
-            labelStyle={{ fontSize: 20, textAlign: "center" }}
+            labelStyle={{ fontSize: 15, textAlign: "center" }}
             style={{
-              width: windowWidth,
+              width: windowWidth * 0.5,
               height: 40,
-              borderRadius: 0,
+              borderRadius: 10,
+              marginRight: 3,
             }}
             mode="contained"
             onPress={() => showStatus()}
@@ -145,16 +191,17 @@ export default function QrCode({ route }) {
             Status Order
           </Button>
           <Button
-            labelStyle={{ fontSize: 20, textAlign: "center" }}
+            labelStyle={{ fontSize: 15, textAlign: "center" }}
             style={{
-              width: windowWidth,
+              width: windowWidth * 0.5,
               height: 40,
-              borderRadius: 0,
+              borderRadius: 10,
+              marginLeft: 3,
             }}
             mode="contained"
             onPress={() => showModal()}
           >
-            Show QR Code
+            QR Code
           </Button>
         </View>
       </>
