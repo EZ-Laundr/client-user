@@ -18,40 +18,9 @@ export default function Cart({ route, navigation }) {
   const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
   const dispatch = useDispatch();
-  // const { cartData } = route.params;
+  const { cartData } = route.params;
 
-  const cartData = {
-    perfume: {
-      id: 2,
-      image:
-        "https://www.daya.id/01%20Tips%20-%20Info%20Terkini/Usaha/2021/2021%20-%2001/Cara%20memulai%20usaha%20laundry%20yang%20benar%20agar%20tidak%20rugi/Gambar%201.jpg",
-      price: 20000,
-      title: "Melati",
-    },
-    pickup: false,
-    service: {
-      id: 3,
-      image:
-        "https://www.daya.id/01%20Tips%20-%20Info%20Terkini/Usaha/2021/2021%20-%2001/Cara%20memulai%20usaha%20laundry%20yang%20benar%20agar%20tidak%20rugi/Gambar%201.jpg",
-      title: "Setrika Aja",
-    },
-    treatments: [
-      {
-        id: 1,
-        title: "Handuk",
-        price: 10000,
-        qty: 2,
-      },
-      {
-        id: 3,
-        title: "Sepatu",
-        price: 30000,
-        qty: 4,
-      },
-    ],
-  };
-
-  function chechoutHander() {
+  async function chechoutHander() {
     const payload = {
       ServiceId: cartData.service.id,
       perfume: {
@@ -61,10 +30,12 @@ export default function Cart({ route, navigation }) {
       treatments: cartData.treatments,
       pickup: cartData.pickup,
     };
-
-    dispatch(createOrder(payload));
-
-    navigation.navigate("OrderCompleted");
+    let orderrs = await dispatch(createOrder(payload));
+    if (orderrs === "success") {
+      navigation.navigate("OrderCompleted");
+    } else {
+      console.log("ada error di create order");
+    }
   }
 
   function convertToRupiah(angka) {
@@ -86,16 +57,16 @@ export default function Cart({ route, navigation }) {
   return (
     <>
       <Card>
-        <Card.Title title={cartData.service.title} />
-        <Card.Cover source={{ uri: `${cartData.service.image}` }} />
+        <Card.Title title={cartData.service.name} />
+        <Card.Cover source={{ uri: `${cartData.service.imageUrl}` }} />
         <Card.Content>
           <View>
             <Title>With perfume</Title>
-            <Paragraph>{cartData.perfume.title}</Paragraph>
+            <Paragraph>{cartData.perfume.name}</Paragraph>
             <View>
               <Image
                 style={{ width: 80, height: 80, borderRadius: 20 }}
-                source={{ uri: `${cartData.perfume.image}` }}
+                source={{ uri: `${cartData.perfume.imageUrl}` }}
               />
               <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
             </View>
@@ -108,7 +79,7 @@ export default function Cart({ route, navigation }) {
                   <View>
                     <Image
                       style={{ width: 80, height: 80, borderRadius: 20 }}
-                      source={{ uri: `${treat.image}` }}
+                      source={{ uri: `${treat.imageUrl}` }}
                     />
                     <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
                   </View>
