@@ -3,6 +3,7 @@ import {
   SET_ACCESS_TOKEN,
   SET_PARFUME,
   SET_TREATMENT,
+  SET_ORDERS,
 } from "./actionType";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   perfumes: [],
   loading: false,
   treatments: [],
+  orders: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -38,13 +40,19 @@ export default function reducer(state = initialState, action) {
       return dataTreat;
 
     case SET_ACCESS_TOKEN:
-      console.log("masuk");
       const dataToken = {
         ...state,
         access_token: action.payload,
       };
       return dataToken;
 
+    case SET_ORDERS:
+      console.log("masuk");
+      const dataOrders = {
+        ...state,
+        orders: action.payload,
+      };
+      return dataOrders;
     default:
       return state;
   }

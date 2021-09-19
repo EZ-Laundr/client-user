@@ -3,6 +3,7 @@ import {
   SET_PARFUME,
   SET_TREATMENT,
   SET_ACCESS_TOKEN,
+  SET_ORDERS,
 } from "./actionType";
 import localhost from "../APIS/axiosAPI";
 
@@ -35,6 +36,14 @@ export function setTreatment(treatment) {
     payload: treatment,
   };
   return dataTreatment;
+}
+
+export function setOrders(orders) {
+  const dataOrders = {
+    type: SET_ORDERS,
+    payload: orders,
+  };
+  return dataOrders;
 }
 
 export function fetchServices() {
@@ -124,6 +133,26 @@ export function loginUser(payload) {
       return "success";
     } catch (error) {
       return error;
+    }
+  };
+}
+
+export function fetchOrders() {
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        headers: {
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
+        },
+        url: `/orders`,
+      });
+      const result = response.data;
+      dispatch(setOrders(result));
+      console.log(result);
+    } catch (error) {
+      console.log(error);
     }
   };
 }
