@@ -88,25 +88,25 @@ export function fetchTreatment() {
 export function createOrder(payload) {
   return async function (dispatch, getState) {
     try {
-      let results;
       const state = getState();
-      const response = await fetch(`${baseUrl}/order`, {
+      console.log(state.reducer.access_token);
+      const response = await localhost({
         method: "post",
+        url: `/orders`,
         headers: {
-          access_token: state.reducer.access_token,
+          access_token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
         },
-        body: payload,
+        data: payload,
       });
 
-      if (response.ok) {
-        results = response;
+      if (response.status == 201) {
+        return "success";
       } else {
         throw Error;
       }
     } catch (error) {
-      results = error;
-    } finally {
-      return results;
+      console.log(error, "ini eror");
     }
   };
 }

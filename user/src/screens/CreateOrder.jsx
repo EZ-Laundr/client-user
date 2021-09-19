@@ -60,6 +60,7 @@ const CreateOrder = ({ navigation }) => {
       title: treatForAdd.name,
       qty: quantity,
       price: treatForAdd.price,
+      imageUrl: treatForAdd.imageUrl,
     };
     setTreatForSend([...treatForSend, newTreat]);
     hideModal();
@@ -100,7 +101,7 @@ const CreateOrder = ({ navigation }) => {
                     treatments: treatForSend,
                     pickup: delivery,
                   };
-                  console.log(payload);
+                  console.log(cartData);
                   navigation.navigate("Cart", { cartData });
                 },
                 style: "cancel",
@@ -138,14 +139,6 @@ const CreateOrder = ({ navigation }) => {
         },
       },
     ]);
-
-    console.log(payload, "payload");
-    // const payload = {
-    //   ServiceId: servicesSelected,
-    //   ParfumeId: parumeSelected,
-    //   treatments: treatmentSelected,
-    //   pickup: delivery,
-    // };
   }
 
   return (
