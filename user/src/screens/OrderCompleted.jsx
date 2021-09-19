@@ -1,6 +1,7 @@
 import React from "react";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
-export default function OrderCompleted() {
+import { Image, StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
+export default function OrderCompleted({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
@@ -12,6 +13,22 @@ export default function OrderCompleted() {
       <Text style={{ fontSize: 40 }}>Selamat!!!</Text>
       <Text style={{ fontSize: 20 }}>Pesanan kamu telah kami terima</Text>
       <Text style={{ fontSize: 20 }}>Silahkan tunggu konfirmasi dari kami</Text>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: 30,
+        }}
+      >
+        <Button
+          labelStyle={{ fontSize: 20, textAlign: "center" }}
+          style={{ width: 200, height: 40, borderRadius: 10 }}
+          mode="contained"
+          onPress={() => navigation.push("OrderDetail")}
+        >
+          Order List
+        </Button>
+      </View>
     </View>
   );
 }
