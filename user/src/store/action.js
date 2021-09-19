@@ -114,31 +114,18 @@ export function createOrder(payload) {
 
 export function loginUser(payload) {
   return async function (dispatch, getState) {
-    // try {
-    //   const response = await fetch(`${baseUrl}/user/login`, {
-    //     method: "post",
-    //     body: payload,
-    //   });
-    //   if (response.ok) {
-    //     dispatch(setToken(response.access_token));
-    //     return "success";
-    //   } else {
-    //     throw Error;
-    //   }
-    // } catch (error) {
-    //   return error;
-    // }
     try {
-      console.log(payload, "payload");
-
-      if (payload) {
-        dispatch(setToken("cobacoba"));
+      const response = await fetch(`${baseUrl}/login`, {
+        method: "post",
+        body: payload,
+      });
+      if (response.ok) {
+        dispatch(setToken(response.access_token));
         return "success";
       } else {
         throw Error;
       }
     } catch (error) {
-      console.log(error, "disini?");
       return error;
     }
   };
