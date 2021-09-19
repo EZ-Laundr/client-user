@@ -21,7 +21,7 @@ import {
 } from "react-native-paper";
 import { DraxProvider, DraxView } from "react-native-drax";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrder } from "../store/action";
+import { fetchParfume, fetchServices, fetchTreatment } from "../store/action";
 const windowWidth = Dimensions.get("window").width;
 const CreateOrder = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -41,6 +41,12 @@ const CreateOrder = ({ navigation }) => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
+  React.useEffect(() => {
+    dispatch(fetchServices());
+    dispatch(fetchParfume());
+    dispatch(fetchTreatment());
+  }, []);
+
   const containerStyleModal = {
     backgroundColor: "white",
     padding: 20,
@@ -51,7 +57,7 @@ const CreateOrder = ({ navigation }) => {
   function submitExtraHandler() {
     let newTreat = {
       id: treatForAdd.id,
-      title: treatForAdd.title,
+      title: treatForAdd.name,
       qty: quantity,
       price: treatForAdd.price,
     };
@@ -151,12 +157,12 @@ const CreateOrder = ({ navigation }) => {
           contentContainerStyle={containerStyleModal}
         >
           <View>
-            <Text>Mau berapa {treatForAdd.title}?</Text>
+            <Text>Mau berapa {treatForAdd.name}?</Text>
           </View>
           <View>
             <Image
               style={styles.logo}
-              source={{ uri: `${treatForAdd.image}` }}
+              source={{ uri: `${treatForAdd.imageUrl}` }}
             />
           </View>
           <View style={{ flexDirection: "row", marginTop: 10 }}>
@@ -261,11 +267,11 @@ const CreateOrder = ({ navigation }) => {
                               borderBottomLeftRadius: 0,
                             }}
                           >
-                            {item.service.title}
+                            {item.service.name}
                           </Chip>
                           <Card.Cover
                             style={{ width: 150, height: 120, marginTop: 5 }}
-                            source={{ uri: `${item.service.image}` }}
+                            source={{ uri: `${item.service.imageUrl}` }}
                           />
                         </Card>
                       </View>
@@ -300,11 +306,11 @@ const CreateOrder = ({ navigation }) => {
                               borderBottomLeftRadius: 0,
                             }}
                           >
-                            {item.parfume.title}
+                            {item.parfume.name}
                           </Chip>
                           <Card.Cover
                             style={{ width: 150, height: 120, marginTop: 5 }}
-                            source={{ uri: `${item.parfume.image}` }}
+                            source={{ uri: `${item.parfume.imageUrl}` }}
                           />
                         </Card>
                       </View>
@@ -339,11 +345,11 @@ const CreateOrder = ({ navigation }) => {
                               borderBottomLeftRadius: 0,
                             }}
                           >
-                            {item.treat.title}
+                            {item.treat.name}
                           </Chip>
                           <Card.Cover
                             style={{ width: 150, height: 120, marginTop: 5 }}
-                            source={{ uri: `${item.treat.image}` }}
+                            source={{ uri: `${item.treat.imageUrl}` }}
                           />
                         </Card>
                       </View>
@@ -409,7 +415,7 @@ const CreateOrder = ({ navigation }) => {
                                 borderBottomLeftRadius: 0,
                               }}
                             >
-                              {service.title}
+                              {service.name}
                             </Chip>
                             <Card.Cover
                               style={{
@@ -417,7 +423,7 @@ const CreateOrder = ({ navigation }) => {
                                 height: 120,
                                 marginTop: 5,
                               }}
-                              source={{ uri: `${service.image}` }}
+                              source={{ uri: `${service.imageUrl}` }}
                             />
                           </Card>
                         </View>
@@ -482,7 +488,7 @@ const CreateOrder = ({ navigation }) => {
                                 borderBottomLeftRadius: 0,
                               }}
                             >
-                              {parfume.title}
+                              {parfume.name}
                             </Chip>
                             <Card.Cover
                               style={{
@@ -490,7 +496,7 @@ const CreateOrder = ({ navigation }) => {
                                 height: 120,
                                 marginTop: 5,
                               }}
-                              source={{ uri: `${parfume.image}` }}
+                              source={{ uri: `${parfume.imageUrl}` }}
                             />
                           </Card>
                         </View>
@@ -547,7 +553,7 @@ const CreateOrder = ({ navigation }) => {
                             borderBottomLeftRadius: 0,
                           }}
                         >
-                          {treat.title}
+                          {treat.name}
                         </Chip>
                         <Card.Cover
                           style={{
@@ -555,7 +561,7 @@ const CreateOrder = ({ navigation }) => {
                             height: 120,
                             marginTop: 5,
                           }}
-                          source={{ uri: `${treat.image}` }}
+                          source={{ uri: `${treat.imageUrl}` }}
                         />
                       </Card>
                     </View>

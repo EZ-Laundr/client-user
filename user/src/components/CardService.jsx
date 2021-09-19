@@ -18,7 +18,7 @@ export default function CardService({ service, navigation }) {
   }
 
   return (
-    <>
+    <View>
       <View
         style={{
           alignItems: "center",
@@ -30,7 +30,7 @@ export default function CardService({ service, navigation }) {
         >
           <Card.Cover
             style={{ width: 120, height: 120, marginTop: 10 }}
-            source={{ uri: `${service.image}` }}
+            source={{ uri: `${service.imageUrl}` }}
           />
           <Card.Actions>
             <Button
@@ -39,11 +39,11 @@ export default function CardService({ service, navigation }) {
               mode="contained"
               onPress={() => createOrderHandler()}
             >
-              {service.title}
+              {service.name}
             </Button>
           </Card.Actions>
         </Card>
       </View>
-    </>
+    </View>
   );
 }

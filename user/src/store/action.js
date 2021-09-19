@@ -4,8 +4,7 @@ import {
   SET_TREATMENT,
   SET_ACCESS_TOKEN,
 } from "./actionType";
-import axios from "axios";
-const baseUrl = `http://localhost:3000`;
+import localhost from "../APIS/axiosAPI";
 
 export function setServices(services) {
   const dataServie = {
@@ -43,16 +42,13 @@ export function fetchServices() {
   return async function (dispatch, getState) {
     try {
       console.log("try");
-      const response = await axios.get(`http://192.168.43.227:4000/services`);
-      console.log(response, "response???");
-      // if (response.ok) {
-      //   const result = await response.json();
-      //   dispatch(setServices(result));
-      // } else {
-      //   throw Error;
-      // }
+      const response = await localhost({
+        method: "get",
+        url: `/services`,
+      });
+      const result = response.data;
+      dispatch(setServices(result));
     } catch (error) {
-      console.log("catch");
       console.log(error);
     }
   };
@@ -61,13 +57,12 @@ export function fetchServices() {
 export function fetchParfume() {
   return async function (dispatch, getState) {
     try {
-      const response = await fetch(`${baseUrl}/parfume`);
-      if (response.ok) {
-        const result = await response.json();
-        dispatch(setParfume(result));
-      } else {
-        throw Error;
-      }
+      const response = await localhost({
+        method: "get",
+        url: `/perfumes`,
+      });
+      const result = response.data;
+      dispatch(setParfume(result));
     } catch (error) {
       console.log(error);
     }
@@ -77,13 +72,13 @@ export function fetchParfume() {
 export function fetchTreatment() {
   return async function (dispatch, getState) {
     try {
-      const response = await fetch(`${baseUrl}/treatment`);
-      if (response.ok) {
-        const result = await response.json();
-        dispatch(setTreatment(result));
-      } else {
-        throw Error;
-      }
+      const response = await localhost({
+        method: "get",
+        url: `/special-treatments`,
+      });
+      const result = response.data;
+      console.log(result);
+      dispatch(setTreatment(result));
     } catch (error) {
       console.log(error);
     }
@@ -119,16 +114,14 @@ export function createOrder(payload) {
 export function loginUser(payload) {
   return async function (dispatch, getState) {
     try {
-      const response = await fetch(`${baseUrl}/login`, {
+      const response = await localhost({
         method: "post",
-        body: payload,
+        url: `/login`,
+        data: payload,
       });
-      if (response.ok) {
-        dispatch(setToken(response.access_token));
-        return "success";
-      } else {
-        throw Error;
-      }
+      console.log(response, "responsee");
+      dispatch(setToken(response.access_token));
+      return "success";
     } catch (error) {
       return error;
     }
