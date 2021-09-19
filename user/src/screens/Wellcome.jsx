@@ -11,7 +11,7 @@ export default function Wellcome({ navigation }) {
         contentStyle={{ marginTop: 2, width: 50 }}
         mode="contained"
         color="blue"
-        onPress={() => navigation.navigate("CreateOrder")}
+        onPress={() => navigation.navigate("Login")}
       >
         Continue
       </Button>

@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from "react-native";
+import convertToRupiah from "../helpers/toRupiah";
 const windowWidth = Dimensions.get("window").width;
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 import { useDispatch } from "react-redux";
@@ -57,6 +58,9 @@ export default function Cart({ route, navigation }) {
               />
               <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
             </View>
+          </View>
+          <View style={{ marginTop: 5 }}>
+            <Title>Extra Order</Title>
           </View>
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             {cartData.treatments.map((treat) => {
