@@ -66,20 +66,20 @@ export function setQrCode(code) {
 }
 
 export function fetchServices() {
-	// console.log("masuk");
-	return async function (dispatch, getState) {
-		try {
-			// console.log("try");
-			const response = await localhost({
-				method: "get",
-				url: `/services`,
-			});
-			const result = response.data;
-			dispatch(setServices(result));
-		} catch (error) {
-			console.log(error);
-		}
-	};
+
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        url: `/services`,
+      });
+      const result = response.data;
+      dispatch(setServices(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 }
 
 export function fetchParfume() {
@@ -98,65 +98,121 @@ export function fetchParfume() {
 }
 
 export function fetchTreatment() {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "get",
-				url: `/special-treatments`,
-			});
-			const result = response.data;
-			// console.log(result);
-			dispatch(setTreatment(result));
-		} catch (error) {
-			console.log(error);
-		}
-	};
+
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        url: `/special-treatments`,
+      });
+      const result = response.data;
+
+      dispatch(setTreatment(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 
 export function createOrder(payload) {
-	return async function (dispatch, getState) {
-		try {
-			const state = getState();
-			// console.log(state.reducer.access_token);
-			const response = await localhost({
-				method: "post",
-				url: `/orders`,
-				headers: {
-					access_token:
-						"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
-				},
-				data: payload,
-			});
+  return async function (dispatch, getState) {
+    try {
+      const state = getState();
 
-			if (response.status == 201) {
-				return "success";
-			} else {
-				throw Error;
-			}
-		} catch (error) {
-			console.log(error, "ini eror");
-		}
-	};
+      const response = await localhost({
+        method: "post",
+        url: `/orders`,
+        headers: {
+          access_token: state.reducer.access_token,
+        },
+        data: payload,
+      });
+
+      if (response.status == 201) {
+        return "success";
+      } else {
+        throw Error;
+      }
+    } catch (error) {
+      console.log(error, "ini eror");
+    }
+  };
 }
 
 export function loginUser(payload) {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "post",
-				url: `/login`,
-				data: payload,
-			});
-			console.log(1, response.data.access_token);
-			dispatch(setToken(response.data.access_token));
-			return "success";
-		} catch (error) {
-			return error.response.data.msg;
-		}
-	};
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "post",
+        url: `/login`,
+        data: payload,
+      });
+
+      dispatch(setToken(response.access_token));
+      return "success";
+    } catch (error) {
+      return error;
+    }
+  };
 }
 
-export function registerUser(payload) {
+export function fetchOrders() {
+  return async function (dispatch, getState) {
+    try {
+      const state = getState();
+
+      const response = await localhost({
+        method: "get",
+        headers: {
+          access_token: state.reducer.access_token.toString(),
+        },
+        url: `/orders`,
+      });
+      const result = response.data;
+      dispatch(setOrders(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function fetchOrderDetail(id) {
+  return async function (dispatch, getState) {
+    try {
+      const state = getState();
+
+      const response = await localhost({
+        method: "get",
+        headers: {
+          access_token: state.reducer.access_token.toString(),
+        },
+        url: `/orders/${id}`,
+      });
+      const result = response.data;
+      console.log(result, "resulltt");
+      dispatch(setOrderDetail(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function fetchQrCode(payload) {
+  return async function (dispatch, getState) {
+    try {
+      const response = await happi({
+        url: `/v1/qrcode?data=${payload}`,
+        method: "get",
+      });
+      const result = response.data;
+      dispatch(setQrCode(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+  
+  export function registerUser(payload) {
 	return async function (dispatch, getState) {
 		// console.log(payload);
 		try {
@@ -174,58 +230,3 @@ export function registerUser(payload) {
 	};
 }
 
-export function fetchOrders() {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "get",
-				headers: {
-					access_token:
-						"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
-				},
-				url: `/orders`,
-			});
-			const result = response.data;
-			dispatch(setOrders(result));
-			// console.log(result);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-}
-
-export function fetchOrderDetail(id) {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "get",
-				headers: {
-					access_token:
-						"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ2ZXJsaWdpZ2FAbWFpbC5jb20iLCJwaG9uZU51bWJlciI6MTIzNDU2ODksInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTYzMjA1Nzc3Mn0.JYzjQpB62QHh4X3ol3rLwqxARc3AZpXWKz4AIkjsiRs",
-				},
-				url: `/orders/${id}`,
-			});
-			const result = response.data;
-			dispatch(setOrderDetail(result));
-			// console.log(result);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-}
-
-export function fetchQrCode(payload) {
-	return async function (dispatch, getState) {
-		try {
-			const response = await happi({
-				url: `/v1/qrcode?data=${payload}`,
-				method: "get",
-			});
-			const result = response.data;
-			dispatch(setQrCode(result));
-			// console.log(result);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-}

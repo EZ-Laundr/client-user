@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from "react-native";
+import convertToRupiah from "../helpers/toRupiah";
 const windowWidth = Dimensions.get("window").width;
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 import { useDispatch } from "react-redux";
@@ -44,38 +45,72 @@ export default function Cart({ route, navigation }) {
   return (
     <>
       <Card>
-        <Card.Title title={cartData.service.name} />
+        <View
+          style={{
+            marginTop: 10,
+            backgroundColor: "#1DB9C3",
+          }}
+        >
+          <Title style={{ textAlign: "center" }}>{cartData.service.name}</Title>
+        </View>
         <Card.Cover source={{ uri: `${cartData.service.imageUrl}` }} />
         <Card.Content>
-          <View>
-            <Title>With perfume</Title>
-            <Paragraph>{cartData.perfume.name}</Paragraph>
-            <View>
-              <Image
-                style={{ width: 80, height: 80, borderRadius: 20 }}
-                source={{ uri: `${cartData.perfume.imageUrl}` }}
-              />
-              <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
-            </View>
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: "#1DB9C3",
+            }}
+          >
+            <Title style={{ textAlign: "center" }}>Perfume</Title>
           </View>
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <View style={{ alignItems: "center" }}>
+            <Paragraph>{cartData.perfume.name}</Paragraph>
+            <Image
+              style={{ width: 80, height: 80, borderRadius: 20 }}
+              source={{ uri: `${cartData.perfume.imageUrl}` }}
+            />
+            <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
+          </View>
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: "#1DB9C3",
+            }}
+          >
+            <Title style={{ textAlign: "center" }}>Extra Order</Title>
+          </View>
+          <View style={{ flexDirection: "row" }}>
             {cartData.treatments.map((treat) => {
               return (
-                <View>
-                  <Paragraph>{treat.title}</Paragraph>
-                  <View>
+                <View key={treat.id}>
+                  <View style={{ marginHorizontal: 10, alignItems: "center" }}>
+                    <Paragraph>{treat.name}</Paragraph>
                     <Image
                       style={{ width: 80, height: 80, borderRadius: 20 }}
                       source={{ uri: `${treat.imageUrl}` }}
                     />
-                    <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
+                    <Text>
+                      {convertToRupiah(+treat.price) + " x " + treat.qty}
+                    </Text>
                   </View>
                 </View>
               );
             })}
           </View>
         </Card.Content>
-        <Card.Actions></Card.Actions>
+        <Card.Actions style={{ alignItems: "center" }}>
+          <View
+            style={{
+              height: 30,
+              backgroundColor: "#1DB9C3",
+              width: windowWidth,
+            }}
+          >
+            <Text>
+              Total pesanan akan di hitung setelah konfirmasi dari admin
+            </Text>
+          </View>
+        </Card.Actions>
       </Card>
       <View
         style={{
@@ -89,7 +124,7 @@ export default function Cart({ route, navigation }) {
           labelStyle={{ fontSize: 20, textAlign: "center" }}
           style={{
             width: windowWidth,
-            height: 40,
+            height: 50,
             borderRadius: 0,
           }}
           mode="contained"

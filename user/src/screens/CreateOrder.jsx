@@ -18,6 +18,7 @@ import {
   Colors,
   TextInput,
   Button,
+  Badge,
 } from "react-native-paper";
 import { DraxProvider, DraxView } from "react-native-drax";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,11 +58,12 @@ const CreateOrder = ({ navigation }) => {
   function submitExtraHandler() {
     let newTreat = {
       id: treatForAdd.id,
-      title: treatForAdd.name,
+      name: treatForAdd.name,
       qty: quantity,
       price: treatForAdd.price,
       imageUrl: treatForAdd.imageUrl,
     };
+    setReceived([...received, { treat: newTreat }]);
     setTreatForSend([...treatForSend, newTreat]);
     hideModal();
   }
@@ -85,7 +87,7 @@ const CreateOrder = ({ navigation }) => {
 
     let cartData;
 
-    Alert.alert("Mau yang mana?", "Mau nganter apa di jemput nih?", [
+    Alert.alert("Anter apa jemput?", "Mau nganter apa di jemput nih?", [
       {
         text: "Anter Aja",
         onPress: () => {
@@ -124,7 +126,15 @@ const CreateOrder = ({ navigation }) => {
               {
                 text: "GAS!",
                 onPress: () => {
-                  setDelivery(false), console.log(delivery);
+                  // console.log(service);
+                  cartData = {
+                    service: service[0].service,
+                    perfume: parfume[0].parfume,
+                    treatments: treatForSend,
+                    pickup: delivery,
+                  };
+                  console.log(cartData);
+                  navigation.navigate("Cart", { cartData });
                 },
                 style: "cancel",
               },
@@ -326,6 +336,15 @@ const CreateOrder = ({ navigation }) => {
                             marginVertical: 2,
                           }}
                         >
+                          <Badge
+                            size={25}
+                            style={{
+                              position: "absolute",
+                              zIndex: 50,
+                            }}
+                          >
+                            {item.treat.qty}
+                          </Badge>
                           <Chip
                             style={{
                               width: 150,
@@ -577,7 +596,7 @@ const CreateOrder = ({ navigation }) => {
           mode="contained"
           onPress={() => chechoutHander()}
         >
-          Checkout
+          Gas Laundry!
         </Button>
       </View>
     </>

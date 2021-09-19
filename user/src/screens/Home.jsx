@@ -73,13 +73,21 @@ export default function Home({ navigation }) {
           </View>
           <Portal>
             <FAB.Group
+              fabStyle={{ backgroundColor: "#3DB2FF" }}
+              color="#FFFF"
               style={{ zIndex: 50 }}
               open={open}
               icon={open ? "basket-outline" : "plus"}
               actions={[
                 {
-                  icon: "cart-outline",
-                  label: "Create Order",
+                  icon: "chat",
+                  label: "Chat Admin",
+                  onPress: () => createOrderHandler(),
+                  small: false,
+                },
+                {
+                  icon: "washing-machine",
+                  label: "Pesan Laundry",
                   onPress: () => createOrderHandler(),
                   small: false,
                 },
