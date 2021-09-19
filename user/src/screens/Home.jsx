@@ -18,6 +18,7 @@ export default function Home({ navigation }) {
     dispatch(fetchServices());
   }, []);
 
+
   return (
     <>
       <CarouselItem />
@@ -34,13 +35,11 @@ export default function Home({ navigation }) {
         >
           {services.map((service, index) => {
             return (
-              <>
                 <CardService
                   service={service}
-                  key={index}
+                  key={"services"+index}
                   navigation={navigation}
                 />
-              </>
             );
           })}
         </View>

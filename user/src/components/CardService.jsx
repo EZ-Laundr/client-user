@@ -26,22 +26,18 @@ export default function CardService({ service, navigation }) {
         }}
       >
         <Card
+            onPress={() => createOrderHandler()}
+
           style={{ width: 180, height: 180, margin: 5, alignItems: "center" }}
         >
           <Card.Cover
             style={{ width: 120, height: 120, marginTop: 10 }}
-            source={{ uri: `${service.image}` }}
+            source={{ uri: `${service.imageUrl}` }}
           />
-          <Card.Actions>
-            <Button
-              labelStyle={{ fontSize: 10 }}
-              style={{ width: 100, height: 30 }}
-              mode="contained"
-              onPress={() => createOrderHandler()}
-            >
-              {service.title}
-            </Button>
-          </Card.Actions>
+          <Card.Title 
+            title={service.name}
+              titleStyle={{ fontSize: 15 }}
+          />
         </Card>
       </View>
     </>
