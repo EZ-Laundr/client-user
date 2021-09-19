@@ -20,12 +20,12 @@ export default function Login({ navigation }) {
   }
 
   async function loginHandler() {
-    try {
-      if (email === "") {
-        Alert.alert("Email kosong", "Silahkan isi email & pasword");
-      } else if (password === "") {
-        Alert.alert("Password kosong", "Silahkan isi email & pasword");
-      } else {
+    // try {
+    //   if (email === "") {
+    //     Alert.alert("Email kosong", "Silahkan isi email & pasword");
+    //   } else if (password === "") {
+    //     Alert.alert("Password kosong", "Silahkan isi email & pasword");
+    //   } else {
         const payload = {
           email: email,
           password: password,
@@ -35,12 +35,12 @@ export default function Login({ navigation }) {
         if (goLogin === "success") {
           navigation.navigate("Home");
         } else {
-          Alert.alert("Login Failed", `${goLogin}`);
+          Alert.alert("Login Failed", `${goLogin.join('\n')}`);
         }
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   return (
