@@ -8,28 +8,75 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import { Chip, Button, Card, Title } from "react-native-paper";
+// import RnIncrementDecrementBtn from "react-native-increment-decrement-button";
+import {
+  Chip,
+  Modal,
+  Card,
+  Portal,
+  IconButton,
+  Colors,
+  TextInput,
+  Button,
+} from "react-native-paper";
 import { DraxProvider, DraxView } from "react-native-drax";
 import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../store/action";
 const windowWidth = Dimensions.get("window").width;
-const CreateOrder = () => {
+const CreateOrder = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [received, setReceived] = React.useState([]);
+  const [quantity, setQuantity] = React.useState(0);
   const [staged, setStaged] = React.useState([]);
   const [serviceDragged, setServDrag] = React.useState(false);
   const [parfumeDragged, setParfDrag] = React.useState(false);
   const [delivery, setDelivery] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [treatForAdd, setTreatAdd] = React.useState({});
+  const [treatForSend, setTreatForSend] = React.useState([]);
 
-  const { services, access_token, loading } = useSelector(
+  const { services, perfumes, treatments, access_token, loading } = useSelector(
     (state) => state.reducer
   );
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
+  const containerStyleModal = {
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+    textAlign: "center",
+  };
+
+  function submitExtraHandler() {
+    let newTreat = {
+      id: treatForAdd.id,
+      title: treatForAdd.title,
+      qty: quantity,
+      price: treatForAdd.price,
+    };
+    setTreatForSend([...treatForSend, newTreat]);
+    hideModal();
+  }
+
+  function treatHandler(treat) {
+    setTreatAdd(treat);
+    showModal();
+  }
+
+  function incrementHandler() {
+    setQuantity(quantity + 1);
+  }
+
+  function decrementHandler() {
+    setQuantity(quantity - 1);
+  }
 
   function chechoutHander() {
     let parfume = received.filter((el) => el.parfume);
     let service = received.filter((el) => el.service);
-    let treat = received.filter((el) => el.parfume);
-    let payload;
 
-    // Alert.alert("test");
+    let cartData;
 
     Alert.alert("Mau yang mana?", "Mau nganter apa di jemput nih?", [
       {
@@ -40,7 +87,15 @@ const CreateOrder = () => {
               {
                 text: "GAS!",
                 onPress: () => {
-                  setDelivery(false), console.log(delivery);
+                  // console.log(service);
+                  cartData = {
+                    service: service[0].service,
+                    perfume: parfume[0].parfume,
+                    treatments: treatForSend,
+                    pickup: delivery,
+                  };
+                  console.log(payload);
+                  navigation.navigate("Cart", { cartData });
                 },
                 style: "cancel",
               },
@@ -89,6 +144,56 @@ const CreateOrder = () => {
 
   return (
     <>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={containerStyleModal}
+        >
+          <View>
+            <Text>Mau berapa {treatForAdd.title}?</Text>
+          </View>
+          <View>
+            <Image
+              style={styles.logo}
+              source={{ uri: `${treatForAdd.image}` }}
+            />
+          </View>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            <IconButton
+              icon="minus"
+              color={Colors.blue800}
+              size={20}
+              onPress={() => decrementHandler()}
+            />
+            <TextInput
+              style={{
+                width: 40,
+                height: 40,
+              }}
+              value={quantity.toString()}
+              keyboardType="numeric"
+              onChangeText={(val) => setQuantity(val)}
+            />
+            <IconButton
+              icon="plus"
+              color={Colors.blue800}
+              size={20}
+              onPress={() => incrementHandler()}
+            />
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <Button
+              labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
+              style={{ width: 80, height: 30, borderRadius: 10 }}
+              mode="contained"
+              onPress={() => submitExtraHandler()}
+            >
+              Oke
+            </Button>
+          </View>
+        </Modal>
+      </Portal>
       <DraxProvider>
         <View style={{ padding: 12 }}>
           <Chip
@@ -116,7 +221,7 @@ const CreateOrder = () => {
                   ...received,
                   { parfume: event.dragged.payload.parfume } || "?",
                 ]);
-                // setParfDrag(true);
+                setParfDrag(true);
               }
             }}
             style={[styles.receivingZone, styles.blue]}
@@ -339,7 +444,7 @@ const CreateOrder = () => {
               </Chip>
               <View style={[styles.palette]}>
                 <ScrollView horizontal={true}>
-                  {services.map((parfume, index) => {
+                  {perfumes.map((parfume, index) => {
                     return (
                       <DraxView
                         key={index + 3}
@@ -397,78 +502,68 @@ const CreateOrder = () => {
             </View>
           )}
 
-          {!parfumeDragged && (
-            <View style={styles.container}>
-              <Chip
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#3DB2FF",
-                  borderRadius: 0,
-                  justifyContent: "space-evenly",
-                }}
-              >
-                EXTRA ORDER
-              </Chip>
-              <View style={[styles.palette]}>
-                <ScrollView horizontal={true}>
-                  {services.map((parfume, index) => {
-                    return (
-                      <DraxView
-                        key={index + 4}
-                        style={[styles.centeredContent, styles.draggableBox]}
-                        draggingStyle={styles.dragging}
-                        dragReleasedStyle={styles.dragging}
-                        hoverDraggingStyle={styles.hoverDragging}
-                        dragPayload={{ parfume, type: "parfume" }}
-                        longPressDelay={300}
+          <View style={styles.container}>
+            <Chip
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#3DB2FF",
+                borderRadius: 0,
+                justifyContent: "space-evenly",
+              }}
+            >
+              EXTRA ORDER
+            </Chip>
+            <View style={[styles.palette]}>
+              <ScrollView horizontal={true}>
+                {treatments.map((treat, index) => {
+                  return (
+                    <View
+                      key={index + 4}
+                      style={{
+                        alignItems: "center",
+                      }}
+                    >
+                      <Card
+                        onPress={() => treatHandler(treat)}
+                        style={{
+                          width: 160,
+                          height: 170,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginHorizontal: 10,
+                          borderRadius: 5,
+                        }}
                       >
-                        <View
+                        <Chip
                           style={{
-                            alignItems: "center",
+                            width: 150,
+                            justifyContent: "center",
+                            backgroundColor: "#3DB2FF",
+                            marginTop: 5,
+                            borderTopRightRadius: 5,
+                            borderTopLeftRadius: 5,
+                            borderBottomRightRadius: 0,
+                            borderBottomLeftRadius: 0,
                           }}
                         >
-                          <Card
-                            style={{
-                              width: 160,
-                              height: 170,
-                              alignItems: "center",
-                              justifyContent: "center",
-                              marginHorizontal: 10,
-                              borderRadius: 5,
-                            }}
-                          >
-                            <Chip
-                              style={{
-                                width: 150,
-                                justifyContent: "center",
-                                backgroundColor: "#3DB2FF",
-                                marginTop: 5,
-                                borderTopRightRadius: 5,
-                                borderTopLeftRadius: 5,
-                                borderBottomRightRadius: 0,
-                                borderBottomLeftRadius: 0,
-                              }}
-                            >
-                              {parfume.title}
-                            </Chip>
-                            <Card.Cover
-                              style={{
-                                width: 150,
-                                height: 120,
-                                marginTop: 5,
-                              }}
-                              source={{ uri: `${parfume.image}` }}
-                            />
-                          </Card>
-                        </View>
-                      </DraxView>
-                    );
-                  })}
-                </ScrollView>
-              </View>
+                          {treat.title}
+                        </Chip>
+                        <Card.Cover
+                          style={{
+                            width: 150,
+                            height: 120,
+                            marginTop: 5,
+                          }}
+                          source={{ uri: `${treat.image}` }}
+                        />
+                      </Card>
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
-          )}
+          </View>
         </ScrollView>
       </DraxProvider>
       <View

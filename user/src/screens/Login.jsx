@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, Alert, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 
 import { useDispatch } from "react-redux";
@@ -23,9 +23,9 @@ export default function Login({ navigation }) {
     try {
       console.log(email, "email di login");
       if (email === "") {
-        console.log("email is required");
+        Alert.alert("Email kosong", "Silahkan isi email & pasword");
       } else if (password === "") {
-        console.log("password is required");
+        Alert.alert("Password kosong", "Silahkan isi email & pasword");
       } else {
         const payload = {
           email: email,
@@ -33,7 +33,6 @@ export default function Login({ navigation }) {
         };
         const goLogin = await dispatch(loginUser(payload));
         if (goLogin === "success") {
-          console.log(goLogin, "turee");
           navigation.navigate("Home");
         } else {
           console.log(goLogin, "else");
