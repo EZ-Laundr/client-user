@@ -85,7 +85,7 @@ const CreateOrder = ({ navigation }) => {
 
     let cartData;
 
-    Alert.alert("Mau yang mana?", "Mau nganter apa di jemput nih?", [
+    Alert.alert("Anter apa jemput?", "Mau nganter apa di jemput nih?", [
       {
         text: "Anter Aja",
         onPress: () => {
@@ -124,7 +124,15 @@ const CreateOrder = ({ navigation }) => {
               {
                 text: "GAS!",
                 onPress: () => {
-                  setDelivery(false), console.log(delivery);
+                  // console.log(service);
+                  cartData = {
+                    service: service[0].service,
+                    perfume: parfume[0].parfume,
+                    treatments: treatForSend,
+                    pickup: delivery,
+                  };
+                  console.log(cartData);
+                  navigation.navigate("Cart", { cartData });
                 },
                 style: "cancel",
               },
@@ -577,7 +585,7 @@ const CreateOrder = ({ navigation }) => {
           mode="contained"
           onPress={() => chechoutHander()}
         >
-          Checkout
+          Gas Laundry!
         </Button>
       </View>
     </>
