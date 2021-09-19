@@ -4,6 +4,8 @@ import {
   SET_PARFUME,
   SET_TREATMENT,
   SET_ORDERS,
+  SET_ORDER_DETAIL,
+  SET_QR_CODE,
 } from "./actionType";
 
 const initialState = {
@@ -14,6 +16,8 @@ const initialState = {
   loading: false,
   treatments: [],
   orders: [],
+  detailOrder: [],
+  qrCode: "",
 };
 
 export default function reducer(state = initialState, action) {
@@ -47,12 +51,27 @@ export default function reducer(state = initialState, action) {
       return dataToken;
 
     case SET_ORDERS:
-      console.log("masuk");
       const dataOrders = {
         ...state,
         orders: action.payload,
       };
       return dataOrders;
+
+    case SET_ORDER_DETAIL:
+      const dataOrderDetail = {
+        ...state,
+        detailOrder: action.payload,
+      };
+      return dataOrderDetail;
+
+    case SET_QR_CODE:
+      console.log("masuk");
+      const dataQr = {
+        ...state,
+        qrCode: action.payload,
+      };
+      return dataQr;
+
     default:
       return state;
   }

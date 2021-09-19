@@ -6,7 +6,7 @@ import { Chip, DataTable } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import convertToRupiah from "../helpers/toRupiah";
 
-export default function OrderList() {
+export default function OrderList({ navigation }) {
   const dispatch = useDispatch();
 
   const { orders, perfumes, treatments, access_token, loading } = useSelector(
@@ -47,7 +47,9 @@ export default function OrderList() {
                       borderRadius: 10,
                       justifyContent: "space-evenly",
                     }}
-                    onPress={() => console.log("Pressed")}
+                    onPress={() =>
+                      navigation.navigate("Order Detail", { orderId: order.id })
+                    }
                   >
                     Detail
                   </Chip>
