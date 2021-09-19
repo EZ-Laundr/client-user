@@ -19,95 +19,97 @@ import Splash from "./src/screens/Splash";
 // import Map from "./src/components/Map";
 import Wellcome from "./src/screens/Wellcome";
 import { Provider as PaperProvider } from "react-native-paper";
+import Register from "./src/screens/Register";
 export default function App() {
-  const Stack = createNativeStackNavigator();
-  const Tab = createBottomTabNavigator();
+	const Stack = createNativeStackNavigator();
+	const Tab = createBottomTabNavigator();
 
-  function StackNavigator() {
-    return (
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Map" component={Map} /> */}
-        <Stack.Screen
-          name="Splash"
-          options={{
-            headerShown: false,
-          }}
-          component={Splash}
-        />
-        <Stack.Screen
-          name="Wellcome"
-          options={{
-            headerShown: false,
-          }}
-          component={Wellcome}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name="Orders" component={OrderList} />
-        <Stack.Screen name="CreateOrder" component={CreateOrder} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
-      </Stack.Navigator>
-    );
-  }
+	function StackNavigator() {
+		return (
+			<Stack.Navigator>
+				{/* <Stack.Screen name="Map" component={Map} /> */}
+				<Stack.Screen
+					name="Splash"
+					options={{
+						headerShown: false,
+					}}
+					component={Splash}
+				/>
+				<Stack.Screen
+					name="Wellcome"
+					options={{
+						headerShown: false,
+					}}
+					component={Wellcome}
+				/>
+				<Stack.Screen
+					name="Home"
+					component={Home}
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen name="Orders" component={OrderList} />
+				<Stack.Screen name="CreateOrder" component={CreateOrder} />
+				<Stack.Screen name="Login" component={Login} />
+				<Stack.Screen name="Register" component={Register} />
+				<Stack.Screen name="Cart" component={Cart} />
+				<Stack.Screen name="OrderCompleted" component={OrderCompleted} />
+			</Stack.Navigator>
+		);
+	}
 
-  function StackOrders() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="OrderDetail" component={OrderList} />
-        <Stack.Screen name="QrPage" component={QrCode} />
-        <Stack.Screen name="StatusOrder" component={OrderStatus} />
-      </Stack.Navigator>
-    );
-  }
+	function StackOrders() {
+		return (
+			<Stack.Navigator>
+				<Stack.Screen name="OrderDetail" component={OrderList} />
+				<Stack.Screen name="QrPage" component={QrCode} />
+				<Stack.Screen name="StatusOrder" component={OrderStatus} />
+			</Stack.Navigator>
+		);
+	}
 
-  return (
-    <Provider store={store}>
-      <PaperProvider>
-        <NavigationContainer>
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-                if (route.name === "Home") {
-                  iconName = focused ? "ios-home" : "ios-home";
-                } else if (route.name === "Orders") {
-                  iconName = focused ? "ios-list" : "ios-list";
-                }
-                return <Ionicons name={iconName} size={size} color={color} />;
-              },
-              tabBarActiveTintColor: "blue",
-              tabBarInactiveTintColor: "gray",
-            })}
-          >
-            <Tab.Screen
-              name="Home"
-              component={StackNavigator}
-              options={{ headerShown: false }}
-            />
-            <Tab.Screen
-              name="Orders"
-              component={StackOrders}
-              options={{ headerShown: false }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<PaperProvider>
+				<NavigationContainer>
+					<Tab.Navigator
+						screenOptions={({ route }) => ({
+							tabBarIcon: ({ focused, color, size }) => {
+								let iconName;
+								if (route.name === "Home") {
+									iconName = focused ? "ios-home" : "ios-home";
+								} else if (route.name === "Orders") {
+									iconName = focused ? "ios-list" : "ios-list";
+								}
+								return <Ionicons name={iconName} size={size} color={color} />;
+							},
+							tabBarActiveTintColor: "blue",
+							tabBarInactiveTintColor: "gray",
+						})}
+					>
+						<Tab.Screen
+							name="Home"
+							component={StackNavigator}
+							options={{ headerShown: false }}
+						/>
+						<Tab.Screen
+							name="Orders"
+							component={StackOrders}
+							options={{ headerShown: false }}
+						/>
+					</Tab.Navigator>
+				</NavigationContainer>
+			</PaperProvider>
+		</Provider>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+	container: {
+		flex: 1,
+		backgroundColor: "#fff",
+		alignItems: "center",
+		justifyContent: "center",
+	},
 });

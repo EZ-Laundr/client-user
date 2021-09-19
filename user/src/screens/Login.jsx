@@ -21,7 +21,6 @@ export default function Login({ navigation }) {
 
   async function loginHandler() {
     try {
-      console.log(email, "email di login");
       if (email === "") {
         Alert.alert("Email kosong", "Silahkan isi email & pasword");
       } else if (password === "") {
@@ -32,10 +31,11 @@ export default function Login({ navigation }) {
           password: password,
         };
         const goLogin = await dispatch(loginUser(payload));
+
         if (goLogin === "success") {
           navigation.navigate("Home");
         } else {
-          console.log(goLogin, "else");
+          Alert.alert("Login Failed", `${goLogin}`);
         }
       }
     } catch (error) {

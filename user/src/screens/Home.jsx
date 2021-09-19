@@ -19,9 +19,14 @@ export default function Home({ navigation }) {
   }, []);
 
 
+
   return (
     <>
       <CarouselItem />
+      <Button labelStyle={{ fontSize: 10 }}
+              style={{ width: 100, height: 30 }}
+              mode="contained"
+              onPress={() => navigation.navigate("Register")}></Button>
       <View>
         <View style={{ marginTop: 20 }}>
           <Text>Selamat Datang</Text>
@@ -46,4 +51,5 @@ export default function Home({ navigation }) {
       </View>
     </>
   );
+
 }
