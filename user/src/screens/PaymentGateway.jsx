@@ -11,7 +11,7 @@ export default function App({ route }) {
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 
-  const orderID = "sahjdgsajhdg21863"; //order id nanti diganti
+  const orderID = "aystdytsatdy2342"; //order id nanti diganti
 
   useEffect(() => {
     midtrans().then((data) => {

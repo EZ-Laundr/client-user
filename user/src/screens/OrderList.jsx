@@ -74,6 +74,7 @@ export default function OrderList({ navigation }) {
           {orders.map((order) => {
             return (
               <Card
+                key={order.id}
                 style={{
                   width: windowWidth,
                   height: 180,
