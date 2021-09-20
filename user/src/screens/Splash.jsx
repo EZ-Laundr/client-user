@@ -6,7 +6,7 @@ import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 export default function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace("Create Order");
+      navigation.replace("Order Completed");
     }, 3000);
   }, [navigation]);
 

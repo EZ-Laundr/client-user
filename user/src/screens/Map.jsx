@@ -16,14 +16,18 @@ export default function Map({ route, navigation }) {
   const [latToko, setLatToko] = useState(-5.370346);
   const [longToko, setLongToko] = useState(105.051187);
   const [coordinates, setCoordinates] = useState();
+
   useEffect(() => {
-    (async () => {
+    getLocation();
+  }, []);
+
+  async function getLocation() {
+    try {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-
       let location = await Location.getLastKnownPositionAsync({
         accuracy: 6,
       });
@@ -32,8 +36,10 @@ export default function Map({ route, navigation }) {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-    })();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function calculateDistance() {
     var dis = getDistance(
@@ -114,14 +120,22 @@ export default function Map({ route, navigation }) {
               latitude: latToko,
               longitude: longToko,
             }}
-            title="Jemputnya dimana??"
-            description={"Alamat Penjamputan"}
+            title="PIlih Lokasi"
+            description={"Alamat Penjemputan"}
             draggable
             coordinate={coordinates}
             onDragEnd={(e) => setCustAddress(e)}
           />
         </MapView>
-        <View style={{ marginTop: 10, flex: 1, alignItems: "center" }}>
+        <View
+          style={{
+            marginTop: 10,
+            flex: 1,
+            alignItems: "center",
+            bottom: 0,
+            position: "absolute",
+          }}
+        >
           <Button
             labelStyle={{
               fontSize: 15,
@@ -144,6 +158,6 @@ export default function Map({ route, navigation }) {
 
 const styles = StyleSheet.create({
   map: {
-    height: height * 0.7,
+    height: height,
   },
 });

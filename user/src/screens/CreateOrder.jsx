@@ -27,6 +27,7 @@ import Map from "./Map";
 const windowWidth = Dimensions.get("window").width;
 import MapView, { Marker, Polyline } from "react-native-maps";
 import * as Location from "expo-location";
+import convertToRupiah from "../helpers/toRupiah";
 const CreateOrder = ({ navigation }) => {
   const dispatch = useDispatch();
   const [received, setReceived] = React.useState([]);
@@ -44,8 +45,8 @@ const CreateOrder = ({ navigation }) => {
 
   //yg di tampilin
   const [treatReceived, setTreatReceived] = React.useState([]);
-  const [serviceReceived, setServiceReceived] = React.useState({});
-  const [perfumeReceived, setPerfumeReceived] = React.useState({});
+  const [serviceReceived, setServiceReceived] = React.useState(null);
+  const [perfumeReceived, setPerfumeReceived] = React.useState(null);
 
   const [editQty, setEditQty] = React.useState(false);
 
@@ -128,13 +129,14 @@ const CreateOrder = ({ navigation }) => {
       const newReceived = treatReceived.filter((el) => el.id !== id);
       setTreatReceived(newReceived);
     } else if (ident == "service") {
-      setServiceReceived({});
+      setServiceReceived(null);
     } else if (ident == "parfume") {
-      setPerfumeReceived({});
+      console.log("masuk");
+      setPerfumeReceived(null);
     } else {
-      setPerfumeReceived({});
-      setServiceReceived({});
-      setTreatReceived([]);
+      setPerfumeReceived(null);
+      setServiceReceived(null);
+      setTreatReceived(null);
     }
   }
 
@@ -160,75 +162,79 @@ const CreateOrder = ({ navigation }) => {
   }
 
   function chechoutHander() {
-    let parfume = received.filter((el) => el.parfume);
-    let service = received.filter((el) => el.service);
-
     let payloadCart;
     let cartData;
-
-    Alert.alert("Anter apa jemput?", "Mau nganter apa di jemput nih?", [
-      {
-        text: "Anter Aja",
-        onPress: () => {
-          setDelivery(false),
-            Alert.alert("Di anter yaa?", "lanjut checkout kuy?", [
-              {
-                text: "GAS!",
-                onPress: () => {
-                  // console.log(service);
-                  cartData = {
-                    service: serviceReceived,
-                    perfume: perfumeReceived,
-                    treatments: treatReceived,
-                    pickup: delivery,
-                  };
-                  console.log(cartData, "cardata");
-                  navigation.navigate("Cart", { cartData });
+    if (!serviceReceived && !perfumeReceived && treatReceived.length < 1) {
+      Alert.alert("Pesanan Kosong", "Kamu belum memilih pesanan");
+    } else {
+      Alert.alert("Anter apa jemput?", "Mau nganter apa di jemput nih?", [
+        {
+          text: "Anter Aja",
+          onPress: () => {
+            setDelivery(false),
+              Alert.alert("Di anter yaa?", "lanjut checkout kuy?", [
+                {
+                  text: "GAS!",
+                  onPress: () => {
+                    // console.log(service);
+                    cartData = {
+                      service: serviceReceived,
+                      perfume: perfumeReceived,
+                      treatments: treatReceived,
+                      pickup: delivery,
+                    };
+                    console.log(cartData, "cardata");
+                    navigation.navigate("Cart", { cartData });
+                  },
+                  style: "cancel",
                 },
-                style: "cancel",
-              },
-              {
-                text: "Ga jadi",
-                onPress: () => {
-                  setDelivery(true), console.log(delivery, "deliv");
+                {
+                  text: "Ga jadi",
+                  onPress: () => {
+                    setDelivery(true), console.log(delivery, "deliv");
+                  },
                 },
-              },
-            ]);
+              ]);
+          },
+          style: "cancel",
         },
-        style: "cancel",
-      },
-      {
-        text: "Di Jemput Dong",
-        onPress: () => {
-          setDelivery(true),
-            Alert.alert("Okeey dijemput", "PIlih dulu tempat penjemputannya", [
-              {
-                text: "GAS!",
-                onPress: () => {
-                  payloadCart = {
-                    service: serviceReceived,
-                    perfume: perfumeReceived,
-                    treatments: treatReceived,
-                    pickup: delivery,
-                  };
-                  navigation.navigate("Map", { payloadCart });
-                  // showMap();
-                  // console.log(service);
-                  // console.log(cartData);
-                  // navigation.navigate("Cart", { cartData });
-                },
-                style: "cancel",
-              },
-              {
-                text: "Ga jadi",
-                onPress: () => {
-                  setDelivery(true), console.log(delivery, "ga jadi");
-                },
-              },
-            ]);
+        {
+          text: "Di Jemput Dong",
+          onPress: () => {
+            setDelivery(true),
+              Alert.alert(
+                "Okeey dijemput",
+                "PIlih dulu tempat penjemputannya",
+                [
+                  {
+                    text: "GAS!",
+                    onPress: () => {
+                      payloadCart = {
+                        service: serviceReceived,
+                        perfume: perfumeReceived,
+                        treatments: treatReceived,
+                        pickup: delivery,
+                      };
+                      navigation.navigate("Map", { payloadCart });
+                      // showMap();
+                      // console.log(service);
+                      // console.log(cartData);
+                      // navigation.navigate("Cart", { cartData });
+                    },
+                    style: "cancel",
+                  },
+                  {
+                    text: "Ga jadi",
+                    onPress: () => {
+                      setDelivery(true), console.log(delivery, "ga jadi");
+                    },
+                  },
+                ]
+              );
+          },
         },
-      },
-    ]);
+      ]);
+    }
   }
 
   if (services) {
@@ -327,7 +333,7 @@ const CreateOrder = ({ navigation }) => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#3DB2FF",
+                backgroundColor: "#0075F6",
                 borderRadius: 0,
                 justifyContent: "space-evenly",
               }}
@@ -362,20 +368,36 @@ const CreateOrder = ({ navigation }) => {
                         marginVertical: 2,
                       }}
                     >
-                      <Chip
-                        style={{
-                          width: 150,
-                          marginTop: 5,
-                          justifyContent: "center",
-                          backgroundColor: "#3DB2FF",
-                          borderTopRightRadius: 5,
-                          borderTopLeftRadius: 5,
-                          borderBottomRightRadius: 0,
-                          borderBottomLeftRadius: 0,
-                        }}
-                      >
-                        {serviceReceived.name}
-                      </Chip>
+                      <View>
+                        <View>
+                          <Badge
+                            size={25}
+                            style={{
+                              position: "absolute",
+                              zIndex: 50,
+                            }}
+                            onPress={(e) =>
+                              deleteOrder("service", serviceReceived.id)
+                            }
+                          >
+                            X
+                          </Badge>
+                        </View>
+                        <Chip
+                          style={{
+                            width: 150,
+                            marginTop: 5,
+                            justifyContent: "center",
+                            backgroundColor: "#3DB2FF",
+                            borderTopRightRadius: 5,
+                            borderTopLeftRadius: 5,
+                            borderBottomRightRadius: 0,
+                            borderBottomLeftRadius: 0,
+                          }}
+                        >
+                          {serviceReceived.name}
+                        </Chip>
+                      </View>
                       <Card.Cover
                         style={{ width: 150, height: 120, marginTop: 5 }}
                         source={{ uri: `${serviceReceived.imageUrl}` }}
@@ -401,65 +423,20 @@ const CreateOrder = ({ navigation }) => {
                         marginVertical: 2,
                       }}
                     >
-                      <Chip
-                        style={{
-                          width: 150,
-                          marginTop: 5,
-                          justifyContent: "center",
-                          backgroundColor: "#3DB2FF",
-                          borderTopRightRadius: 5,
-                          borderTopLeftRadius: 5,
-                          borderBottomRightRadius: 0,
-                          borderBottomLeftRadius: 0,
-                        }}
-                      >
-                        {perfumeReceived.name}
-                      </Chip>
-                      <Card.Cover
-                        style={{ width: 150, height: 120, marginTop: 5 }}
-                        source={{ uri: `${perfumeReceived.imageUrl}` }}
-                      />
-                    </Card>
-                  </View>
-                )}
-                {treatReceived.map((treat) => {
-                  return (
-                    <View
-                      key={treat.id}
-                      style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Card
-                        style={{
-                          width: 160,
-                          height: 170,
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginHorizontal: 10,
-                          borderRadius: 5,
-                          marginVertical: 2,
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-end",
-                          }}
-                        >
-                          <View>
-                            <Badge
-                              size={25}
-                              style={{
-                                position: "absolute",
-                                zIndex: 50,
-                              }}
-                              onPress={(e) => deleteOrder("treat", treat.id)}
-                            >
-                              X
-                            </Badge>
-                          </View>
+                      <View>
+                        <View>
+                          <Badge
+                            size={25}
+                            style={{
+                              position: "absolute",
+                              zIndex: 50,
+                            }}
+                            onPress={(e) =>
+                              deleteOrder("parfume", perfumeReceived.id)
+                            }
+                          >
+                            X
+                          </Badge>
                         </View>
                         <Chip
                           style={{
@@ -473,50 +450,113 @@ const CreateOrder = ({ navigation }) => {
                             borderBottomLeftRadius: 0,
                           }}
                         >
-                          {treat.name}
+                          {perfumeReceived.name}
                         </Chip>
-                        <View
+                      </View>
+                      <Card.Cover
+                        style={{ width: 150, height: 120, marginTop: 5 }}
+                        source={{ uri: `${perfumeReceived.imageUrl}` }}
+                      />
+                    </Card>
+                  </View>
+                )}
+                {treatReceived && (
+                  <View
+                    style={{
+                      alignItems: "flex-start",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {treatReceived.map((treat) => {
+                      return (
+                        <Card
+                          key={treat.id}
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
+                            width: 160,
+                            height: 170,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginHorizontal: 10,
+                            borderRadius: 5,
+                            marginVertical: 2,
                           }}
                         >
-                          <Card.Cover
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "flex-end",
+                            }}
+                          >
+                            <View>
+                              <Badge
+                                size={25}
+                                style={{
+                                  position: "absolute",
+                                  zIndex: 50,
+                                }}
+                                onPress={(e) => deleteOrder("treat", treat.id)}
+                              >
+                                X
+                              </Badge>
+                            </View>
+                          </View>
+                          <Chip
                             style={{
                               width: 150,
-                              height: 120,
                               marginTop: 5,
+                              justifyContent: "center",
+                              backgroundColor: "#3DB2FF",
+                              borderTopRightRadius: 5,
+                              borderTopLeftRadius: 5,
+                              borderBottomRightRadius: 0,
+                              borderBottomLeftRadius: 0,
                             }}
-                            source={{ uri: `${treat.imageUrl}` }}
-                          />
-                          <Badge
-                            size={25}
-                            style={{
-                              zIndex: 50,
-                              position: "absolute",
-                              borderRadius: 5,
-                            }}
-                            onPress={(e) => editQtyHandler(treat.id)}
                           >
-                            total: {treat.qty}
-                          </Badge>
-                        </View>
-                      </Card>
-                    </View>
-                  );
-                })}
+                            {treat.name}
+                          </Chip>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "flex-start",
+                            }}
+                          >
+                            <Card.Cover
+                              style={{
+                                width: 150,
+                                height: 120,
+                                marginTop: 5,
+                              }}
+                              source={{ uri: `${treat.imageUrl}` }}
+                            />
+                            <Badge
+                              size={25}
+                              style={{
+                                zIndex: 50,
+                                position: "absolute",
+                                borderRadius: 5,
+                              }}
+                              onPress={(e) => editQtyHandler(treat.id)}
+                            >
+                              total: {treat.qty}
+                            </Badge>
+                          </View>
+                        </Card>
+                      );
+                    })}
+                  </View>
+                )}
               </ScrollView>
             </DraxView>
           </View>
 
-          <ScrollView>
+          <ScrollView style={{ backgroundColor: "#B5DEFF" }}>
             {!serviceDragged && (
               <View style={styles.container}>
                 <Chip
                   style={{
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "#3DB2FF",
+                    backgroundColor: "#0075F6",
                     borderRadius: 0,
                     justifyContent: "space-evenly",
                   }}
@@ -555,7 +595,7 @@ const CreateOrder = ({ navigation }) => {
                                 style={{
                                   width: 150,
                                   justifyContent: "center",
-                                  backgroundColor: "#3DB2FF",
+                                  backgroundColor: "#0075F6",
                                   marginTop: 5,
                                   borderTopRightRadius: 5,
                                   borderTopLeftRadius: 5,
@@ -589,7 +629,7 @@ const CreateOrder = ({ navigation }) => {
                   style={{
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "#3DB2FF",
+                    backgroundColor: "#0075F6",
                     borderRadius: 0,
                     justifyContent: "space-evenly",
                   }}
@@ -628,7 +668,7 @@ const CreateOrder = ({ navigation }) => {
                                 style={{
                                   width: 150,
                                   justifyContent: "center",
-                                  backgroundColor: "#3DB2FF",
+                                  backgroundColor: "#0075F6",
                                   marginTop: 5,
                                   borderTopRightRadius: 5,
                                   borderTopLeftRadius: 5,
@@ -661,7 +701,7 @@ const CreateOrder = ({ navigation }) => {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: "#3DB2FF",
+                  backgroundColor: "#0075F6",
                   borderRadius: 0,
                   justifyContent: "space-evenly",
                 }}
@@ -703,14 +743,32 @@ const CreateOrder = ({ navigation }) => {
                           >
                             {treat.name}
                           </Chip>
-                          <Card.Cover
+                          <View
                             style={{
-                              width: 150,
-                              height: 120,
-                              marginTop: 5,
+                              flexDirection: "row",
+                              justifyContent: "flex-start",
                             }}
-                            source={{ uri: `${treat.imageUrl}` }}
-                          />
+                          >
+                            <Card.Cover
+                              style={{
+                                width: 150,
+                                height: 120,
+                                marginTop: 5,
+                              }}
+                              source={{ uri: `${treat.imageUrl}` }}
+                            />
+                            <Badge
+                              size={25}
+                              style={{
+                                zIndex: 50,
+                                position: "absolute",
+                                borderRadius: 5,
+                              }}
+                              onPress={(e) => editQtyHandler(treat.id)}
+                            >
+                              {convertToRupiah(treat.price)}
+                            </Badge>
+                          </View>
                         </Card>
                       </View>
                     );
@@ -724,15 +782,16 @@ const CreateOrder = ({ navigation }) => {
           style={{
             alignItems: "center",
             justifyContent: "space-between",
+            backgroundColor: "#B5DEFF",
           }}
         >
           <Button
-            labelStyle={{ fontSize: 20, textAlign: "center" }}
+            labelStyle={{ fontSize: 15, textAlign: "center" }}
             style={{ width: 200, height: 40, borderRadius: 10 }}
             mode="contained"
             onPress={() => chechoutHander()}
           >
-            Gas Laundry!
+            Laundry Sekarang
           </Button>
         </View>
       </>
@@ -755,6 +814,8 @@ const styles = StyleSheet.create({
     height: 180,
     width: windowWidth * 0.94,
     justifyContent: "flex-start",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   receiving: {
     borderColor: "green",
@@ -782,7 +843,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aaffaa",
   },
   blue: {
-    backgroundColor: "#aaaaff",
+    backgroundColor: "#3DB2FF",
   },
   red: {
     backgroundColor: "#ffaaaa",

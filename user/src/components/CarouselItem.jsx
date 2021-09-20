@@ -48,7 +48,6 @@ export default class CarouselItem extends React.Component {
     return (
       <View
         style={{
-          backgroundColor: "floralwhite",
           borderRadius: 15,
           height: 200,
           padding: 40,
@@ -68,9 +67,7 @@ export default class CarouselItem extends React.Component {
 
   render() {
     return (
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: "#fff", paddingTop: 50 }}
-      >
+      <View style={{ flex: 1, backgroundColor: "#EEEEEE", paddingTop: 50 }}>
         <View
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
@@ -90,7 +87,7 @@ export default class CarouselItem extends React.Component {
         <Image style={styles.logo} source={require("../img/EZ_Laundr.png")} />
         {/* <Text>Buat hidupmu mudah</Text>
         <Text>Biarkan kami yang mencucikan bajumu</Text> */}
-      </SafeAreaView>
+      </View>
     );
   }
 }

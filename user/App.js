@@ -55,7 +55,7 @@ export default function App() {
         <Stack.Screen name="Orders" component={OrderList} />
         <Stack.Screen name="Create Order" component={CreateOrder} />
         <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
+        <Stack.Screen name="Order Completed" component={OrderCompleted} />
         <Stack.Screen name="Map" component={Map} />
       </Stack.Navigator>
     );
