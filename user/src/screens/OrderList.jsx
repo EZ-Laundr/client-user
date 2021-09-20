@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "../store/action";
+import { fetchOrderDetail, fetchOrders, fetchQrCode } from "../store/action";
 import {
   Chip,
   DataTable,
@@ -19,6 +19,8 @@ import {
   Card,
   Title,
   Badge,
+  Modal,
+  Portal,
 } from "react-native-paper";
 
 import convertToRupiah from "../helpers/toRupiah";
@@ -26,16 +28,30 @@ import getDirections from "react-native-google-maps-directions";
 import * as Location from "expo-location";
 import convertDate from "../helpers/formatDate";
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 export default function OrderList({ navigation }) {
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
   const [latToko, setLatToko] = useState(-5.370346);
   const [longToko, setLongToko] = useState(105.051187);
-  const { orders, perfumes, treatments, access_token, loading } = useSelector(
-    (state) => state.reducer
-  );
+  const {
+    orders,
+    detailOrder,
+    qrCode,
+    perfumes,
+    treatments,
+    access_token,
+    loading,
+  } = useSelector((state) => state.reducer);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [visibleStatus, setStatusVisible] = React.useState(false);
+
+  const showStatus = () => setStatusVisible(true);
+  const hideStatus = () => setStatusVisible(false);
   useEffect(() => {
+    if (access_token == "") {
+      navigation.navigate("Login");
+    }
     dispatch(fetchOrders());
     getLocation();
   }, []);
@@ -82,6 +98,12 @@ export default function OrderList({ navigation }) {
         },
       },
     ]);
+  }
+
+  function handleShowStatus(orderId) {
+    dispatch(fetchQrCode(`edit/${orderId}`));
+    dispatch(fetchOrderDetail(orderId));
+    showStatus();
   }
 
   function handleDirection() {
@@ -165,6 +187,7 @@ export default function OrderList({ navigation }) {
                       style={{ width: 45, height: 45 }}
                       source={{ uri: `${order.Perfume.imageUrl}` }}
                     />
+
                     <View style={{ flexDirection: "row", marginTop: 5 }}>
                       <ScrollView horizontal={true}>
                         {order.OrderSpecials.map((treat) => {
@@ -189,134 +212,126 @@ export default function OrderList({ navigation }) {
                     </View>
                   </View>
                 </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                  }}
-                >
-                  <Chip
-                    labelStyle={{ fontSize: 10 }}
+
+                <View>
+                  <View
                     style={{
-                      width: 100,
-                      height: 30,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "#3DB2FF",
-                      borderRadius: 0,
-                      justifyContent: "space-evenly",
-                      marginRight: 5,
+                      position: "absolute",
+                      bottom: 50,
+                      right: 0,
                     }}
-                    mode="contained"
-                    onPress={() => handleDirection()}
                   >
-                    Antar
-                  </Chip>
-                  <Chip
-                    labelStyle={{ fontSize: 10 }}
-                    style={{
-                      width: 100,
-                      height: 30,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "#3DB2FF",
-                      borderRadius: 0,
-                      justifyContent: "space-evenly",
-                    }}
-                    mode="contained"
-                    onPress={() => paymentHandler(order)}
-                  >
-                    Bayar
-                  </Chip>
+                    <Chip
+                      labelStyle={{ fontSize: 10 }}
+                      style={{
+                        width: 100,
+                        height: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#3DB2FF",
+                        borderRadius: 0,
+                        justifyContent: "space-evenly",
+                        marginRight: 5,
+                      }}
+                      mode="contained"
+                      onPress={() => handleShowStatus(order.id)}
+                    >
+                      Status
+                    </Chip>
+
+                    <Chip
+                      labelStyle={{ fontSize: 10 }}
+                      style={{
+                        width: 100,
+                        height: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#3DB2FF",
+                        borderRadius: 0,
+                        justifyContent: "space-evenly",
+                        marginRight: 5,
+                      }}
+                      mode="contained"
+                      onPress={() => handleDirection()}
+                    >
+                      Antar
+                    </Chip>
+                    <View>
+                      <Chip
+                        labelStyle={{ fontSize: 10 }}
+                        style={{
+                          width: 100,
+                          height: 30,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#3DB2FF",
+                          borderRadius: 0,
+                          justifyContent: "space-evenly",
+                        }}
+                        mode="contained"
+                        onPress={() => paymentHandler(order)}
+                      >
+                        Bayar
+                      </Chip>
+                    </View>
+                  </View>
                 </View>
               </Card>
             );
           })}
         </View>
+        <Portal>
+          {detailOrder?.Service && (
+            <Modal
+              visible={visibleStatus}
+              onDismiss={hideStatus}
+              contentContainerStyle={styles.containerStyleModal}
+            >
+              <View>
+                <View>
+                  <Image
+                    style={styles.codeImage}
+                    source={{ uri: `${qrCode.qrcode}` }}
+                  />
+                </View>
+                <Text>{detailOrder.id}</Text>
+                <Text>{detailOrder.Service.name}</Text>
+                <Text>{detailOrder.status}</Text>
+              </View>
+
+              <Button
+                labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
+                style={{ width: 80, height: 30, borderRadius: 10 }}
+                mode="contained"
+                onPress={() => hideStatus()}
+              >
+                Oke
+              </Button>
+            </Modal>
+          )}
+        </Portal>
       </ScrollView>
     );
-
-    // return (
-    //   <>
-    //     {/* <ScrollView horizontal={true}> */}
-    //     <DataTable>
-    //       <DataTable.Header>
-    //         <DataTable.Title>Order Id</DataTable.Title>
-    //         <DataTable.Title>Service</DataTable.Title>
-    //         <DataTable.Title>Status</DataTable.Title>
-    //         <DataTable.Title>Total Price</DataTable.Title>
-    //         <DataTable.Title>Action</DataTable.Title>
-    //       </DataTable.Header>
-    //       {orders.map((order) => {
-    //         return (
-    //           <DataTable.Row key={order.id}>
-    //             <DataTable.Cell>{order.id}</DataTable.Cell>
-    //             <DataTable.Cell>service</DataTable.Cell>
-    //             <DataTable.Cell>{order.status}</DataTable.Cell>
-    //             <DataTable.Cell>
-    //               {convertToRupiah(order.totalPrice)}
-    //             </DataTable.Cell>
-    //             <DataTable.Cell>
-    //               <Chip
-    //                 style={{
-    //                   alignItems: "center",
-    //                   justifyContent: "center",
-    //                   backgroundColor: "#3DB2FF",
-    //                   borderRadius: 10,
-    //                   justifyContent: "space-evenly",
-    //                 }}
-    //                 onPress={() =>
-    //                   navigation.navigate("Midtrans", { order: order })
-    //                 }
-    //               >
-    //                 Bayar
-    //               </Chip>
-    //               <Chip
-    //                 style={{
-    //                   alignItems: "center",
-    //                   justifyContent: "center",
-    //                   backgroundColor: "#3DB2FF",
-    //                   borderRadius: 10,
-    //                   justifyContent: "space-evenly",
-    //                 }}
-    //                 onPress={() =>
-    //                   navigation.navigate("Order Detail", { orderId: order.id })
-    //                 }
-    //               >
-    //                 Detail
-    //               </Chip>
-    //             </DataTable.Cell>
-    //           </DataTable.Row>
-    //         );
-    //       })}
-    //     </DataTable>
-    //     <View
-    //       style={{
-    //         alignItems: "center",
-    //         justifyContent: "center",
-    //         bottom: 3,
-    //         position: "absolute",
-    //       }}
-    //     >
-    //       <Button
-    //         labelStyle={{ fontSize: 20, textAlign: "center" }}
-    //         style={{
-    //           width: windowWidth,
-    //           height: 50,
-    //           borderRadius: 0,
-    //         }}
-    //         mode="contained"
-    //         onPress={() => handleDirection()}
-    //       >
-    //         Antar Pakaian
-    //       </Button>
-    //     </View>
-    //     {/* </ScrollView> */}
-    //   </>
-    // );
   } else {
     return <Text> Loading...</Text>;
   }
 }
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
+  codeImage: {
+    width: 200,
+    height: 200,
+  },
+  containerStyleModal: {
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+    textAlign: "center",
+  },
+});

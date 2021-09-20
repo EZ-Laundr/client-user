@@ -48,48 +48,6 @@ export default function QrCode({ route }) {
   if (detailOrder?.Service) {
     return (
       <>
-        <Portal>
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={containerStyleModal}
-          >
-            <View>
-              <Image
-                style={styles.codeImage}
-                source={{ uri: `${qrCode.qrcode}` }}
-              />
-            </View>
-
-            <Button
-              labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
-              style={{ width: 80, height: 30, borderRadius: 10, marginTop: 20 }}
-              mode="contained"
-              onPress={() => hideModal()}
-            >
-              Oke
-            </Button>
-          </Modal>
-
-          <Modal
-            visible={visibleStatus}
-            onDismiss={hideStatus}
-            contentContainerStyle={containerStyleModal}
-          >
-            <View>
-              <Text>INI STATUS</Text>
-            </View>
-
-            <Button
-              labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
-              style={{ width: 80, height: 30, borderRadius: 10 }}
-              mode="contained"
-              onPress={() => hideStatus()}
-            >
-              Oke
-            </Button>
-          </Modal>
-        </Portal>
         <Card>
           <View
             style={{
