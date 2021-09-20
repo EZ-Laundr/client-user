@@ -1,162 +1,98 @@
-import { ExpoLeaflet } from "expo-leaflet";
-import * as Location from "expo-location";
-// import type { LatLngLiteral } from "leaflet";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Button,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { MapLayer } from "expo-leaflet";
-import { mapMarkers, mapShapes } from "./mockData";
+import MapView, { Marker, Polyline } from "react-native-maps";
+import { Dimensions, StyleSheet, Text, View, Platform } from "react-native";
+// import { MapViewDirections } from "react-native-maps-directions";
+const height = Dimensions.get("window").height;
 
-let marker = {
-  id: "1", // The ID attached to the marker. It will be returned when onMarkerClicked is called
-  position: {
-    lat: 52.1,
-    lng: 2.3,
-  },
-  // HTML element that will be displayed as the marker.  It can also be text or an SVG string.
-  icon: "<span>🍇</span>",
-  size: [32, 32],
-};
-let mapLayer = {
-  baseLayerName: "OpenStreetMap", // This will be seen in the layer selection control
-  baseLayerIsChecked: "true", // If the layer is selected in the layer selection control
-  layerType: "TileLayer",
-  baseLayer: true,
-  url: `https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${mapboxToken}`,
-  attribution:
-    "&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors",
-};
-
-const initialPosition = {
-  lat: 51.4545,
-  lng: 2.5879,
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    height: 60,
-    backgroundColor: "dodgerblue",
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    width: "100%",
-  },
-  headerText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  mapControls: {
-    backgroundColor: "rgba(255,255,255,.5)",
-    borderRadius: 5,
-    bottom: 25,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    left: 0,
-    marginHorizontal: 10,
-    padding: 7,
-    position: "absolute",
-    right: 0,
-  },
-  mapButton: {
-    alignItems: "center",
-    height: 42,
-    justifyContent: "center",
-    width: 42,
-  },
-  mapButtonEmoji: {
-    fontSize: 28,
-  },
-});
-
+const GOOGLE_MAPS_APIKEY = "AIzaSyBrBxPVos3uoCbgzIk4TB_LQas7wuZYOpU";
+import * as Location from "expo-location";
+import { getDistance, getPreciseDistance } from "geolib";
 export default function Map() {
-  const [zoom, setZoom] = useState(7);
-  const [mapCenterPosition, setMapCenterPosition] = useState(initialPosition);
-  const [ownPosition, setOwnPosition] =
-    (useState < null) | (LatLngLiteral > null);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [latToko, setLatToko] = useState(-5.370346);
+  const [longToko, setLongToko] = useState(105.051187);
+  const [coordinates, setCoordinates] = useState([]);
 
   useEffect(() => {
-    const getLocationAsync = async () => {
+    (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.warn("Permission to access location was denied");
+        setErrorMsg("Permission to access location was denied");
+        return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      if (!ownPosition) {
-        setOwnPosition({
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
-        });
-      }
-    };
-
-    getLocationAsync().catch((error) => {
-      console.error(error);
-    });
+      let location = await Location.getLastKnownPositionAsync({
+        accuracy: 6,
+      });
+      setLocation(location);
+      setCoordinates([
+        {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
+        { latitude: latToko, longitude: longToko },
+      ]);
+      console.log(location);
+    })();
   }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>expo-leaflet</Text>
-      </View>
-      <View style={{ flex: 1, position: "relative" }}>
-        <ExpoLeaflet
-          loadingIndicator={() => <ActivityIndicator />}
-          mapCenterPosition={mapCenterPosition}
-          mapLayers={mapLayers}
-          mapMarkers={mapMarkers}
-          mapOptions={mapOptions}
-          mapShapes={mapShapes}
-          maxZoom={20}
-          onMessage={(message) => {
-            switch (message.tag) {
-              case "onMapMarkerClicked":
-                Alert.alert(
-                  `Map Marker Touched, ID: ${message.mapMarkerId || "unknown"}`
-                );
-                break;
-              case "onMapClicked":
-                Alert.alert(
-                  `Map Touched at:`,
-                  `${message.location.lat}, ${message.location.lng}`
-                );
-                break;
-              case "onMoveEnd":
-                setMapCenterPosition(message.mapCenter);
-                break;
-              case "onZoomEnd":
-                setZoom(message.zoom);
-                break;
-              default:
-                if (["onMove"].includes(message.tag)) {
-                  return;
-                }
-                console.log(message);
-            }
-          }}
-          zoom={zoom}
-        />
-      </View>
-      <Button
-        onPress={() => {
-          setMapCenterPosition(initialPosition);
-          setZoom(7);
+  function calculateDistance() {
+    var dis = getDistance(
+      {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      },
+      { latitude: latToko, longitude: longToko }
+    );
+    alert(`Jarak\n${dis} Meter\nor\n${dis / 1000} KM`);
+  }
+
+  if (location?.coords) {
+    return (
+      <MapView
+        showsUserLocation={true}
+        style={styles.map}
+        loadingEnabled={true}
+        region={{
+          latitude: location.coords.latitude, //37.78825,
+          longitude: location.coords.longitude, //-122.4324,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
         }}
-        title="Reset Map"
-      />
-    </SafeAreaView>
-  );
+      >
+        {calculateDistance()}
+        {/* 5b3ce3597851110001cf6248027fba2f206e4540bb957deae8cc76fb */}
+        {/* <MapViewDirections
+          origin={origin}
+          destination={destination}
+          apikey={GOOGLE_MAPS_APIKEY}
+        /> */}
+        <Polyline
+          coordinates={coordinates}
+          strokeColor="#000"
+          strokeColors={["#7F0000"]}
+          strokeWidth={3}
+          lineDashPattern={[1]}
+        />
+
+        <MapView.Marker
+          coordinate={{
+            latitude: latToko,
+            longitude: longToko,
+          }}
+          title="Title 1"
+          description={"Desc 1"}
+        />
+      </MapView>
+    );
+  } else {
+    return <Text>Loading..</Text>;
+  }
 }
+
+const styles = StyleSheet.create({
+  map: {
+    height,
+  },
+});
