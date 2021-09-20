@@ -66,18 +66,18 @@ export function setQrCode(code) {
 }
 
 export function fetchServices() {
-  return async function (dispatch, getState) {
-    try {
-      const response = await localhost({
-        method: "get",
-        url: `/services`,
-      });
-      const result = response.data;
-      dispatch(setServices(result));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+	return async function (dispatch, getState) {
+		try {
+			const response = await localhost({
+				method: "get",
+				url: `/services`,
+			});
+			const result = response.data;
+			dispatch(setServices(result));
+		} catch (error) {
+			console.log(error);
+		}
+	};
 }
 
 export function fetchParfume() {
@@ -154,47 +154,48 @@ export function loginUser(payload) {
       return error;
     }
   };
+
 }
 
 export function fetchOrders() {
-  return async function (dispatch, getState) {
-    try {
-      const state = getState();
+	return async function (dispatch, getState) {
+		try {
+			const state = getState();
 
-      const response = await localhost({
-        method: "get",
-        headers: {
-          access_token: state.reducer.access_token.toString(),
-        },
-        url: `/orders`,
-      });
-      const result = response.data;
-      dispatch(setOrders(result));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+			const response = await localhost({
+				method: "get",
+				headers: {
+					access_token: state.reducer.access_token.toString(),
+				},
+				url: `/orders`,
+			});
+			const result = response.data;
+			dispatch(setOrders(result));
+		} catch (error) {
+			console.log(error);
+		}
+	};
 }
 
 export function fetchOrderDetail(id) {
-  return async function (dispatch, getState) {
-    try {
-      const state = getState();
+	return async function (dispatch, getState) {
+		try {
+			const state = getState();
 
-      const response = await localhost({
-        method: "get",
-        headers: {
-          access_token: state.reducer.access_token.toString(),
-        },
-        url: `/orders/${id}`,
-      });
-      const result = response.data;
-      console.log(result, "resulltt");
-      dispatch(setOrderDetail(result));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+			const response = await localhost({
+				method: "get",
+				headers: {
+					access_token: state.reducer.access_token,
+				},
+				url: `/orders/${id}`,
+			});
+			const result = response.data;
+			console.log(result, "resulltt");
+			dispatch(setOrderDetail(result));
+		} catch (error) {
+			console.log(error);
+		}
+	};
 }
 
 export function fetchQrCode(payload) {
