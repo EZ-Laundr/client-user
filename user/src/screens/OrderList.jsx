@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, Dimensions, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  Alert,
+  RefreshControl,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../store/action";
 import {
@@ -10,7 +20,7 @@ import {
   Title,
   Badge,
 } from "react-native-paper";
-import { ScrollView } from "react-native-gesture-handler";
+
 import convertToRupiah from "../helpers/toRupiah";
 import getDirections from "react-native-google-maps-directions";
 import * as Location from "expo-location";
@@ -24,6 +34,7 @@ export default function OrderList({ navigation }) {
   const { orders, perfumes, treatments, access_token, loading } = useSelector(
     (state) => state.reducer
   );
+  const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     dispatch(fetchOrders());
     getLocation();
@@ -44,6 +55,18 @@ export default function OrderList({ navigation }) {
       console.log(error);
     }
   }
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchOrders());
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   function paymentHandler(order) {
     Alert.alert("Bayar Pesanan", "Bayar pesanan sekarang?", [
@@ -99,7 +122,11 @@ export default function OrderList({ navigation }) {
 
   if (orders) {
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View>
           {orders.map((order) => {
             return (
