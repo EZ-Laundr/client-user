@@ -24,7 +24,6 @@ export default function Home({ navigation }) {
     dispatch(fetchServices());
   }, []);
 
-
   function createOrderHandler() {
     if (access_token == "") {
       console.log(access_token);
@@ -38,18 +37,16 @@ export default function Home({ navigation }) {
     return (
       <>
         <Provider>
-
-        
           <CarouselItem />
-          
-          <Button
+
+          {/* <Button
               labelStyle={{ fontSize: 20, textAlign: "center" }}
               style={{ width: 200, height: 50 }}
               mode="contained"
               onPress={() => navigation.navigate("Register")}
             >
   Register
-            </Button>
+            </Button> */}
 
           <View>
             <View style={{ marginTop: 20 }}>
@@ -83,6 +80,12 @@ export default function Home({ navigation }) {
                   icon: "chat",
                   label: "Chat Admin",
                   onPress: () => createOrderHandler(),
+                  small: false,
+                },
+                {
+                  icon: "chat",
+                  label: "Register",
+                  onPress: () => navigation.navigate("Register"),
                   small: false,
                 },
                 {

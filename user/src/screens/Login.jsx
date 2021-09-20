@@ -26,17 +26,18 @@ export default function Login({ navigation }) {
     //   } else if (password === "") {
     //     Alert.alert("Password kosong", "Silahkan isi email & pasword");
     //   } else {
-        const payload = {
-          email: email,
-          password: password,
-        };
-        const goLogin = await dispatch(loginUser(payload));
+    const payload = {
+      email: email,
+      password: password,
+    };
+    const goLogin = await dispatch(loginUser(payload));
 
-        if (goLogin === "success") {
-          navigation.navigate("Home");
-        } else {
-          Alert.alert("Login Failed", `${goLogin.join('\n')}`);
-        }
+    if (goLogin === "success") {
+      navigation.navigate("Home");
+    } else {
+      // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
+      Alert.alert("Login Failed");
+    }
     //   }
     // } catch (error) {
     //   console.log(error);

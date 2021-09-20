@@ -16,12 +16,11 @@ import { Provider } from "react-redux";
 import store from "./src/store";
 import Login from "./src/screens/Login";
 import Splash from "./src/screens/Splash";
-// import Map from "./src/components/Map";
 import Wellcome from "./src/screens/Wellcome";
 import { Provider as PaperProvider } from "react-native-paper";
 import Register from "./src/screens/Register";
-import Map from "./src/components/Map";
-import testMIdtrans from "./src/screens/testMidtrans";
+import PaymentGateway from "./src/screens/PaymentGateway";
+import Map from "./src/screens/Map";
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -29,7 +28,6 @@ export default function App() {
   function StackNavigator() {
     return (
       <Stack.Navigator>
-        {/* <Stack.Screen name="Map" component={Map} /> */}
         <Stack.Screen
           name="Splash"
           options={{
@@ -53,9 +51,9 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Midtrans" component={testMIdtrans} />
+        <Stack.Screen name="Midtrans" component={PaymentGateway} />
         <Stack.Screen name="Orders" component={OrderList} />
-        <Stack.Screen name="CreateOrder" component={CreateOrder} />
+        <Stack.Screen name="Create Order" component={CreateOrder} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
         <Stack.Screen name="Map" component={Map} />

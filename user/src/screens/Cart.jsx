@@ -8,11 +8,12 @@ import {
   Dimensions,
   TextInput,
   TouchableHighlight,
+  Alert,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import convertToRupiah from "../helpers/toRupiah";
 const windowWidth = Dimensions.get("window").width;
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
-import { useDispatch } from "react-redux";
 import { createOrder } from "../store/action";
 const optionsPerPage = [2, 3, 4];
 export default function Cart({ route, navigation }) {
@@ -20,22 +21,29 @@ export default function Cart({ route, navigation }) {
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
   const dispatch = useDispatch();
   const { cartData } = route.params;
-
+  const { services, access_token, loading } = useSelector(
+    (state) => state.reducer
+  );
   async function chechoutHander() {
-    const payload = {
-      ServiceId: cartData.service.id,
-      perfume: {
-        id: cartData.perfume.id,
-        price: cartData.perfume.price,
-      },
-      treatments: cartData.treatments,
-      pickup: cartData.pickup,
-    };
-    let orderrs = await dispatch(createOrder(payload));
-    if (orderrs === "success") {
-      navigation.navigate("OrderCompleted");
+    if (access_token == "") {
+      Alert.alert("Checkout Error", "Please Login First!");
+      navigation.navigate("Login");
     } else {
-      console.log("ada error di create order");
+      const payload = {
+        ServiceId: cartData.service.id,
+        perfume: {
+          id: cartData.perfume.id,
+          price: cartData.perfume.price,
+        },
+        treatments: cartData.treatments,
+        pickup: cartData.pickup,
+      };
+      let orderrs = await dispatch(createOrder(payload));
+      if (orderrs === "success") {
+        navigation.navigate("OrderCompleted");
+      } else {
+        Alert.alert("Checkout Error", `${orderrs}`);
+      }
     }
   }
 
@@ -44,7 +52,13 @@ export default function Cart({ route, navigation }) {
   }, [itemsPerPage]);
   return (
     <>
-      <Card>
+      <Card
+        style={{
+          width: windowWidth,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <View
           style={{
             marginTop: 10,
@@ -53,7 +67,16 @@ export default function Cart({ route, navigation }) {
         >
           <Title style={{ textAlign: "center" }}>{cartData.service.name}</Title>
         </View>
-        <Card.Cover source={{ uri: `${cartData.service.imageUrl}` }} />
+        <View
+          style={{
+            alignItems: "center",
+          }}
+        >
+          <Card.Cover
+            style={{ width: 200, height: 200, marginTop: 5 }}
+            source={{ uri: `${cartData.service.imageUrl}` }}
+          />
+        </View>
         <Card.Content>
           <View
             style={{
