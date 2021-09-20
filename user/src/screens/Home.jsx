@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Dimensions, Text, View, ScrollView, Alert } from "react-native";
+import {
+  Dimensions,
+  Text,
+  View,
+  ScrollView,
+  Alert,
+  RefreshControl,
+} from "react-native";
 import CardService from "../components/CardService";
 import { SafeAreaView } from "react-native-safe-area-context";
 const height = Dimensions.get("window").height;
@@ -19,7 +26,7 @@ export default function Home({ navigation }) {
     (state) => state.reducer
   );
   const [state, setState] = React.useState({ open: false });
-
+  const [refreshing, setRefreshing] = React.useState(false);
   const onStateChange = ({ open }) => setState({ open });
 
   const { open } = state;
@@ -28,6 +35,20 @@ export default function Home({ navigation }) {
     dispatch(fetchServices());
     dispatch(fetchParfume());
     dispatch(fetchTreatment());
+  }, []);
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(fetchServices());
+    dispatch(fetchParfume());
+    dispatch(fetchTreatment());
+    wait(2000).then(() => setRefreshing(false));
   }, []);
 
   function createOrderHandler() {
@@ -63,7 +84,11 @@ export default function Home({ navigation }) {
             <View style={{ height: height * 0.45 }}>
               <CarouselItem />
             </View>
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
               <View>
                 <View style={{ marginTop: 20 }}>
                   <Text>Services</Text>
