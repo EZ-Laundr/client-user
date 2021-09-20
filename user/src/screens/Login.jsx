@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, Alert, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDispatch } from "react-redux";
+import CarouselItem from "../components/CarouselItem";
 import Header from "../components/Header";
 import { loginUser } from "../store/action";
 export default function Login({ navigation }) {
@@ -20,33 +23,33 @@ export default function Login({ navigation }) {
   }
 
   async function loginHandler() {
-    // try {
-    //   if (email === "") {
-    //     Alert.alert("Email kosong", "Silahkan isi email & pasword");
-    //   } else if (password === "") {
-    //     Alert.alert("Password kosong", "Silahkan isi email & pasword");
-    //   } else {
-    const payload = {
-      email: email,
-      password: password,
-    };
-    const goLogin = await dispatch(loginUser(payload));
+    try {
+      if (email === "") {
+        Alert.alert("Email kosong", "Silahkan isi email & pasword");
+      } else if (password === "") {
+        Alert.alert("Password kosong", "Silahkan isi email & pasword");
+      } else {
+        const payload = {
+          email: email,
+          password: password,
+        };
+        const goLogin = await dispatch(loginUser(payload));
 
-    if (goLogin === "success") {
-      navigation.navigate("Home");
-    } else {
-      // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
+        if (goLogin === "success") {
+          navigation.navigate("Home");
+        } else {
+          // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
+          Alert.alert("Login Failed");
+        }
+      }
+    } catch (error) {
       Alert.alert("Login Failed");
     }
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
   }
 
   return (
-    <>
-      <Header />
+    <ScrollView style={{ backgroundColor: "#F9F8EB" }}>
+      <CarouselItem />
       <TextInput
         mode="outlined"
         label="Email"
@@ -70,7 +73,8 @@ export default function Login({ navigation }) {
         }}
       >
         <Button
-          labelStyle={{ fontSize: 20, textAlign: "center" }}
+          color="#3DB2FF"
+          labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
           style={{ width: 200, height: 50 }}
           mode="contained"
           onPress={() => loginHandler()}
@@ -78,6 +82,6 @@ export default function Login({ navigation }) {
           Login
         </Button>
       </View>
-    </>
+    </ScrollView>
   );
 }

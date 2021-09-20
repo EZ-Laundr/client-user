@@ -24,9 +24,9 @@ export default function OrderCompleted({ navigation }) {
           labelStyle={{ fontSize: 20, textAlign: "center" }}
           style={{ width: 200, height: 40, borderRadius: 10 }}
           mode="contained"
-          onPress={() => navigation.push("OrderDetail")}
+          onPress={() => navigation.replace("Home")}
         >
-          Order List
+          Home
         </Button>
       </View>
     </View>

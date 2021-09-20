@@ -47,94 +47,98 @@ export default function Cart({ route, navigation }) {
     }
   }
 
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
   return (
     <>
       <Card
         style={{
           width: windowWidth,
-          alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <View
-          style={{
-            marginTop: 10,
-            backgroundColor: "#1DB9C3",
-          }}
-        >
-          <Title style={{ textAlign: "center" }}>{cartData.service.name}</Title>
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-          }}
-        >
-          <Card.Cover
-            style={{ width: 200, height: 200, marginTop: 5 }}
-            source={{ uri: `${cartData.service.imageUrl}` }}
-          />
-        </View>
-        <Card.Content>
-          <View
-            style={{
-              marginTop: 10,
-              backgroundColor: "#1DB9C3",
-            }}
-          >
-            <Title style={{ textAlign: "center" }}>Perfume</Title>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Paragraph>{cartData.perfume.name}</Paragraph>
-            <Image
-              style={{ width: 80, height: 80, borderRadius: 20 }}
-              source={{ uri: `${cartData.perfume.imageUrl}` }}
-            />
-            <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
-          </View>
-          <View
-            style={{
-              marginTop: 10,
-              backgroundColor: "#1DB9C3",
-            }}
-          >
-            <Title style={{ textAlign: "center" }}>Extra Order</Title>
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            {cartData.treatments.map((treat) => {
-              return (
-                <View key={treat.id}>
-                  <View style={{ marginHorizontal: 10, alignItems: "center" }}>
-                    <Paragraph>{treat.name}</Paragraph>
-                    <Image
-                      style={{ width: 80, height: 80, borderRadius: 20 }}
-                      source={{ uri: `${treat.imageUrl}` }}
-                    />
-                    <Text>
-                      {convertToRupiah(+treat.price) + " x " + treat.qty}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        </Card.Content>
-        <Card.Actions style={{ alignItems: "center" }}>
-          <View
-            style={{
-              height: 30,
-              backgroundColor: "#1DB9C3",
-              width: windowWidth,
-            }}
-          >
-            <Text>
-              Total pesanan akan di hitung setelah konfirmasi dari admin
-            </Text>
-          </View>
-        </Card.Actions>
+        {cartData?.service && (
+          <>
+            <View
+              style={{
+                marginTop: 10,
+                backgroundColor: "#1DB9C3",
+                width: windowWidth,
+              }}
+            >
+              <Title style={{ textAlign: "center" }}>
+                {cartData.service.name}
+              </Title>
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Card.Cover
+                style={{ width: 200, height: 200, marginTop: 5 }}
+                source={{ uri: `${cartData.service.imageUrl}` }}
+              />
+            </View>
+          </>
+        )}
+        {cartData?.service && (
+          <>
+            <View
+              style={{
+                marginTop: 10,
+                width: windowWidth,
+                backgroundColor: "#1DB9C3",
+              }}
+            >
+              <Title style={{ textAlign: "center" }}>Perfume</Title>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Paragraph>{cartData.perfume.name}</Paragraph>
+              <Image
+                style={{ width: 80, height: 80, borderRadius: 20 }}
+                source={{ uri: `${cartData.perfume.imageUrl}` }}
+              />
+              <Text>{convertToRupiah(+cartData.perfume.price)}</Text>
+            </View>
+          </>
+        )}
+
+        {cartData.treatments.length > 0 && (
+          <>
+            <View
+              style={{
+                marginTop: 10,
+                width: windowWidth,
+                backgroundColor: "#1DB9C3",
+              }}
+            >
+              <Title style={{ textAlign: "center" }}>Extra Order</Title>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <ScrollView horizontal={true}>
+                {cartData.treatments.map((treat) => {
+                  return (
+                    <View key={treat.id}>
+                      <View
+                        style={{ marginHorizontal: 10, alignItems: "center" }}
+                      >
+                        <Paragraph>{treat.name}</Paragraph>
+                        <Image
+                          style={{ width: 80, height: 80, borderRadius: 20 }}
+                          source={{ uri: `${treat.imageUrl}` }}
+                        />
+                        <Text>
+                          {convertToRupiah(+treat.price) + " x " + treat.qty}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          </>
+        )}
       </Card>
+
       <View
         style={{
           alignItems: "center",
@@ -143,6 +147,17 @@ export default function Cart({ route, navigation }) {
           position: "absolute",
         }}
       >
+        <View
+          style={{
+            height: 30,
+            backgroundColor: "#1DB9C3",
+            width: windowWidth,
+          }}
+        >
+          <Text>
+            Total pesanan akan di hitung setelah konfirmasi dari admin
+          </Text>
+        </View>
         <Button
           labelStyle={{ fontSize: 20, textAlign: "center" }}
           style={{
