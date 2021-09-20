@@ -17,14 +17,11 @@ export default function CardService({ service, navigation }) {
         }}
       >
         <Card
-            onPress={() => createOrderHandler()}
-
           style={{ width: 180, height: 180, margin: 5, alignItems: "center" }}
         >
           <Card.Cover
             style={{ width: 120, height: 120, marginTop: 10 }}
             source={{ uri: `${service.imageUrl}` }}
-
           />
           <Card.Actions>
             <Chip
@@ -41,7 +38,6 @@ export default function CardService({ service, navigation }) {
               mode="contained"
             >
               {service.name}
-
             </Chip>
           </Card.Actions>
         </Card>
