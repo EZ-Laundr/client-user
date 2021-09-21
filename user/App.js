@@ -21,11 +21,13 @@ import { Provider as PaperProvider } from "react-native-paper";
 import Register from "./src/screens/Register";
 import PaymentGateway from "./src/screens/PaymentGateway";
 import Map from "./src/screens/Map";
+import Dummy from "./src/screens/dummy";
+import ChatAdmin from "./src/screens/ChatAdmin";
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  function StackNavigator() {
+  function StackHome() {
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -42,21 +44,27 @@ export default function App() {
           }}
           component={Wellcome}
         />
+        <Stack.Screen name="Dummy" component={Dummy} />
+        <Stack.Screen name="Chat Admin" component={ChatAdmin} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
-          name="Home"
+          name="Login"
+          options={{
+            headerShown: false,
+          }}
+          component={Login}
+        />
+        <Stack.Screen
+          name="Ez Loundr"
           component={Home}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Midtrans" component={PaymentGateway} />
-        <Stack.Screen name="Orders" component={OrderList} />
+
         <Stack.Screen name="Create Order" component={CreateOrder} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="Order Completed" component={OrderCompleted} />
-        <Stack.Screen name="Map" component={Map} />
       </Stack.Navigator>
     );
   }
@@ -66,7 +74,9 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Order List" component={OrderList} />
         <Stack.Screen name="Order Detail" component={QrCode} />
+        <Stack.Screen name="Midtrans" component={PaymentGateway} />
         <Stack.Screen name="StatusOrder" component={OrderStatus} />
+        <Stack.Screen name="Map" component={Map} />
       </Stack.Navigator>
     );
   }
@@ -92,7 +102,7 @@ export default function App() {
           >
             <Tab.Screen
               name="Home"
-              component={StackNavigator}
+              component={StackHome}
               options={{ headerShown: false }}
             />
             <Tab.Screen
