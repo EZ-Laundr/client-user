@@ -11,8 +11,7 @@ export default function PaymentGateway({ route }) {
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 
-  const orderID = order.codeTransaction; //order id nanti diganti
-  // const orderID = "gsgsgsgsg454545454"; //order id nanti diganti
+  const orderID = order.codeTransaction;
 
   useEffect(() => {
     midtrans().then((data) => {
@@ -29,7 +28,7 @@ export default function PaymentGateway({ route }) {
     let item_details;
     let detailService = {
       id: order.Service.id,
-      price: 0, // ini nanti di isi kalo server udah di deploy
+      price: order.Service.price * order.weight,
       weight: order.weight,
       quantity: 1,
       name: order.Service.name,
@@ -88,6 +87,7 @@ export default function PaymentGateway({ route }) {
       },
       body: JSON.stringify(data),
     });
+    console.log("=====", data, "data");
     return response.json();
   }
 
@@ -126,6 +126,7 @@ export default function PaymentGateway({ route }) {
 
   return (
     <Layout>
+      {console.log(order)}
       {!transactions ? (
         <View
           style={{

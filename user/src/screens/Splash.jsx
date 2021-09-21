@@ -10,7 +10,7 @@ export default function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       dispatch(setLoading(true));
-      navigation.replace("Ez Loundr");
+      navigation.replace("Login");
     }, 3000);
   }, [navigation]);
 
