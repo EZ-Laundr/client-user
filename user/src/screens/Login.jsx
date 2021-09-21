@@ -82,7 +82,8 @@ export default function Login({ navigation }) {
             justifyContent: "space-between",
             marginTop: 10,
           }}
-        >
+          >
+
           <Button
             color="#3DB2FF"
             labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
