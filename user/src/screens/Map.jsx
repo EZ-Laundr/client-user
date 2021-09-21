@@ -47,15 +47,15 @@ export default function Map({ route, navigation }) {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: 6,
-      });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: 6,
+      // });
       // let location = await Location.getCurrentPositionAsync({
       //   accuracy: Location.Accuracy.High,
       // });
-      // let location = await Location.getLastKnownPositionAsync({
-      //   accuracy: 6,
-      // });
+      let location = await Location.getLastKnownPositionAsync({
+        accuracy: 6,
+      });
       setLocation(location);
       setCoordinates({
         latitude: location.coords.latitude,

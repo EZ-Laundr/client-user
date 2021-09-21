@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 2000);
-  }, [navigation]);
+  }, []);
 
   function emailHandler(email) {
     setEmail(email);
@@ -95,7 +95,8 @@ export default function Login({ navigation }) {
             >
               <Card.Cover
                 style={styles.logo}
-                source={require("../img/EZ_Laundr.png")}
+
+                source={require("../img/head4_white.png")}
               />
               <Card.Title />
               <Card.Content>
@@ -136,10 +137,23 @@ export default function Login({ navigation }) {
               </Card.Actions>
             </Card>
             <Text style={{ margin: 10 }}>Didn't have account ?</Text>
+
+            <Button
+              color="#3DB2FF"
+              labelStyle={{
+                fontSize: 20,
+                textAlign: "center",
+                color: "white",
+              }}
+              style={{ width: 150, height: 45 }}
+              mode="contained"
+              onPress={() => navigation.navigate("Register")}
+            >
+              Register
+            </Button>
           </ScrollView>
         </ImageBackground>
       </View>
-
     );
   }
 }

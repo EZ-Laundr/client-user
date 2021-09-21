@@ -84,7 +84,7 @@ export default class CarouselItem extends React.Component {
             autoplayInterval={2000}
           />
         </View>
-        <Image style={styles.logo} source={require("../img/EZ_Laundr.png")} />
+        <Image style={styles.logo} source={require("../img/head4_white.png")} />
         {/* <Text>Buat hidupmu mudah</Text>
         <Text>Biarkan kami yang mencucikan bajumu</Text> */}
       </View>

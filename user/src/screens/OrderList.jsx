@@ -90,6 +90,7 @@ export default function OrderList({ navigation }) {
   }, []);
 
   function paymentHandler(order) {
+    console.log("====>", order, "handler");
     Alert.alert("Bayar Pesanan", "Bayar pesanan sekarang?", [
       {
         text: "Ngga",
@@ -230,53 +231,32 @@ export default function OrderList({ navigation }) {
                         })}
                       </ScrollView>
                     </View>
+                    <View>
+                      <Text style={{ fontStyle: "italic" }}>
+                        Total Harga: {convertToRupiah(order.totalPrice)}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-
-                <View>
+                {order.status === "Done" ? (
                   <View
                     style={{
                       position: "absolute",
                       bottom: 50,
-                      right: 0,
+                      right: 120,
                     }}
                   >
-                    <Chip
-                      labelStyle={{ fontSize: 10 }}
+                    <Text style={{ fontStyle: "italic" }}>Pesanan Selesai</Text>
+                  </View>
+                ) : (
+                  <View>
+                    <View
                       style={{
-                        width: 100,
-                        height: 30,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#3DB2FF",
-                        borderRadius: 0,
-                        justifyContent: "space-evenly",
-                        marginRight: 5,
+                        position: "absolute",
+                        bottom: 50,
+                        right: 0,
                       }}
-                      mode="contained"
-                      onPress={() => handleShowStatus(order.id)}
                     >
-                      Status
-                    </Chip>
-
-                    <Chip
-                      labelStyle={{ fontSize: 10 }}
-                      style={{
-                        width: 100,
-                        height: 30,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#3DB2FF",
-                        borderRadius: 0,
-                        justifyContent: "space-evenly",
-                        marginRight: 5,
-                      }}
-                      mode="contained"
-                      onPress={() => handleDirection()}
-                    >
-                      Antar
-                    </Chip>
-                    <View>
                       <Chip
                         labelStyle={{ fontSize: 10 }}
                         style={{
@@ -287,15 +267,55 @@ export default function OrderList({ navigation }) {
                           backgroundColor: "#3DB2FF",
                           borderRadius: 0,
                           justifyContent: "space-evenly",
+                          marginRight: 5,
                         }}
                         mode="contained"
-                        onPress={() => paymentHandler(order)}
+                        onPress={() => handleShowStatus(order.id)}
                       >
-                        Bayar
+                        Status
                       </Chip>
+
+                      <Chip
+                        labelStyle={{ fontSize: 10 }}
+                        style={{
+                          width: 100,
+                          height: 30,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#3DB2FF",
+                          borderRadius: 0,
+                          justifyContent: "space-evenly",
+                          marginRight: 5,
+                        }}
+                        mode="contained"
+                        onPress={() => handleDirection()}
+                      >
+                        Antar
+                      </Chip>
+                      {order.status == "On Progress" &&
+                        order.statusPayment == false && (
+                          <View>
+                            <Chip
+                              labelStyle={{ fontSize: 10 }}
+                              style={{
+                                width: 100,
+                                height: 30,
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#3DB2FF",
+                                borderRadius: 0,
+                                justifyContent: "space-evenly",
+                              }}
+                              mode="contained"
+                              onPress={() => paymentHandler(order)}
+                            >
+                              Bayar
+                            </Chip>
+                          </View>
+                        )}
                     </View>
                   </View>
-                </View>
+                )}
               </Card>
             );
           })}
@@ -308,7 +328,7 @@ export default function OrderList({ navigation }) {
               contentContainerStyle={styles.containerStyleModal}
             >
               <View>
-                <Text>Order ID : {detailOrder.id}</Text>
+                <Text>Order ID : {detailOrder.codeTransaction}</Text>
                 <View>
                   <Image
                     style={styles.codeImage}
@@ -317,6 +337,13 @@ export default function OrderList({ navigation }) {
                 </View>
                 <Text>Nama Pesanan : {detailOrder.Service.name}</Text>
                 <Text>Status Pesanan : {detailOrder.status}</Text>
+                {detailOrder.statusPayment == true ? (
+                  <Text>Status Pembayaran : Selesai</Text>
+                ) : (
+                  <Text>Status Pembayaran : Pending</Text>
+                )}
+
+                <Text>Total Harga : {detailOrder.totalPrice}</Text>
               </View>
               <View style={{ marginTop: 10 }}>
                 <Button
