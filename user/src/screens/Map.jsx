@@ -203,6 +203,6 @@ export default function Map({ route, navigation }) {
 
 const styles = StyleSheet.create({
   map: {
-    height: height,
+    height: height * 0.85,
   },
 });

@@ -22,56 +22,52 @@ import {
 } from "../store/action";
 
 import { Loading } from "../components/LoadingPage";
-//-----------------------------------------------------------
+
+import MyCarousel from "../components/Homee";
+
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useState, useRef } from "react";
 
 Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
-  });
-//-----------------------------------------------------------
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
-  const { services, perfumes, treatments, access_token, loading } = useSelector(
-    (state) => state.reducer
-  );
+  const { userId, services, perfumes, treatments, access_token, loading } =
+    useSelector((state) => state.reducer);
   const [state, setState] = React.useState({ open: false });
   const [refreshing, setRefreshing] = React.useState(false);
   const onStateChange = ({ open }) => setState({ open });
-
   const { open } = state;
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  //-------------------------------------------------------
-	const [notification, setNotification] = useState(false);
-	const notificationListener = useRef();
-	const responseListener = useRef();
+  useEffect(() => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
 
-	useEffect(() => {
-		notificationListener.current =
-			Notifications.addNotificationReceivedListener((notification) => {
-				setNotification(notification);
-			});
-            
-		responseListener.current =
-			Notifications.addNotificationResponseReceivedListener((response) => {
-				console.log(response,2);
-                navigation.navigate("Ez Loundr");
-			});
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response, 2);
+        navigation.navigate("Ez Loundr");
+      });
 
-		return () => {
-			Notifications.removeNotificationSubscription(
-				notificationListener.current
-			);
-			Notifications.removeNotificationSubscription(responseListener.current);
-		};
-	}, []);
-	//-------------------------------------------------------
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -123,6 +119,7 @@ export default function Home({ navigation }) {
 
   return (
     <>
+      {console.log(userId, "userID")}
       <Provider>
         <View style={{ flex: 1, backgroundColor: "#1EAFED" }}>
           <View style={{ height: height * 0.45 }}>
@@ -225,12 +222,7 @@ export default function Home({ navigation }) {
                   },
                   small: false,
                 },
-                {
-                  icon: "chat",
-                  label: "Chat Admin",
-                  onPress: () => navigation.navigate("Chat Admin"),
-                  small: false,
-                },
+
                 {
                   icon: "washing-machine",
                   label: "Pesan Laundry",
@@ -262,7 +254,7 @@ export default function Home({ navigation }) {
                 {
                   icon: "chat",
                   label: "Chat Admin",
-                  onPress: () => createOrderHandler(),
+                  onPress: () => navigation.navigate("Chat Admin"),
                   small: false,
                 },
                 {

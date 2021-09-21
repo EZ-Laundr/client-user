@@ -11,7 +11,8 @@ export default function PaymentGateway({ route }) {
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 
-  const orderID = "23123sdasdsa"; //order id nanti diganti
+  const orderID = order.codeTransaction; //order id nanti diganti
+  // const orderID = "gsgsgsgsg454545454"; //order id nanti diganti
 
   useEffect(() => {
     midtrans().then((data) => {
@@ -25,10 +26,10 @@ export default function PaymentGateway({ route }) {
 
   async function midtrans(user) {
     const url = "https://app.sandbox.midtrans.com/snap/v1/transactions";
-
+    let item_details;
     let detailService = {
       id: order.Service.id,
-      price: order.Service.price,
+      price: 0, // ini nanti di isi kalo server udah di deploy
       weight: order.weight,
       quantity: 1,
       name: order.Service.name,
@@ -49,10 +50,10 @@ export default function PaymentGateway({ route }) {
       return treat;
     });
 
-    let newItem = treatments.map((item) => {
+    item_details = treatments.map((item) => {
       return {
         id: item.SpecialTreatment.id,
-        price: item.price,
+        price: item.price / item.quantity,
         quantity: item.quantity,
         name: item.SpecialTreatment.name,
         category: "Extra Order",
@@ -60,34 +61,24 @@ export default function PaymentGateway({ route }) {
       };
     });
 
-    newItem.push(detailService);
-    newItem.push(detailPerfume);
+    item_details.push(detailService);
+    item_details.push(detailPerfume);
 
-    console.log(">>>>", newItem, "<<<<<<<<");
     const data = {
       transaction_details: {
         order_id: orderID,
-        // gross_amount: 30000,
         gross_amount: order.totalPrice,
+        // gross_amount: order.totalPrice,
       },
-      item_details: newItem,
+      item_details,
       credit_card: {
         secure: true,
       },
       customer_details: {
-        first_name: "dummy",
-        last_name: "dummy",
-        email: "dummy@mail.com",
-        phone: "dumyahaaaa",
+        email: order.User.email,
+        phone: order.User.phoneNumber,
       },
-      // customer_details: {
-      //   first_name: order.User.name,
-      //   last_name: order.User.name,
-      //   email: order.User.email,
-      //   phone: order.User.phoneNumber,
-      // },
     };
-
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -113,18 +104,20 @@ export default function PaymentGateway({ route }) {
         Authorization: "Basic " + base64Key,
       },
     });
+    console.log(response, "<<<<<<<<<<<<< response");
     return response.json();
   }
 
   function checkPayment() {
     setLoading(true);
     getstatus().then((data) => {
+      console.log(data, "sebelummm");
       if (data.status_code == 200) {
-        console.log(data);
         setLoading(false);
         alert("This Order ID has been paid");
+        console.log(data, " di getsatus");
       } else {
-        console.log(data);
+        console.log(data, " <<<<<<<<<<<<<<<< di getsatus");
         setLoading(false);
         alert("This Order ID has not been paid");
       }
@@ -145,42 +138,13 @@ export default function PaymentGateway({ route }) {
         </View>
       ) : (
         <>
+          {console.log(order, "sebelummm")}
           <WebView
             source={{
               uri: transactions.redirect_url,
             }}
             style={{ flex: 1 }}
           />
-
-          <TouchableOpacity
-            onPress={() => {
-              checkPayment();
-            }}
-            style={{
-              backgroundColor: "#3366FF",
-              padding: 20,
-              paddingVertical: 15,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-            disabled={loading}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 18,
-              }}
-            >
-              Cek Pembayaran
-            </Text>
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <FontAwesome name="check-square" size={20} color="white" />
-            )}
-          </TouchableOpacity>
         </>
       )}
     </Layout>

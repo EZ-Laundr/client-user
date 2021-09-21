@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, Alert, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Alert,
+  View,
+  ImageBackground,
+  Image,
+  Dimensions,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { TextInput, Button } from "react-native-paper";
+import { TextInput, Button, Card, Title, Paragraph } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -59,52 +67,111 @@ export default function Login({ navigation }) {
     return <Loading />;
   } else {
     return (
-      <ScrollView style={{ backgroundColor: "#F9F8EB" }}>
-        <CarouselItem />
-        <TextInput
-          mode="outlined"
-          label="Email"
-          left={<TextInput.Icon name="email" />}
-          onChangeText={(value) => setEmail(value)}
-        />
-        <TextInput
-          theme="accent"
-          mode="outlined"
-          label="Password"
-          secureTextEntry
-          left={<TextInput.Icon name="lock" />}
-          right={<TextInput.Icon name="eye" />}
-          onChangeText={(value) => passwordHandler(value)}
-        />
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 10,
+      <View style={styles.container}>
+        <ImageBackground
+          source={{
+            uri: "https://cutewallpaper.org/21/mobile-app-background/Gradient-Huawei-wallpapers-Oneplus-wallpapers-Samsung-.jpg",
           }}
-          >
+          style={styles.image}
+        >
+          <View>
+            <ImageBackground
+              style={styles.imageHeader}
+              source={require("../img/head3-removebg-preview.png")}
+            >
+              {/* <View>
+                <Image
+                  source={require("../img/EZ_Laundr.png")}
+                  style={styles.logo}
+                />
+              </View> */}
+            </ImageBackground>
+          </View>
+          <ScrollView>
+            <Card
+              style={{
+                backgroundColor: "rgba(52, 52, 52, 0.4)",
+              }}
+            >
+              <Card.Cover
+                style={styles.logo}
+                source={require("../img/EZ_Laundr.png")}
+              />
+              <Card.Title />
+              <Card.Content>
+                <Title>Sign In</Title>
+                <Paragraph>Sign in with your account</Paragraph>
+                <TextInput
+                  mode="outlined"
+                  label="Email"
+                  left={<TextInput.Icon name="email" />}
+                  onChangeText={(value) => setEmail(value)}
+                />
+                <TextInput
+                  theme="accent"
+                  mode="outlined"
+                  label="Password"
+                  secureTextEntry
+                  left={<TextInput.Icon name="lock" />}
+                  right={<TextInput.Icon name="eye" />}
+                  onChangeText={(value) => passwordHandler(value)}
+                />
+              </Card.Content>
+              <Card.Actions
+                style={{ alignItems: "center", justifyContent: "center" }}
+              >
+                <Button
+                  color="#3DB2FF"
+                  labelStyle={{
+                    fontSize: 20,
+                    textAlign: "center",
+                    color: "white",
+                  }}
+                  style={{ width: 150, height: 45 }}
+                  mode="contained"
+                  onPress={() => loginHandler()}
+                >
+                  Login
+                </Button>
+              </Card.Actions>
+            </Card>
+            <Text style={{ margin: 10 }}>Didn't have account ?</Text>
+          </ScrollView>
+        </ImageBackground>
+      </View>
 
-          <Button
-            color="#3DB2FF"
-            labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
-            style={{ width: 200, height: 50 }}
-            mode="contained"
-            onPress={() => loginHandler()}
-          >
-            Login
-          </Button>
-          <Text style={{ margin: 10 }}>Didn't have account ?</Text>
-          <Button
-            color="#3DB2FF"
-            labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
-            style={{ width: 200, height: 50 }}
-            mode="contained"
-            onPress={() => navigation.navigate("Register")}
-          >
-            Register
-          </Button>
-        </View>
-      </ScrollView>
     );
   }
 }
+const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 42,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#000000a0",
+  },
+  imageHeader: {
+    width: windowWidth,
+    height: 300,
+  },
+  logo: {
+    width: 180,
+    height: 100,
+    position: "absolute",
+    right: 0,
+    backgroundColor: "rgba(52, 52, 52, 0)",
+    // backgroundColor: "white",
+  },
+});

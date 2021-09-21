@@ -16,13 +16,12 @@ import {
   Chip,
   DataTable,
   Button,
-  Card,
   Title,
   Badge,
   Modal,
   Portal,
+  Card,
 } from "react-native-paper";
-
 import convertToRupiah from "../helpers/toRupiah";
 import getDirections from "react-native-google-maps-directions";
 import * as Location from "expo-location";
