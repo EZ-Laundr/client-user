@@ -12,7 +12,7 @@ export default function Register({ navigation }) {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  async function registerHandler() {
+  async function registerHandler({ navigation }) {
     const payload = {
       phoneNumber,
       email,

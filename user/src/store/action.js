@@ -75,18 +75,18 @@ export function setQrCode(code) {
 }
 
 export function fetchServices() {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "get",
-				url: `/services`,
-			});
-			const result = response.data;
-			dispatch(setServices(result));
-		} catch (error) {
-			console.log(error);
-		}
-	};
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        url: `/services`,
+      });
+      const result = response.data;
+      dispatch(setServices(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 
 export function fetchParfume() {
@@ -167,7 +167,6 @@ export function loginUser(payload) {
       dispatch(setLoading(false));
     }
   };
-
 }
 
 export function fetchOrders() {
@@ -241,7 +240,6 @@ export function registerUser(payload) {
         url: `/register`,
         data: payload,
       });
-      console.log(2, response.data.access_token);
       dispatch(setToken(response.data.access_token));
       return "success";
     } catch (error) {
