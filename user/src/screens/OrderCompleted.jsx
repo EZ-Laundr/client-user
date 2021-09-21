@@ -24,7 +24,7 @@ export default function OrderCompleted({ navigation }) {
           labelStyle={{ fontSize: 20, textAlign: "center" }}
           style={{ width: 200, height: 40, borderRadius: 10 }}
           mode="contained"
-          onPress={() => navigation.replace("Home")}
+          onPress={() => navigation.replace("Ez Loundr")}
         >
           Home
         </Button>

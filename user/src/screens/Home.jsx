@@ -17,9 +17,11 @@ import {
   fetchParfume,
   fetchServices,
   fetchTreatment,
+  setLoading,
   setToken,
 } from "../store/action";
 
+import { Loading } from "../components/LoadingPage";
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { services, perfumes, treatments, access_token, loading } = useSelector(
@@ -35,6 +37,8 @@ export default function Home({ navigation }) {
     dispatch(fetchServices());
     dispatch(fetchParfume());
     dispatch(fetchTreatment());
+    dispatch(setLoading(false));
+    console.log("jalan");
   }, []);
 
   const wait = (timeout) => {
@@ -57,7 +61,9 @@ export default function Home({ navigation }) {
         {
           text: "Login",
           onPress: () => {
+            dispatch(setLoading(true));
             navigation.navigate("Login");
+            console.log("jalan");
           },
           style: "ok",
         },
@@ -76,166 +82,167 @@ export default function Home({ navigation }) {
     Alert.alert("Logout Sukses", "Kamu berhasil logout!");
   }
 
-  if (services) {
-    return (
-      <>
-        <Provider>
-          <View style={{ flex: 1, backgroundColor: "#1EAFED" }}>
-            <View style={{ height: height * 0.45 }}>
-              <CarouselItem />
-            </View>
-            <ScrollView
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-            >
-              <View>
-                <View style={{ marginTop: 20 }}>
-                  <Text>Services</Text>
-                </View>
-                <ScrollView horizontal={true}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    {services.map((service, index) => {
-                      return (
-                        <View key={index}>
-                          <CardService
-                            service={service}
-                            navigation={navigation}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-              <View>
-                <View style={{ marginTop: 20 }}>
-                  <Text>Perfumes</Text>
-                </View>
-                <ScrollView horizontal={true}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    {perfumes.map((service, index) => {
-                      return (
-                        <View key={index}>
-                          <CardService
-                            service={service}
-                            navigation={navigation}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-              <View>
-                <View style={{ marginTop: 20 }}>
-                  <Text>Ekstra Order</Text>
-                </View>
-                <ScrollView horizontal={true}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    {treatments.map((service, index) => {
-                      return (
-                        <View key={index}>
-                          <CardService
-                            service={service}
-                            navigation={navigation}
-                          />
-                        </View>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-            </ScrollView>
+  return (
+    <>
+      <Provider>
+        <View style={{ flex: 1, backgroundColor: "#1EAFED" }}>
+          <View style={{ height: height * 0.45 }}>
+            <CarouselItem />
           </View>
-          <Portal>
-            {access_token == "" ? (
-              <FAB.Group
-                fabStyle={{ backgroundColor: "#3DB2FF" }}
-                color="#FFFF"
-                style={{ zIndex: 50 }}
-                open={open}
-                icon={open ? "basket-outline" : "plus"}
-                actions={[
-                  {
-                    icon: "login",
-                    label: "Login",
-                    onPress: () => navigation.navigate("Login"),
-                    small: false,
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            <View>
+              <View style={{ marginTop: 20 }}>
+                <Text>Services</Text>
+              </View>
+              <ScrollView horizontal={true}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  {services.map((service, index) => {
+                    return (
+                      <View key={index}>
+                        <CardService
+                          service={service}
+                          navigation={navigation}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+            <View>
+              <View style={{ marginTop: 20 }}>
+                <Text>Perfumes</Text>
+              </View>
+              <ScrollView horizontal={true}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  {perfumes.map((service, index) => {
+                    return (
+                      <View key={index}>
+                        <CardService
+                          service={service}
+                          navigation={navigation}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+            <View>
+              <View style={{ marginTop: 20 }}>
+                <Text>Ekstra Order</Text>
+              </View>
+              <ScrollView horizontal={true}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  {treatments.map((service, index) => {
+                    return (
+                      <View key={index}>
+                        <CardService
+                          service={service}
+                          navigation={navigation}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+          </ScrollView>
+        </View>
+        <Portal>
+          {access_token == "" ? (
+            <FAB.Group
+              fabStyle={{ backgroundColor: "#3DB2FF" }}
+              color="#FFFF"
+              style={{ zIndex: 50 }}
+              open={open}
+              icon={open ? "basket-outline" : "plus"}
+              actions={[
+                {
+                  icon: "login",
+                  label: "Login",
+                  onPress: (e) => {
+                    dispatch(setLoading(true)), console.log("jalan");
+                    navigation.navigate("Login");
                   },
-                  {
-                    icon: "chat",
-                    label: "Chat Admin",
-                    onPress: () => createOrderHandler(),
-                    small: false,
-                  },
-                  {
-                    icon: "washing-machine",
-                    label: "Pesan Laundry",
-                    onPress: () => createOrderHandler(),
-                    small: false,
-                  },
-                ]}
-                onStateChange={onStateChange}
-                onPress={() => {
-                  if (open) {
-                    // do something if the speed dial is open
-                  }
-                }}
-              />
-            ) : (
-              <FAB.Group
-                fabStyle={{ backgroundColor: "#3DB2FF" }}
-                color="#FFFF"
-                style={{ zIndex: 50 }}
-                open={open}
-                icon={open ? "basket-outline" : "plus"}
-                actions={[
-                  {
-                    icon: "logout",
-                    label: "Logout",
-                    onPress: () => logoutHandler(),
-                    small: false,
-                  },
-                  {
-                    icon: "chat",
-                    label: "Chat Admin",
-                    onPress: () => createOrderHandler(),
-                    small: false,
-                  },
-                  {
-                    icon: "washing-machine",
-                    label: "Pesan Laundry",
-                    onPress: () => createOrderHandler(),
-                    small: false,
-                  },
-                ]}
-                onStateChange={onStateChange}
-                onPress={() => {
-                  if (open) {
-                    // do something if the speed dial is open
-                  }
-                }}
-              />
-            )}
-          </Portal>
-        </Provider>
-      </>
-    );
-  }
+                  small: false,
+                },
+                {
+                  icon: "chat",
+                  label: "Chat Admin",
+                  onPress: () => navigation.navigate("Chat Admin"),
+                  small: false,
+                },
+                {
+                  icon: "washing-machine",
+                  label: "Pesan Laundry",
+                  onPress: () => createOrderHandler(),
+                  small: false,
+                },
+              ]}
+              onStateChange={onStateChange}
+              onPress={() => {
+                if (open) {
+                  // do something if the speed dial is open
+                }
+              }}
+            />
+          ) : (
+            <FAB.Group
+              fabStyle={{ backgroundColor: "#3DB2FF" }}
+              color="#FFFF"
+              style={{ zIndex: 50 }}
+              open={open}
+              icon={open ? "basket-outline" : "plus"}
+              actions={[
+                {
+                  icon: "logout",
+                  label: "Logout",
+                  onPress: () => logoutHandler(),
+                  small: false,
+                },
+                {
+                  icon: "chat",
+                  label: "Chat Admin",
+                  onPress: () => createOrderHandler(),
+                  small: false,
+                },
+                {
+                  icon: "washing-machine",
+                  label: "Pesan Laundry",
+                  onPress: () => createOrderHandler(),
+                  small: false,
+                },
+              ]}
+              onStateChange={onStateChange}
+              onPress={() => {
+                if (open) {
+                  // do something if the speed dial is open
+                }
+              }}
+            />
+          )}
+        </Portal>
+      </Provider>
+    </>
+  );
 }

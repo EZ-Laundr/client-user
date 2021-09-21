@@ -6,6 +6,7 @@ import {
   SET_ORDERS,
   SET_ORDER_DETAIL,
   SET_QR_CODE,
+  SET_LOADING,
 } from "./actionType";
 
 const initialState = {
@@ -27,6 +28,13 @@ export default function reducer(state = initialState, action) {
         services: action.payload,
       };
       return dataService;
+
+    case SET_LOADING:
+      const statusLoading = {
+        ...state,
+        loading: action.payload,
+      };
+      return statusLoading;
 
     case SET_PARFUME:
       const dataParfume = {

@@ -4,10 +4,10 @@ import { WebView } from "react-native-webview";
 import base64 from "base-64";
 import { FontAwesome } from "@expo/vector-icons";
 import Layout from "../components/LayoutMIdtrans";
-export default function App({ route }) {
+export default function PaymentGateway({ route }) {
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState(false);
-  const { order } = route.params;
+  // const { order } = route.params;
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 

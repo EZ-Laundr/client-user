@@ -27,6 +27,7 @@ import convertToRupiah from "../helpers/toRupiah";
 import getDirections from "react-native-google-maps-directions";
 import * as Location from "expo-location";
 import convertDate from "../helpers/formatDate";
+import { DataNotFound } from "../components/LoadingPage";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function OrderList({ navigation }) {
@@ -48,10 +49,8 @@ export default function OrderList({ navigation }) {
 
   const showStatus = () => setStatusVisible(true);
   const hideStatus = () => setStatusVisible(false);
+
   useEffect(() => {
-    if (access_token == "") {
-      navigation.navigate("Login");
-    }
     dispatch(fetchOrders());
     getLocation();
   }, []);
@@ -142,7 +141,17 @@ export default function OrderList({ navigation }) {
     ]);
   }
 
-  if (orders) {
+  if (orders.length < 1) {
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <DataNotFound />
+      </ScrollView>
+    );
+  } else {
     return (
       <ScrollView
         refreshControl={
@@ -288,32 +297,35 @@ export default function OrderList({ navigation }) {
               contentContainerStyle={styles.containerStyleModal}
             >
               <View>
+                <Text>Order ID : {detailOrder.id}</Text>
                 <View>
                   <Image
                     style={styles.codeImage}
                     source={{ uri: `${qrCode.qrcode}` }}
                   />
                 </View>
-                <Text>{detailOrder.id}</Text>
-                <Text>{detailOrder.Service.name}</Text>
-                <Text>{detailOrder.status}</Text>
+                <Text>Nama Pesanan : {detailOrder.Service.name}</Text>
+                <Text>Status Pesanan : {detailOrder.status}</Text>
               </View>
-
-              <Button
-                labelStyle={{ fontSize: 15, textAlign: "center", marginTop: 5 }}
-                style={{ width: 80, height: 30, borderRadius: 10 }}
-                mode="contained"
-                onPress={() => hideStatus()}
-              >
-                Oke
-              </Button>
+              <View style={{ marginTop: 10 }}>
+                <Button
+                  labelStyle={{
+                    fontSize: 15,
+                    textAlign: "center",
+                    marginTop: 5,
+                  }}
+                  style={{ width: 80, height: 30, borderRadius: 10 }}
+                  mode="contained"
+                  onPress={() => hideStatus()}
+                >
+                  Oke
+                </Button>
+              </View>
             </Modal>
           )}
         </Portal>
       </ScrollView>
     );
-  } else {
-    return <Text> Loading...</Text>;
   }
 }
 
