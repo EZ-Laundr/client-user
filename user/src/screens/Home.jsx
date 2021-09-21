@@ -22,7 +22,10 @@ import {
 } from "../store/action";
 
 import { Loading } from "../components/LoadingPage";
-//-----------------------------------------------------------
+
+import MyCarousel from "../components/Homee";
+
+
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useState, useRef } from "react";

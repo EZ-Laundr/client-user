@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "750366010095",
+    "project_id": "ez-loundr-51248",
+    "storage_bucket": "ez-loundr-51248.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750366010095:android:0bb883229f5a509a1f491a",
+        "android_client_info": {
+          "package_name": "com.hacktiv.ezloundr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750366010095-kb4tgmrufea5473l8qgn9nh15pev7sn6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiSk-o8-waLB8P1epCUZ8m21W2ZGlDbFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750366010095-kb4tgmrufea5473l8qgn9nh15pev7sn6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

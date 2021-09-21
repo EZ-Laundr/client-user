@@ -67,7 +67,7 @@ export default class CarouselItem extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#EEEEEE", paddingTop: 50 }}>
+      <View style={{ flex: 1, paddingTop: 50 }}>
         <View
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    backgroundColor: "white",
     borderRadius: 8,
   },
   image: {
