@@ -7,11 +7,11 @@ import Layout from "../components/LayoutMIdtrans";
 export default function PaymentGateway({ route }) {
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState(false);
-  // const { order } = route.params;
+  const { order } = route.params;
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 
-  const orderID = "aystdytsatdy2342"; //order id nanti diganti
+  const orderID = "23123sdasdsa"; //order id nanti diganti
 
   useEffect(() => {
     midtrans().then((data) => {
@@ -26,46 +26,66 @@ export default function PaymentGateway({ route }) {
   async function midtrans(user) {
     const url = "https://app.sandbox.midtrans.com/snap/v1/transactions";
 
+    let detailService = {
+      id: order.Service.id,
+      price: order.Service.price,
+      weight: order.weight,
+      quantity: 1,
+      name: order.Service.name,
+      category: "Service",
+      merchant_name: "Ez_Loundr",
+    };
+
+    let detailPerfume = {
+      id: order.Perfume.id,
+      price: order.Perfume.price,
+      quantity: 1,
+      name: order.Perfume.name,
+      category: "Perfume",
+      merchant_name: "Ez_Loundr",
+    };
+
+    let treatments = order.OrderSpecials.map((treat) => {
+      return treat;
+    });
+
+    let newItem = treatments.map((item) => {
+      return {
+        id: item.SpecialTreatment.id,
+        price: item.price,
+        quantity: item.quantity,
+        name: item.SpecialTreatment.name,
+        category: "Extra Order",
+        merchant_name: "Ez_Loundr",
+      };
+    });
+
+    newItem.push(detailService);
+    newItem.push(detailPerfume);
+
+    console.log(">>>>", newItem, "<<<<<<<<");
     const data = {
       transaction_details: {
         order_id: orderID,
-        gross_amount: 48000,
+        // gross_amount: 30000,
+        gross_amount: order.totalPrice,
       },
-      item_details: [
-        {
-          id: "PRODUCTID1",
-          price: 6000,
-          quantity: 1,
-          name: "Service",
-          category: "Clothes",
-          merchant_name: "Merchant",
-        },
-        {
-          id: "PRODUCTID2",
-          price: 2000,
-          quantity: 1,
-          name: "Perfume",
-          category: "Clothes",
-          merchant_name: "Merchant",
-        },
-        {
-          id: "PRODUCTID2",
-          price: 40000,
-          quantity: 1,
-          name: "Extra Order",
-          category: "Clothes",
-          merchant_name: "Merchant",
-        },
-      ],
+      item_details: newItem,
       credit_card: {
         secure: true,
       },
       customer_details: {
-        first_name: "budi",
-        last_name: "pratama",
-        email: "budi.pra@example.com",
-        phone: "08111222333",
+        first_name: "dummy",
+        last_name: "dummy",
+        email: "dummy@mail.com",
+        phone: "dumyahaaaa",
       },
+      // customer_details: {
+      //   first_name: order.User.name,
+      //   last_name: order.User.name,
+      //   email: order.User.email,
+      //   phone: order.User.phoneNumber,
+      // },
     };
 
     const response = await fetch(url, {
