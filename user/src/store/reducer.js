@@ -7,6 +7,7 @@ import {
   SET_ORDER_DETAIL,
   SET_QR_CODE,
   SET_LOADING,
+  SET_USER_ID,
 } from "./actionType";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   orders: [],
   detailOrder: [],
   qrCode: "",
+  userId: "",
 };
 
 export default function reducer(state = initialState, action) {
@@ -28,6 +30,13 @@ export default function reducer(state = initialState, action) {
         services: action.payload,
       };
       return dataService;
+
+    case SET_USER_ID:
+      const idUser = {
+        ...state,
+        userId: action.payload,
+      };
+      return idUser;
 
     case SET_LOADING:
       const statusLoading = {
