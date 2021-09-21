@@ -75,18 +75,18 @@ export function setQrCode(code) {
 }
 
 export function fetchServices() {
-	return async function (dispatch, getState) {
-		try {
-			const response = await localhost({
-				method: "get",
-				url: `/services`,
-			});
-			const result = response.data;
-			dispatch(setServices(result));
-		} catch (error) {
-			console.log(error);
-		}
-	};
+  return async function (dispatch, getState) {
+    try {
+      const response = await localhost({
+        method: "get",
+        url: `/services`,
+      });
+      const result = response.data;
+      dispatch(setServices(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 
 export function fetchParfume() {

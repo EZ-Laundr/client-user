@@ -43,6 +43,7 @@ export default function Cart({ route, navigation }) {
         },
         treatments: cartData.treatments,
         pickup: cartData.pickup,
+        customerAddress: JSON.stringify(cartData.customerAddress),
       };
       let orderrs = await dispatch(createOrder(payload));
       if (orderrs === "success") {

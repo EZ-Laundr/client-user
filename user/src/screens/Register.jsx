@@ -18,6 +18,8 @@ export default function Register({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
 //   const [notificationToken, setNotificationToken] = useState('')
 
+
+
     async function registerHandler() {
         console.log(1);
         registerForPushNotificationsAsync()
