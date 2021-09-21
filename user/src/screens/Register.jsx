@@ -4,6 +4,8 @@ import { TextInput, Button } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import Header from "../components/Header";
 import { registerUser } from "../store/action";
+import { ScrollView } from "react-native-gesture-handler";
+
 
 export default function Register({navigation}) {
     const dispatch = useDispatch();
@@ -22,13 +24,13 @@ export default function Register({navigation}) {
           if (goRegister === "success") {
             navigation.navigate("Home");
           } else {
-            Alert.alert("Rwgister Failed", `${goRegister.join('\n')}`);
+            Alert.alert("Register Failed", `${goRegister.join('\n')}`);
           }
     }
 
     return (
-        <>
-          <Header />
+        <ScrollView style={{ backgroundColor: "#F9F8EB" }}>
+          {/* <Header /> */}
           <TextInput
             mode="outlined"
             label="Email"
@@ -67,6 +69,6 @@ export default function Register({navigation}) {
               Register
             </Button>
           </View>
-        </>
+        </ScrollView>
       );
     }

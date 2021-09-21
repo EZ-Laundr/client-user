@@ -40,7 +40,7 @@ export default function Cart({ route, navigation }) {
       };
       let orderrs = await dispatch(createOrder(payload));
       if (orderrs === "success") {
-        navigation.navigate("OrderCompleted");
+        navigation.navigate("Order Completed");
       } else {
         Alert.alert("Checkout Error", `${orderrs}`);
       }
