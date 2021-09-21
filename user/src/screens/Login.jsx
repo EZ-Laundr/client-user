@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
     setTimeout(() => {
       dispatch(setLoading(false));
     }, 2000);
-  }, [navigation]);
+  }, []);
 
   function emailHandler(email) {
     setEmail(email);

@@ -4,7 +4,7 @@ import { WebView } from "react-native-webview";
 import base64 from "base-64";
 import { FontAwesome } from "@expo/vector-icons";
 import Layout from "../components/LayoutMIdtrans";
-export default function PaymentGateway({ route }) {
+export default function PaymentGateway({ route, navigation }) {
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState(false);
   const { order } = route.params;
@@ -67,7 +67,6 @@ export default function PaymentGateway({ route }) {
       transaction_details: {
         order_id: orderID,
         gross_amount: order.totalPrice,
-        // gross_amount: order.totalPrice,
       },
       item_details,
       credit_card: {
