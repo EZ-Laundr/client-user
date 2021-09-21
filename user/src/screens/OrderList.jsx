@@ -100,7 +100,7 @@ export default function OrderList({ navigation }) {
   }
 
   function handleShowStatus(orderId) {
-    dispatch(fetchQrCode(`edit/${orderId}`));
+    dispatch(fetchQrCode(`/detail/${orderId}`));
     dispatch(fetchOrderDetail(orderId));
     showStatus();
   }
@@ -192,10 +192,10 @@ export default function OrderList({ navigation }) {
                   </View>
                   <View style={{ marginTop: 20 }}>
                     <Text>{order.Perfume.name}</Text>
-                    <Image
+                    {/* <Image
                       style={{ width: 45, height: 45 }}
                       source={{ uri: `${order.Perfume.imageUrl}` }}
-                    />
+                    /> */}
 
                     <View style={{ flexDirection: "row", marginTop: 5 }}>
                       <ScrollView horizontal={true}>
@@ -208,12 +208,12 @@ export default function OrderList({ navigation }) {
                               <Text>
                                 {treat.SpecialTreatment.name} x {treat.quantity}
                               </Text>
-                              <Image
+                              {/* <Image
                                 style={{ width: 35, height: 35 }}
                                 source={{
                                   uri: `${treat.SpecialTreatment.imageUrl}`,
                                 }}
-                              />
+                              /> */}
                             </View>
                           );
                         })}

@@ -82,17 +82,21 @@ export default function Login({ navigation }) {
             marginTop: 10,
           }}
         >
-          <Button
-            color="#3DB2FF"
-            labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
-            style={{ width: 200, height: 50 }}
-            mode="contained"
-            onPress={() => loginHandler()}
-          >
-            Login
-          </Button>
-        </View>
-      </ScrollView>
-    );
-  }
+          Login
+        </Button>
+
+        <Text style={{margin:10}}>Didn't have account ?</Text>
+
+        <Button
+          color="#3DB2FF"
+          labelStyle={{ fontSize: 20, textAlign: "center", color: "white" }}
+          style={{ width: 200, height: 50 }}
+          mode="contained"
+          onPress={() => navigation.navigate('Register')}
+        >
+          Register
+        </Button>
+      </View>
+    </ScrollView>
+  );
 }
