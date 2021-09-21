@@ -22,6 +22,7 @@ import {
 } from "../store/action";
 
 import { Loading } from "../components/LoadingPage";
+import MyCarousel from "../components/Homee";
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { services, perfumes, treatments, access_token, loading } = useSelector(

@@ -12,6 +12,7 @@ export default function PaymentGateway({ route }) {
   const base64Key = base64.encode(serverKey);
 
   const orderID = order.codeTransaction; //order id nanti diganti
+  // const orderID = "gsgsgsgsg454545454"; //order id nanti diganti
 
   useEffect(() => {
     midtrans().then((data) => {
@@ -28,7 +29,7 @@ export default function PaymentGateway({ route }) {
     let item_details;
     let detailService = {
       id: order.Service.id,
-      price: order.Service.price,
+      price: 0, // ini nanti di isi kalo server udah di deploy
       weight: order.weight,
       quantity: 1,
       name: order.Service.name,
@@ -66,7 +67,7 @@ export default function PaymentGateway({ route }) {
     const data = {
       transaction_details: {
         order_id: orderID,
-        gross_amount: order.totalPrice + order.Service.price,
+        gross_amount: order.totalPrice,
         // gross_amount: order.totalPrice,
       },
       item_details,
