@@ -11,7 +11,6 @@ import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 //-------------------------------------------------------------
 
-
 export default function Register({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -118,5 +117,6 @@ export default function Register({ navigation }) {
           </View>
         </ScrollView>
       )
+
 
 }

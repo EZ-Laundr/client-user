@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, Polyline } from "react-native-maps";
-import { Dimensions, StyleSheet, Text, View, Platform } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 // import { MapViewDirections } from "react-native-maps-directions";
 import { Button } from "react-native-paper";
 const height = Dimensions.get("window").height;
@@ -9,6 +17,7 @@ const GOOGLE_MAPS_APIKEY = "AIzaSyBrBxPVos3uoCbgzIk4TB_LQas7wuZYOpU";
 import * as Location from "expo-location";
 import { getDistance, getPreciseDistance } from "geolib";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 export default function Map({ route, navigation }) {
   const { payloadCart } = route.params;
   const [location, setLocation] = useState(null);
@@ -16,21 +25,37 @@ export default function Map({ route, navigation }) {
   const [latToko, setLatToko] = useState(-5.370346);
   const [longToko, setLongToko] = useState(105.051187);
   const [coordinates, setCoordinates] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getLocation();
+    }, [])
+  );
+  // useEffect(() => {
+  //   getLocation();
+  // }, []);
 
   async function getLocation() {
     try {
+      await Location.enableNetworkProviderAsync()
+        .then()
+        .catch((_) => null);
       let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log(status, "statuuss");
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      let location = await Location.getLastKnownPositionAsync({
+      let location = await Location.getCurrentPositionAsync({
         accuracy: 6,
       });
+      // let location = await Location.getCurrentPositionAsync({
+      //   accuracy: Location.Accuracy.High,
+      // });
+      // let location = await Location.getLastKnownPositionAsync({
+      //   accuracy: 6,
+      // });
       setLocation(location);
       setCoordinates({
         latitude: location.coords.latitude,
@@ -80,9 +105,21 @@ export default function Map({ route, navigation }) {
       longitude: e.nativeEvent.coordinate.longitude,
     });
   }
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getLocation();
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
   if (location?.coords && coordinates?.latitude) {
     return (
-      <>
+      <ScrollView>
         <MapView
           showsUserLocation={true}
           style={styles.map}
@@ -149,10 +186,18 @@ export default function Map({ route, navigation }) {
             Pilih Lokasi Penjemputan
           </Button>
         </View>
-      </>
+      </ScrollView>
     );
   } else {
-    return <Text>Loading..</Text>;
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Text>Loading..</Text>
+      </ScrollView>
+    );
   }
 }
 
