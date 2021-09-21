@@ -10,7 +10,7 @@ export default function Splash({ navigation }) {
   useEffect(() => {
     setTimeout(() => {
       dispatch(setLoading(true));
-      navigation.replace("Login");
+      navigation.replace("Register");
     }, 3000);
   }, [navigation]);
 
