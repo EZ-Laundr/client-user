@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.15.8",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-firebase/app": "^12.8.0",
     "@react-native-firebase/firestore": "^12.8.0",
     "@react-native-picker/picker": "1.16.1",
@@ -25,6 +25,7 @@
     "expo-location": "^12.1.2",
     "expo-notifications": "^0.12.3",
     "expo-status-bar": "~1.0.4",
+    "fiction-expo-restart": "^1.1.0",
     "firebase": "8.2.3",
     "geolib": "^3.3.1",
     "lottie-react-native": "4.0.2",
@@ -33,6 +34,7 @@
     "react-measure": "^2.5.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-drax": "^0.8.2",
+    "react-native-firebase-hooks": "0.0.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-gifted-chat": "^0.16.3",
     "react-native-google-maps-directions": "^2.1.1",
@@ -40,6 +42,7 @@
     "react-native-maps": "^0.29.3",
     "react-native-maps-directions": "^1.8.0",
     "react-native-paper": "^4.9.2",
+    "react-native-restart": "0.0.22",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-snap-carousel": "^3.9.1",
@@ -47,6 +50,7 @@
     "react-native-web": "~0.13.12",
     "react-native-webview": "11.6.2",
     "react-redux": "^7.2.5",
+    "react-refresh": "^0.10.0",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0"
   },
