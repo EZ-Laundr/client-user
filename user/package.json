@@ -48,12 +48,7 @@
     "react-native-webview": "11.6.2",
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
-<<<<<<< HEAD
     "redux-thunk": "^2.3.0"
-=======
-    "redux-thunk": "^2.3.0",
-    "undefined": "react-firebase-hooks/firestore"
->>>>>>> 6c70c48fd907d0ba500be804980eee394577b575
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
