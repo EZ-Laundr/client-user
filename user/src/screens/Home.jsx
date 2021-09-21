@@ -38,7 +38,6 @@ export default function Home({ navigation }) {
     dispatch(fetchParfume());
     dispatch(fetchTreatment());
     dispatch(setLoading(false));
-    console.log("jalan");
   }, []);
 
   const wait = (timeout) => {

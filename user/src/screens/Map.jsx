@@ -48,10 +48,13 @@ export default function Map({ route, navigation }) {
         return;
       }
       let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: 6,
       });
       // let location = await Location.getCurrentPositionAsync({
       //   accuracy: Location.Accuracy.High,
+      // });
+      // let location = await Location.getLastKnownPositionAsync({
+      //   accuracy: 6,
       // });
       setLocation(location);
       setCoordinates({
