@@ -139,6 +139,7 @@ export default function Login({ navigation }) {
           </ScrollView>
         </ImageBackground>
       </View>
+
     );
   }
 }
