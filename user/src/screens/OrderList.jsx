@@ -28,6 +28,7 @@ import getDirections from "react-native-google-maps-directions";
 import * as Location from "expo-location";
 import convertDate from "../helpers/formatDate";
 import { DataNotFound } from "../components/LoadingPage";
+import { useFocusEffect } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function OrderList({ navigation }) {
@@ -50,10 +51,16 @@ export default function OrderList({ navigation }) {
   const showStatus = () => setStatusVisible(true);
   const hideStatus = () => setStatusVisible(false);
 
-  useEffect(() => {
-    dispatch(fetchOrders());
-    getLocation();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchOrders());
+      getLocation();
+    }, [])
+  );
+  // useEffect(() => {
+  //   dispatch(fetchOrders());
+  //   getLocation();
+  // }, []);
 
   async function getLocation() {
     try {
@@ -141,9 +148,14 @@ export default function OrderList({ navigation }) {
     ]);
   }
 
-  if (orders.length < 1) {
+  if (orders.length < 1 || access_token == "") {
     return (
       <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

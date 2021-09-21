@@ -55,7 +55,6 @@ export function DataNotFound() {
 
 const styles = StyleSheet.create({
   animationContainer: {
-    backgroundColor: "rgba(52, 52, 52, 0.2)",
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
