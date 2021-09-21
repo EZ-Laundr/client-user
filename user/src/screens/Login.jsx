@@ -95,7 +95,7 @@ export default function Login({ navigation }) {
             >
               <Card.Cover
                 style={styles.logo}
-                source={require("../img/EZ_Laundr.png")}
+                source={require("../img/head4_white.png")}
               />
               <Card.Title />
               <Card.Content>
@@ -139,7 +139,6 @@ export default function Login({ navigation }) {
           </ScrollView>
         </ImageBackground>
       </View>
-
     );
   }
 }
