@@ -56,8 +56,6 @@ export default function ChatAdmin() {
         const unsubscribe = messagesRef.onSnapshot((querySnapshot) => {
             const messagesFirestore = querySnapshot
                 .docChanges()
-                // .slice(0)
-                // .reverse()
                 .map(({ doc }) => {
                     const message = doc.data();
                     return {
