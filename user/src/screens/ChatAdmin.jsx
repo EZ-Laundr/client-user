@@ -3,8 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { LogBox } from "react-native";
 import { useSelector } from "react-redux";
 import firebase from "firebase";
+import RNRestart from "react-native-restart";
 import "firebase/firestore";
-import { Updates } from "expo";
 import { GiftedChat } from "react-native-gifted-chat";
 
 if (firebase.apps.length === 0) {
@@ -36,7 +36,7 @@ export default function ChatAdmin() {
       messagesRef.add(m);
     });
     await Promise.all(writes);
-    Updates.reload();
+    RNRestart.Restart();
   }
 
   const user = {
