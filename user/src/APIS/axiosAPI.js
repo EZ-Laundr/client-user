@@ -1,6 +1,6 @@
 import axios from "axios";
 
 const localhost = axios.create({
-  baseURL: "http://d81d-116-206-39-107.ngrok.io",
+    baseURL: "http://192.168.248.97:4000",
 });
 export default localhost;
