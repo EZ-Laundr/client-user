@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, TextInput } from "react-native";
-
+// @refresh reset
+import React, { useState, useEffect, useCallback } from "react";
+import { LogBox } from "react-native";
+import { useSelector } from "react-redux";
 import firebase from "firebase";
+import RNRestart from "react-native-restart";
 import "firebase/firestore";
+import { GiftedChat } from "react-native-gifted-chat";
 
 if (firebase.apps.length === 0) {
     firebase.initializeApp({
@@ -17,25 +20,39 @@ if (firebase.apps.length === 0) {
 }
 
 const firestore = firebase.firestore();
-
+LogBox.ignoreLogs([
+    "Setting a timer for a long period of time",
+    "Warning: Encountered two children with the same key, `undefined`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.",
+]);
 export default function ChatAdmin() {
-    const [formValue, setFormValue] = useState("");
-    const [userId, setUserId] = useState("2");
+    const { userId } = useSelector((state) => state.reducer);
     const test = firestore.collection("messages");
     const messagesRef = test.doc(userId).collection("chat-history");
     const query = messagesRef.orderBy("createdAt").limit(25);
     const [messages, setMessages] = useState([]);
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        await messagesRef.add({
-            text: formValue,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            sender: "User1",
+    async function handleSend(messages) {
+        const writes = messages.map((m) => {
+            messagesRef.add(m);
         });
-        console.log(formValue);
-        setFormValue("");
+        await Promise.all(writes);
+        RNRestart.Restart();
+    }
+
+    const user = {
+        _id: 1,
+        user: userId,
+        name: userId,
     };
+
+    const appendMessages = useCallback(
+        (messages) => {
+            setMessages((previousMessages) =>
+                GiftedChat.append(previousMessages, messages)
+            );
+        },
+        [messages]
+    );
 
     useEffect(() => {
         const unsubscribe = messagesRef.onSnapshot((querySnapshot) => {
@@ -48,28 +65,11 @@ export default function ChatAdmin() {
                         ...message,
                         createdAt: message.createdAt.toDate(),
                     };
-                });
-            setMessages(messagesFirestore);
+                })
+                .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+            appendMessages(messagesFirestore);
         });
     }, []);
 
-    console.log(messages);
-
-    return (
-        <View>
-            <Text>{userId}</Text>
-            <TextInput
-                onChangeText={(e) => setFormValue(e)}
-                placeholder="Ketik pesan anda..."
-            />
-            <Button
-                style={{ fontSize: 20, color: "green" }}
-                styleDisabled={{ color: "red" }}
-                title="Send"
-                onPress={sendMessage}
-            >
-                Send
-            </Button>
-        </View>
-    );
+    return <GiftedChat messages={messages} user={user} onSend={handleSend} />;
 }
