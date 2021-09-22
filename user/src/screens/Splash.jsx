@@ -6,6 +6,7 @@ import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../store/action";
 export default function Splash({ navigation }) {
+
   const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
@@ -14,22 +15,25 @@ export default function Splash({ navigation }) {
     }, 3000);
   }, [navigation]);
 
-  return (
-    <View style={styles.background}>
-      <Image style={styles.logo} source={require("../img/EZ_Laundr.png")} />
-    </View>
-  );
+    return (
+        <View style={styles.background}>
+            <Image
+                style={styles.logo}
+                source={require("../img/EZ_Laundr.png")}
+            />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
-  },
-  logo: {
-    width: 222,
-    height: 105,
-  },
+    background: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white",
+    },
+    logo: {
+        width: 222,
+        height: 105,
+    },
 });
