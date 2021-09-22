@@ -13,7 +13,7 @@ export default function Header() {
       <View style={styles.page}>
         <ImageBackground
           style={styles.header}
-          source={require("../img/Header.png")}
+          source={require("../assets/Header.png")}
         ></ImageBackground>
       </View>
     </View>
