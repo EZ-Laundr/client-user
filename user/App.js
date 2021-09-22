@@ -23,10 +23,48 @@ import PaymentGateway from "./src/screens/PaymentGateway";
 import Map from "./src/screens/Map";
 import Dummy from "./src/screens/dummy";
 import ChatAdmin from "./src/screens/ChatAdmin";
+//---------------------------------------------------------
+import * as Notifications from "expo-notifications";
+import { useState, useRef, useEffect } from "react";
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: false,
+		shouldSetBadge: false,
+	}),
+});
+//---------------------------------------------------------
 
 export default function App() {
 	const Stack = createNativeStackNavigator();
 	const Tab = createBottomTabNavigator();
+
+	//----------------------------------------------------
+	const [notification, setNotification] = useState(false);
+	const notificationListener = useRef();
+	const responseListener = useRef();
+
+	useEffect(() => {
+		notificationListener.current =
+			Notifications.addNotificationReceivedListener((notification) => {
+				setNotification(notification);
+			});
+
+		responseListener.current =
+			Notifications.addNotificationResponseReceivedListener((response) => {
+				console.log(response, 2);
+				navigation.navigate("Ez Loundr");
+			});
+
+		return () => {
+			Notifications.removeNotificationSubscription(
+				notificationListener.current
+			);
+			Notifications.removeNotificationSubscription(responseListener.current);
+		};
+	}, []);
+	//----------------------------------------------------
 
 	function StackHome() {
 		return (

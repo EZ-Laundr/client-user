@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, FAB, Portal, Provider } from "react-native-paper";
 import CarouselItem from "../components/CarouselItem";
 import {
+    deleteToken,
   fetchParfume,
   fetchServices,
   fetchTreatment,
@@ -26,16 +27,16 @@ import { Loading } from "../components/LoadingPage";
 import MyCarousel from "../components/Homee";
 
 import Constants from "expo-constants";
-import * as Notifications from "expo-notifications";
-import { useState, useRef } from "react";
+// import * as Notifications from "expo-notifications";
+// import { useState, useRef } from "react";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -45,29 +46,29 @@ export default function Home({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onStateChange = ({ open }) => setState({ open });
   const { open } = state;
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+//   const [notification, setNotification] = useState(false);
+//   const notificationListener = useRef();
+//   const responseListener = useRef();
 
-  useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+//   useEffect(() => {
+//     notificationListener.current =
+//       Notifications.addNotificationReceivedListener((notification) => {
+//         setNotification(notification);
+//       });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response, 2);
-        navigation.navigate("Ez Loundr");
-      });
+//     responseListener.current =
+//       Notifications.addNotificationResponseReceivedListener((response) => {
+//         console.log(response, 2);
+//         navigation.navigate("Ez Loundr");
+//       });
 
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
+//     return () => {
+//       Notifications.removeNotificationSubscription(
+//         notificationListener.current
+//       );
+//       Notifications.removeNotificationSubscription(responseListener.current);
+//     };
+//   }, []);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -113,6 +114,7 @@ export default function Home({ navigation }) {
   }
 
   function logoutHandler() {
+    dispatch(deleteToken())
     dispatch(setToken(""));
     Alert.alert("Logout Sukses", "Kamu berhasil logout!");
   }
