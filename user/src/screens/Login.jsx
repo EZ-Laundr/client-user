@@ -17,6 +17,10 @@ import CarouselItem from "../components/CarouselItem";
 import Header from "../components/Header";
 import { Loading } from "../components/LoadingPage";
 import { loginUser, setLoading } from "../store/action";
+//------------------------------------------------------------
+import registerForPushNotificationsAsync from "../helpers/registerForPushNotificationsAsync";
+//-------------------------------------------------------------
+
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.reducer);
@@ -44,19 +48,41 @@ export default function Login({ navigation }) {
       } else if (password === "") {
         Alert.alert("Password kosong", "Silahkan isi email & pasword");
       } else {
+        //-----------------------------------------------------
+        registerForPushNotificationsAsync()
+      .then((token) => {
+        console.log("token>>>>>>", token);
+        // setNotificationToken(token)
         const payload = {
-          email: email,
-          password: password,
-        };
-        const goLogin = await dispatch(loginUser(payload));
-
+            email: email,
+            password: password,
+            notificationToken: token,
+          };
+        console.log(payload);
+        return dispatch((loginUser(payload)));
+      })
+      .then((goLogin) => {
         if (goLogin === "success") {
-          dispatch(setLoading(true));
-          navigation.navigate("Ez Loundr");
-        } else {
-          // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
-          Alert.alert("Login Failed");
-        }
+            dispatch(setLoading(true));
+            navigation.navigate("Ez Loundr");
+          } else {
+            Alert.alert("Login Failed");
+          }
+      });
+      //----------------------------------------------------------
+        // const payload = {
+        //   email: email,
+        //   password: password,
+        // };
+        // const goLogin = await dispatch(loginUser(payload));
+
+        // if (goLogin === "success") {
+        //   dispatch(setLoading(true));
+        //   navigation.navigate("Ez Loundr");
+        // } else {
+        //   // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
+        //   Alert.alert("Login Failed");
+        // }
       }
     } catch (error) {
       Alert.alert("Login Failed");
@@ -144,6 +170,7 @@ export default function Login({ navigation }) {
               </Card.Actions>
             </Card>
             <Text style={{ margin: 10 }}>Didn't have account ?</Text>
+
             <Button
               color="#107CF1"
               labelStyle={{

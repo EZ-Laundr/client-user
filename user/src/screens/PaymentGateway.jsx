@@ -11,6 +11,7 @@ export default function PaymentGateway({ route, navigation }) {
   const serverKey = "SB-Mid-server-qPfv763v-8yrPbfvAgrgZsMw:";
   const base64Key = base64.encode(serverKey);
 
+
   const orderID = order.codeTransaction;
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function PaymentGateway({ route, navigation }) {
     let item_details;
     let detailService = {
       id: order.Service.id,
+
       price: order.Service.price * order.weight,
       weight: order.weight,
       quantity: 1,
@@ -67,6 +69,7 @@ export default function PaymentGateway({ route, navigation }) {
       transaction_details: {
         order_id: orderID,
         gross_amount: order.totalPrice,
+        // gross_amount: order.totalPrice,
       },
       item_details,
       credit_card: {
