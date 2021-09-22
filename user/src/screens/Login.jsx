@@ -69,15 +69,15 @@ export default function Login({ navigation }) {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={{
-            uri: "https://cutewallpaper.org/21/mobile-app-background/Gradient-Huawei-wallpapers-Oneplus-wallpapers-Samsung-.jpg",
-          }}
+          // source={{
+          //   uri: "https://cutewallpaper.org/21/mobile-app-background/Gradient-Huawei-wallpapers-Oneplus-wallpapers-Samsung-.jpg",
+          // }}
           style={styles.image}
         >
           <View>
             <ImageBackground
               style={styles.imageHeader}
-              source={require("../img/head3-removebg-preview.png")}
+              source={require("../assets/head3-removebg-preview.png")}
             >
               {/* <View>
                 <Image
@@ -90,12 +90,20 @@ export default function Login({ navigation }) {
           <ScrollView>
             <Card
               style={{
-                backgroundColor: "rgba(52, 52, 52, 0.4)",
+                backgroundColor: "#B5DEFF",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 6,
+                },
+                shadowOpacity: 0,
+                shadowRadius: 10,
+                elevation: 5,
               }}
             >
               <Card.Cover
                 style={styles.logo}
-                source={require("../img/head4_white.png")}
+                source={require("../assets/head4_white.png")}
               />
               <Card.Title />
               <Card.Content>
@@ -121,7 +129,7 @@ export default function Login({ navigation }) {
                 style={{ alignItems: "center", justifyContent: "center" }}
               >
                 <Button
-                  color="#3DB2FF"
+                  color="#107CF1"
                   labelStyle={{
                     fontSize: 20,
                     textAlign: "center",
@@ -137,7 +145,7 @@ export default function Login({ navigation }) {
             </Card>
             <Text style={{ margin: 10 }}>Didn't have account ?</Text>
             <Button
-              color="#3DB2FF"
+              color="#107CF1"
               labelStyle={{
                 fontSize: 20,
                 textAlign: "center",
@@ -161,6 +169,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+    backgroundColor: "#3DB2FF",
   },
   image: {
     flex: 1,

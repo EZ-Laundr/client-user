@@ -115,7 +115,7 @@ export default function Register({ navigation }) {
         <View style={{ alignItems: "center" }}>
           <ImageBackground
             style={styles.imageHeader}
-            source={require("../img/head4_white.png")}
+            source={require("../assets/head4_white.png")}
           >
             {/* <View>
               <Image

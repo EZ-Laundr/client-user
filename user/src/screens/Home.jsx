@@ -125,84 +125,7 @@ export default function Home({ navigation }) {
           <View style={{ height: height * 0.45 }}>
             <CarouselItem />
           </View>
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Services</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {services.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Perfumes</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {perfumes.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Ekstra Order</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {treatments.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-          </ScrollView>
+          <MyCarousel item={services} />
         </View>
         <Portal>
           {access_token == "" ? (
@@ -277,3 +200,82 @@ export default function Home({ navigation }) {
     </>
   );
 }
+
+// <ScrollView
+// refreshControl={
+//   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+// }
+// >
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Services</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {services.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Perfumes</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {perfumes.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Ekstra Order</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {treatments.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// </ScrollView>
