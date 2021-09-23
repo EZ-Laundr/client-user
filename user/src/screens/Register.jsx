@@ -105,7 +105,6 @@ export default function Register({ navigation }) {
                 theme="accent"
                 mode="outlined"
                 label="Full Name"
-                secureTextEntry
                 left={<TextInput.Icon name="account" />}
               />
               {show && (
