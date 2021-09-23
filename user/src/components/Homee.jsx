@@ -9,26 +9,23 @@ import {
   Platform,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { useFonts } from "expo-font";
 const { width: screenWidth } = Dimensions.get("window");
-
-const MyCarousel = ({ services }) => {
+import AppLoading from "expo-app-loading";
+const MyCarousel = ({ item }) => {
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
 
   const goForward = () => {
     carouselRef.current.snapToNext();
   };
+  let [fontsLoaded] = useFonts({
+    Eczar: require("../assets/Eczar/Eczar-Regular.ttf"),
+  });
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setEntries(services);
-    }, [])
-  );
-
-  //   useEffect(() => {
-  //     setEntries(forRender);
-  //   }, []);
+  useEffect(() => {
+    setEntries(item);
+  }, [item]);
 
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
@@ -37,7 +34,7 @@ const MyCarousel = ({ services }) => {
           source={{ uri: item.imageUrl }}
           containerStyle={styles.imageContainer}
           style={styles.image}
-          parallaxFactor={0.4}
+          parallaxFactor={0.5}
           {...parallaxProps}
         />
         <Text style={styles.title} numberOfLines={2}>
@@ -46,24 +43,43 @@ const MyCarousel = ({ services }) => {
       </View>
     );
   };
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={goForward}>
-        <Text>Our Services</Text>
-      </TouchableOpacity>
-      <Carousel
-        layout={"default"}
-        ref={carouselRef}
-        sliderWidth={screenWidth}
-        sliderHeight={screenWidth}
-        itemWidth={screenWidth - 200}
-        data={services}
-        renderItem={renderItem}
-        // hasParallaxImages={true}
-      />
-    </View>
-  );
+  if (fontsLoaded) {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={goForward}>
+          <Text
+            style={{
+              fontFamily: "Eczar",
+              fontSize: 20,
+              textAlign: "center",
+              fontStyle: "italic",
+            }}
+          >
+            Our Services
+          </Text>
+        </TouchableOpacity>
+        <Carousel
+          layout={"default"}
+          ref={carouselRef}
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth}
+          itemWidth={screenWidth - 200}
+          data={entries}
+          renderItem={renderItem}
+          hasParallaxImages={true}
+          loop={true}
+          // autoplay={true}
+          autoplayInterval={2000}
+          inactiveSlideScale={0.7}
+          activeAnimationType="spring"
+          enableSnap={true}
+          loopClonesPerSide={50}
+        />
+      </View>
+    );
+  } else {
+    return <AppLoading />;
+  }
 };
 
 export default MyCarousel;
@@ -75,22 +91,19 @@ const styles = StyleSheet.create({
   item: {
     width: screenWidth - 200,
     height: screenWidth - 200,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderRadius: 10,
     backgroundColor: "#5089C6",
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderRadius: 10,
     backgroundColor: "#5089C6",
     marginTop: 5,
   },
   image: {
-    // ...StyleSheet.absoluteFillObject,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 10,
     resizeMode: "center",
   },
   title: {
@@ -99,5 +112,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: "white",
+    borderRadius: 10,
   },
 });

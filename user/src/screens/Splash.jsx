@@ -16,7 +16,7 @@ export default function Splash({ navigation }) {
 
   return (
     <View style={styles.background}>
-      <Image style={styles.logo} source={require("../img/EZ_Laundr.png")} />
+      <Image style={styles.logo} source={require("../assets/EZ_Laundr.png")} />
     </View>
   );
 }

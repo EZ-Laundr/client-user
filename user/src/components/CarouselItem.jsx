@@ -67,7 +67,7 @@ export default class CarouselItem extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 50 }}>
+      <View style={{ flex: 1, paddingTop: 50, backgroundColor: "white" }}>
         <View
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
@@ -84,7 +84,10 @@ export default class CarouselItem extends React.Component {
             autoplayInterval={2000}
           />
         </View>
-        <Image style={styles.logo} source={require("../img/head4_white.png")} />
+        <Image
+          style={styles.logo}
+          source={require("../assets/head4_white.png")}
+        />
         {/* <Text>Buat hidupmu mudah</Text>
         <Text>Biarkan kami yang mencucikan bajumu</Text> */}
       </View>

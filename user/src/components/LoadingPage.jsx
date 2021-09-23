@@ -11,7 +11,7 @@ export function Loading() {
           width: widthWindow * 0.5,
           height: heightWindow * 0.5,
         }}
-        source={require("../img/loading_page.json")}
+        source={require("../assets/loading_page.json")}
         autoPlay={true}
         loop={true}
       />
@@ -25,10 +25,10 @@ export function Uploading() {
       <LottieView
         duration={3000}
         style={{
-          width: widthWindow * 0.3,
-          height: heightWindow * 0.3,
+          width: widthWindow * 0.2,
+          height: heightWindow * 0.2,
         }}
-        source={require("../img/uploading_page.json")}
+        source={require("../assets/uploading_page.json")}
         autoPlay={true}
         loop={true}
       />
@@ -45,7 +45,7 @@ export function DataNotFound() {
           width: widthWindow * 0.3,
           height: heightWindow * 0.3,
         }}
-        source={require("../img/data_notfound.json")}
+        source={require("../assets/data_notfound.json")}
         autoPlay={true}
         loop={true}
       />

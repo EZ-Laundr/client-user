@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, FAB, Portal, Provider } from "react-native-paper";
 import CarouselItem from "../components/CarouselItem";
 import {
+  deleteToken,
   fetchParfume,
   fetchServices,
   fetchTreatment,
@@ -25,18 +26,6 @@ import { Loading } from "../components/LoadingPage";
 
 import MyCarousel from "../components/Homee";
 
-import Constants from "expo-constants";
-import * as Notifications from "expo-notifications";
-import { useState, useRef } from "react";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const { userId, services, perfumes, treatments, access_token, loading } =
@@ -45,29 +34,6 @@ export default function Home({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const onStateChange = ({ open }) => setState({ open });
   const { open } = state;
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
-
-  useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response, 2);
-        navigation.navigate("Ez Loundr");
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -113,6 +79,7 @@ export default function Home({ navigation }) {
   }
 
   function logoutHandler() {
+    dispatch(deleteToken());
     dispatch(setToken(""));
     Alert.alert("Logout Sukses", "Kamu berhasil logout!");
   }
@@ -125,84 +92,7 @@ export default function Home({ navigation }) {
           <View style={{ height: height * 0.45 }}>
             <CarouselItem />
           </View>
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Services</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {services.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Perfumes</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {perfumes.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-            <View>
-              <View style={{ marginTop: 20 }}>
-                <Text>Ekstra Order</Text>
-              </View>
-              <ScrollView horizontal={true}>
-                <View
-                  style={{
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  {treatments.map((service, index) => {
-                    return (
-                      <View key={index}>
-                        <CardService
-                          service={service}
-                          navigation={navigation}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            </View>
-          </ScrollView>
+          {/* <MyCarousel item={services} /> */}
         </View>
         <Portal>
           {access_token == "" ? (
@@ -277,3 +167,82 @@ export default function Home({ navigation }) {
     </>
   );
 }
+
+// <ScrollView
+// refreshControl={
+//   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+// }
+// >
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Services</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {services.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Perfumes</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {perfumes.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// <View>
+//   <View style={{ marginTop: 20 }}>
+//     <Text>Ekstra Order</Text>
+//   </View>
+//   <ScrollView horizontal={true}>
+//     <View
+//       style={{
+//         alignItems: "center",
+//         flexDirection: "row",
+//       }}
+//     >
+//       {treatments.map((service, index) => {
+//         return (
+//           <View key={index}>
+//             <CardService
+//               service={service}
+//               navigation={navigation}
+//             />
+//           </View>
+//         );
+//       })}
+//     </View>
+//   </ScrollView>
+// </View>
+// </ScrollView>

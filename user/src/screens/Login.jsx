@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  TouchableRipple,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, Card, Title, Paragraph } from "react-native-paper";
@@ -17,6 +18,10 @@ import CarouselItem from "../components/CarouselItem";
 import Header from "../components/Header";
 import { Loading } from "../components/LoadingPage";
 import { loginUser, setLoading } from "../store/action";
+//------------------------------------------------------------
+import registerForPushNotificationsAsync from "../helpers/registerForPushNotificationsAsync";
+//-------------------------------------------------------------
+
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.reducer);
@@ -44,19 +49,41 @@ export default function Login({ navigation }) {
       } else if (password === "") {
         Alert.alert("Password kosong", "Silahkan isi email & pasword");
       } else {
-        const payload = {
-          email: email,
-          password: password,
-        };
-        const goLogin = await dispatch(loginUser(payload));
+        //-----------------------------------------------------
+        registerForPushNotificationsAsync()
+          .then((token) => {
+            console.log("token>>>>>>", token);
+            // setNotificationToken(token)
+            const payload = {
+              email: email,
+              password: password,
+              notificationToken: token,
+            };
+            console.log(payload);
+            return dispatch(loginUser(payload));
+          })
+          .then((goLogin) => {
+            if (goLogin === "success") {
+              dispatch(setLoading(true));
+              navigation.navigate("Ez Loundr");
+            } else {
+              Alert.alert("Login Failed");
+            }
+          });
+        //----------------------------------------------------------
+        // const payload = {
+        //   email: email,
+        //   password: password,
+        // };
+        // const goLogin = await dispatch(loginUser(payload));
 
-        if (goLogin === "success") {
-          dispatch(setLoading(true));
-          navigation.navigate("Ez Loundr");
-        } else {
-          // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
-          Alert.alert("Login Failed");
-        }
+        // if (goLogin === "success") {
+        //   dispatch(setLoading(true));
+        //   navigation.navigate("Ez Loundr");
+        // } else {
+        //   // Alert.alert("Login Failed", `${goLogin.join("\n")}`);
+        //   Alert.alert("Login Failed");
+        // }
       }
     } catch (error) {
       Alert.alert("Login Failed");
@@ -69,15 +96,15 @@ export default function Login({ navigation }) {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={{
-            uri: "https://cutewallpaper.org/21/mobile-app-background/Gradient-Huawei-wallpapers-Oneplus-wallpapers-Samsung-.jpg",
-          }}
+          // source={{
+          //   uri: "https://cutewallpaper.org/21/mobile-app-background/Gradient-Huawei-wallpapers-Oneplus-wallpapers-Samsung-.jpg",
+          // }}
           style={styles.image}
         >
           <View>
             <ImageBackground
               style={styles.imageHeader}
-              source={require("../img/head3-removebg-preview.png")}
+              source={require("../assets/head3-removebg-preview.png")}
             >
               {/* <View>
                 <Image
@@ -90,12 +117,20 @@ export default function Login({ navigation }) {
           <ScrollView>
             <Card
               style={{
-                backgroundColor: "rgba(52, 52, 52, 0.4)",
+                backgroundColor: "#B5DEFF",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 6,
+                },
+                shadowOpacity: 0,
+                shadowRadius: 10,
+                elevation: 5,
               }}
             >
               <Card.Cover
                 style={styles.logo}
-                source={require("../img/head4_white.png")}
+                source={require("../assets/head4_white.png")}
               />
               <Card.Title />
               <Card.Content>
@@ -121,7 +156,7 @@ export default function Login({ navigation }) {
                 style={{ alignItems: "center", justifyContent: "center" }}
               >
                 <Button
-                  color="#3DB2FF"
+                  color="#107CF1"
                   labelStyle={{
                     fontSize: 20,
                     textAlign: "center",
@@ -136,8 +171,9 @@ export default function Login({ navigation }) {
               </Card.Actions>
             </Card>
             <Text style={{ margin: 10 }}>Didn't have account ?</Text>
+
             <Button
-              color="#3DB2FF"
+              color="#107CF1"
               labelStyle={{
                 fontSize: 20,
                 textAlign: "center",
@@ -161,6 +197,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+    backgroundColor: "#3DB2FF",
   },
   image: {
     flex: 1,

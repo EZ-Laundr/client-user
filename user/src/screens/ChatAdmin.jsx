@@ -4,7 +4,6 @@ import { LogBox } from "react-native";
 import { useSelector } from "react-redux";
 import firebase from "firebase";
 import "firebase/firestore";
-import { Updates } from "expo";
 import { GiftedChat } from "react-native-gifted-chat";
 
 if (firebase.apps.length === 0) {
@@ -28,15 +27,14 @@ export default function ChatAdmin() {
   const { userId } = useSelector((state) => state.reducer);
   const test = firestore.collection("messages");
   const messagesRef = test.doc(userId).collection("chat-history");
-  const query = messagesRef.orderBy("createdAt").limit(25);
   const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
 
   async function handleSend(messages) {
     const writes = messages.map((m) => {
       messagesRef.add(m);
     });
     await Promise.all(writes);
-    Updates.reload();
   }
 
   const user = {
@@ -58,12 +56,12 @@ export default function ChatAdmin() {
     const unsubscribe = messagesRef.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
         .docChanges()
-        .filter(({ type }) => type === "added")
         .map(({ doc }) => {
           const message = doc.data();
           return {
             ...message,
             createdAt: message.createdAt.toDate(),
+            _id: doc.id,
           };
         })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -71,5 +69,12 @@ export default function ChatAdmin() {
     });
   }, []);
 
-  return <GiftedChat messages={messages} user={user} onSend={handleSend} />;
+  return (
+    <GiftedChat
+      renderUsernameOnMessage={true}
+      messages={messages}
+      user={user}
+      onSend={handleSend}
+    />
+  );
 }
