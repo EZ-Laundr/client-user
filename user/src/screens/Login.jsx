@@ -170,21 +170,15 @@ export default function Login({ navigation }) {
                 </Button>
               </Card.Actions>
             </Card>
-            <Text style={{ margin: 10 }}>Didn't have account ?</Text>
-
-            <Button
-              color="#107CF1"
-              labelStyle={{
-                fontSize: 20,
-                textAlign: "center",
-                color: "white",
-              }}
-              style={{ width: 150, height: 45 }}
-              mode="contained"
+            <Text style={{ marginTop: 10, alignSelf: "center" }}>
+              Didn't have account ?
+            </Text>
+            <Text
               onPress={() => navigation.navigate("Register")}
+              style={{ alignSelf: "center", textDecorationLine: "underline" }}
             >
-              Register
-            </Button>
+              Register here
+            </Text>
           </ScrollView>
         </ImageBackground>
       </View>
