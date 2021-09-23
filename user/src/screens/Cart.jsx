@@ -299,7 +299,7 @@ export default function Cart({ route, navigation }) {
                 }}
               >
                 <View style={{ flexDirection: "row" }}>
-                  <Text> Pengiriman Pakaian:</Text>
+                  <Text> Antar jemput cucian : </Text>
                   <Switch value={pickup} onValueChange={onToggleSwitch} />
                 </View>
               </View>
@@ -332,6 +332,8 @@ export default function Cart({ route, navigation }) {
           <Title
             style={{
               color: "black",
+              marginTop: 15,
+              marginBottom: 5
               // textShadowColor: "rgba(0,0,0, 0.5)",
               // textShadowOffset: { width: -1, height: 1 },
               // textShadowRadius: 10,
@@ -357,6 +359,7 @@ export default function Cart({ route, navigation }) {
                   style={{
                     alignItems: "center",
                     justifyContent: "center",
+                    
                   }}
                 >
                   <Card
@@ -368,12 +371,15 @@ export default function Cart({ route, navigation }) {
                   >
                     <View
                       style={{
+                        paddingTop:8,
+                        paddingBottom: 8,
                         justifyContent: "center",
                         alignItems: "center",
                       }}
                     >
                       <Image
                         style={{
+                            
                           width: windowWidth * 0.18,
                           height: windowHeight * 0.1,
                           borderRadius: 15,
@@ -381,7 +387,7 @@ export default function Cart({ route, navigation }) {
                         }}
                         source={{ uri: `${perfume.imageUrl}` }}
                       />
-                      <Text>{perfume.name}</Text>
+                      <Text style={{marginBottom: 5}}>{perfume.name}</Text>
                     </View>
                   </Card>
                 </TouchableRipple>
@@ -391,7 +397,7 @@ export default function Cart({ route, navigation }) {
         </View>
 
         <View style={[styles.container, { marginTop: 15 }]}>
-          <Title style={{ textAlign: "center", height: 50, color: "white" }}>
+          <Title style={{ textAlign: "center", height: 50, color: "black", marginTop: 15, marginBottom:-10 }}>
             Extra Order
           </Title>
 
@@ -561,7 +567,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#107CF1",
+    backgroundColor: "#BDD3EF",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
