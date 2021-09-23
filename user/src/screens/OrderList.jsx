@@ -271,6 +271,7 @@ export default function OrderList({ navigation }) {
                       </View>
                     </View>
 
+
                     <View style={{ flexDirection: "column", marginTop: 26 }}>
                       <ScrollView vertical={true}>
                         {order.OrderSpecials.map((treat) => {
@@ -288,6 +289,7 @@ export default function OrderList({ navigation }) {
                                                             uri: `${treat.SpecialTreatment.imageUrl}`,
                                                             }}
                                                         /> */}
+
                             </View>
                           );
                         })}
@@ -333,7 +335,6 @@ export default function OrderList({ navigation }) {
                       >
                         QR Code
                       </Chip>
-
                       <Chip
                         labelStyle={{ fontSize: 10 }}
                         textStyle={{ color: "white", fontSize: 15 }}
