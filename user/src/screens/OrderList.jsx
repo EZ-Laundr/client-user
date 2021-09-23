@@ -253,16 +253,17 @@ export default function OrderList({ navigation }) {
             
                                 </View >
 
-                                <View style={{ flexDirection: "column", marginTop: 26}}>
-                                        <ScrollView vertical={true}>
+                                <View style={{ flexDirection: "column", justifyContent:'center', marginTop: 26, marginBottom: 25}}>
+                                        {/* <ScrollView vertical={true} contentContainerStyle={{alignContent:'center'}}> */}
                                             {order.OrderSpecials.map((treat) => {
                                                 return (
                                                     <View
+                                                    style={{}}
                                                         key={treat.id}
                                                         // style={{ marginHorizontal: 3 }}
                                                     >
                                                         <Text>
-                                                        {treat.quantity}  {treat.SpecialTreatment.name}
+                                                        {treat.SpecialTreatment.name}  {treat.quantity}
                                                         </Text>
                                                         {/* <Image
                                                             style={{ width: 35, height: 35 }}
@@ -273,7 +274,7 @@ export default function OrderList({ navigation }) {
                                                     </View>
                                                 );
                                                 })}
-                                        </ScrollView>
+                                        {/* </ScrollView> */}
                                     </View>
                                 </View>
                                 
@@ -298,11 +299,56 @@ export default function OrderList({ navigation }) {
                             flexDirection: 'row'
                             }}
                         >
+
+                                {order.status == "On Progress" &&
+                                order.statusPayment == false && (
+                                <View>
+                                    <Chip
+                                    labelStyle={{ fontSize: 10 }}
+                                textStyle={{ color: 'white', fontSize: 15 }}
+                                    style={{
+                                        width: 90,
+                                        height: 30,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        backgroundColor: "#107CF1",
+                                        borderRadius: 0,
+                                        justifyContent: "space-evenly",
+                                    marginRight: 10,
+
+                                    }}
+                                    mode="contained"
+                                    onPress={() => paymentHandler(order)}
+                                    >
+                                    Bayar
+                                    </Chip>
+                                </View>
+                            )}
+                            
                             <Chip
                                 labelStyle={{ fontSize: 10 }}
                                 textStyle={{ color: 'white', fontSize: 15 }}
                                 style={{
-                                    width: 100,
+                                    width: 90,
+                                    height: 30,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#107CF1",
+                                    borderRadius: 0,
+                                    justifyContent: "space-evenly",
+                                    marginRight: 10,
+                                    }}
+                                mode="contained"
+                                onPress={() => handleDirection()}
+                            >
+                                Lokasi
+                            </Chip>
+
+                            <Chip
+                                labelStyle={{ fontSize: 10 }}
+                                textStyle={{ color: 'white', fontSize: 15 }}
+                                style={{
+                                    width: 90,
                                     height: 30,
                                     alignItems: "center",
                                     justifyContent: "center",
@@ -317,47 +363,6 @@ export default function OrderList({ navigation }) {
                                 QR Code
                             </Chip>
 
-                            <Chip
-                                labelStyle={{ fontSize: 10 }}
-                                textStyle={{ color: 'white', fontSize: 15 }}
-                                style={{
-                                    width: 100,
-                                    height: 30,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backgroundColor: "#107CF1",
-                                    borderRadius: 0,
-                                    justifyContent: "space-evenly",
-                                    marginRight: 5,
-                                    }}
-                                mode="contained"
-                                onPress={() => handleDirection()}
-                            >
-                                Lokasi
-                            </Chip>
-
-                            {order.status == "On Progress" &&
-                                order.statusPayment == false && (
-                                <View>
-                                    <Chip
-                                    labelStyle={{ fontSize: 10 }}
-                                textStyle={{ color: 'white', fontSize: 15 }}
-                                    style={{
-                                        width: 100,
-                                        height: 30,
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        backgroundColor: "#107CF1",
-                                        borderRadius: 0,
-                                        justifyContent: "space-evenly",
-                                    }}
-                                    mode="contained"
-                                    onPress={() => paymentHandler(order)}
-                                    >
-                                    Bayar
-                                    </Chip>
-                                </View>
-                            )}
                         </View>
                     </View>
                     )}
