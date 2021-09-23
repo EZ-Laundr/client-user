@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   RefreshControl,
+  Alert,
 } from "react-native";
 // import { MapViewDirections } from "react-native-maps-directions";
 import { Button } from "react-native-paper";
@@ -18,8 +19,12 @@ import * as Location from "expo-location";
 import { getDistance, getPreciseDistance } from "geolib";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { createOrder } from "../store/action";
 export default function Map({ route, navigation }) {
-  const { payloadCart } = route.params;
+  const dispatch = useDispatch();
+
+  const { cartData } = route.params;
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [latToko, setLatToko] = useState(-5.370346);
@@ -88,15 +93,23 @@ export default function Map({ route, navigation }) {
     } catch (error) {}
   }
 
-  function goToCart() {
-    const cartData = {
-      service: payloadCart.service,
-      perfume: payloadCart.perfume,
-      treatments: payloadCart.treatments,
-      pickup: payloadCart.pickup,
-      customerAddress: coordinates,
+  async function goToCart() {
+    const payload = {
+      ServiceId: cartData.ServiceId,
+      perfume: {
+        id: cartData.perfume.id,
+        price: cartData.perfume.price,
+      },
+      treatments: cartData.treatments,
+      pickup: cartData.pickup,
+      customerAddress: JSON.stringify(coordinates),
     };
-    navigation.navigate("Cart", { cartData });
+    const uploadOrder = await dispatch(createOrder(payload));
+    if (uploadOrder === "success") {
+      navigation.navigate("Order Completed");
+    } else {
+      Alert.alert("Checkout Error", `${uploadOrder}`);
+    }
   }
 
   function testOnPressMap(e) {

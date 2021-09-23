@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   Dimensions,
+  TouchableRipple,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, Card, Title, Paragraph } from "react-native-paper";
@@ -50,26 +51,26 @@ export default function Login({ navigation }) {
       } else {
         //-----------------------------------------------------
         registerForPushNotificationsAsync()
-      .then((token) => {
-        console.log("token>>>>>>", token);
-        // setNotificationToken(token)
-        const payload = {
-            email: email,
-            password: password,
-            notificationToken: token,
-          };
-        console.log(payload);
-        return dispatch((loginUser(payload)));
-      })
-      .then((goLogin) => {
-        if (goLogin === "success") {
-            dispatch(setLoading(true));
-            navigation.navigate("Ez Loundr");
-          } else {
-            Alert.alert("Login Failed");
-          }
-      });
-      //----------------------------------------------------------
+          .then((token) => {
+            console.log("token>>>>>>", token);
+            // setNotificationToken(token)
+            const payload = {
+              email: email,
+              password: password,
+              notificationToken: token,
+            };
+            console.log(payload);
+            return dispatch(loginUser(payload));
+          })
+          .then((goLogin) => {
+            if (goLogin === "success") {
+              dispatch(setLoading(true));
+              navigation.navigate("Ez Loundr");
+            } else {
+              Alert.alert("Login Failed");
+            }
+          });
+        //----------------------------------------------------------
         // const payload = {
         //   email: email,
         //   password: password,

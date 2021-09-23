@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, FAB, Portal, Provider } from "react-native-paper";
 import CarouselItem from "../components/CarouselItem";
 import {
-    deleteToken,
+  deleteToken,
   fetchParfume,
   fetchServices,
   fetchTreatment,
@@ -79,7 +79,7 @@ export default function Home({ navigation }) {
   }
 
   function logoutHandler() {
-    dispatch(deleteToken())
+    dispatch(deleteToken());
     dispatch(setToken(""));
     Alert.alert("Logout Sukses", "Kamu berhasil logout!");
   }
@@ -92,7 +92,7 @@ export default function Home({ navigation }) {
           <View style={{ height: height * 0.45 }}>
             <CarouselItem />
           </View>
-          <MyCarousel item={services} />
+          {/* <MyCarousel item={services} /> */}
         </View>
         <Portal>
           {access_token == "" ? (

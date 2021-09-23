@@ -25,8 +25,8 @@ export function Uploading() {
       <LottieView
         duration={3000}
         style={{
-          width: widthWindow * 0.3,
-          height: heightWindow * 0.3,
+          width: widthWindow * 0.2,
+          height: heightWindow * 0.2,
         }}
         source={require("../assets/uploading_page.json")}
         autoPlay={true}

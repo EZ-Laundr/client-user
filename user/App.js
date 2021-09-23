@@ -25,14 +25,15 @@ import Dummy from "./src/screens/dummy";
 import ChatAdmin from "./src/screens/ChatAdmin";
 //---------------------------------------------------------
 import * as Notifications from "expo-notifications";
+
 import { useState, useRef, useEffect } from "react";
 
 Notifications.setNotificationHandler({
-	handleNotification: async () => ({
-		shouldShowAlert: true,
-		shouldPlaySound: false,
-		shouldSetBadge: false,
-	}),
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
 });
 //---------------------------------------------------------
 
@@ -40,66 +41,66 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
-	//----------------------------------------------------
-	const [notification, setNotification] = useState(false);
-	const notificationListener = useRef();
-	const responseListener = useRef();
+  //----------------------------------------------------
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-	useEffect(() => {
-		notificationListener.current =
-			Notifications.addNotificationReceivedListener((notification) => {
-				setNotification(notification);
-			});
+  useEffect(() => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
 
-		responseListener.current =
-			Notifications.addNotificationResponseReceivedListener((response) => {
-				console.log(response, 2);
-				navigation.navigate("Ez Loundr");
-			});
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response, 2);
+        navigation.navigate("Ez Loundr");
+      });
 
-		return () => {
-			Notifications.removeNotificationSubscription(
-				notificationListener.current
-			);
-			Notifications.removeNotificationSubscription(responseListener.current);
-		};
-	}, []);
-	//----------------------------------------------------
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+  //----------------------------------------------------
 
-	function StackHome() {
-		return (
-			<Stack.Navigator>
-				<Stack.Screen
-					name="Splash"
-					options={{
-						headerShown: false,
-					}}
-					component={Splash}
-				/>
-				<Stack.Screen
-					name="Wellcome"
-					options={{
-						headerShown: false,
-					}}
-					component={Wellcome}
-				/>
-				<Stack.Screen name="Dummy" component={Dummy} />
-				<Stack.Screen name="Chat Admin" component={ChatAdmin} />
-				<Stack.Screen name="Register" component={Register} />
-				<Stack.Screen
-					name="Login"
-					options={{
-						headerShown: false,
-					}}
-					component={Login}
-				/>
-				<Stack.Screen
-					name="Ez Loundr"
-					component={Home}
-					options={{
-						headerShown: false,
-					}}
-				/>
+  function StackHome() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Splash"
+          options={{
+            headerShown: false,
+          }}
+          component={Splash}
+        />
+        <Stack.Screen
+          name="Wellcome"
+          options={{
+            headerShown: false,
+          }}
+          component={Wellcome}
+        />
+        <Stack.Screen name="Dummy" component={Dummy} />
+        <Stack.Screen name="Chat Admin" component={ChatAdmin} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen
+          name="Login"
+          options={{
+            headerShown: false,
+          }}
+          component={Login}
+        />
+        <Stack.Screen
+          name="Ez Loundr"
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
 
         <Stack.Screen name="Create Order" component={CreateOrder} />
         <Stack.Screen name="Cart" component={Cart} />
